@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.services.LocationService;
 
 public class MainActivity extends AppCompatActivity {
 
