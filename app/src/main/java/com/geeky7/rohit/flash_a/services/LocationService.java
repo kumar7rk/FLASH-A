@@ -151,6 +151,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (mCurrentLocation==null){
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             try {
+                if (b)
                 addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -159,6 +160,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             if (b){
                 sendSMS();
                 updateToast();
+                this.stopSelf();
             }
             else if (!b)
                 m.openLocationSettings(manager);
@@ -192,17 +194,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
         manager.sendTextMessage("+61410308348",null, address, null, null);
-        SmsManager manager1 = SmsManager.getDefault();
-        manager1.sendTextMessage("+61430736226",null, address, null, null);
+        /*SmsManager manager1 = SmsManager.getDefault();
+        manager1.sendTextMessage("+61430736226",null, address, null, null);*/
     }
     private String setAddress() {
+        for (int i = 0; i< addresses.size();i++)
+            Log.i("All addresses",addresses.get(i).getAddressLine(i));
         String address1 = addresses.get(0).getAddressLine(0);
-        String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName();
-        return address1 + " " + city + "\n" + state + " " + postalCode;
+//        String city = addresses.get(0).getLocality();
+//        String state = addresses.get(0).getAdminArea();
+//        String country = addresses.get(0).getCountryName();
+//        String postalCode = addresses.get(0).getPostalCode();
+//        String knownName = addresses.get(0).getFeatureName();
+        return address1/* + " " + city + "\n" + state + " " + postalCode*/;
     }
 }
 
