@@ -189,7 +189,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
         updateToast();
     }
-
     private void sendSMS() {
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();

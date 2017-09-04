@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(getApplicationContext(), LocationService.class);
         startService(serviceIntent);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
