@@ -211,8 +211,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 Thread.sleep(2000);
                     if (mCurrentLocation==null){
                         Log.i("onReceive","Current location null. haha!");
+                        Thread.sleep(2000);
                         startLocationupdates();
+                        Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        Thread.sleep(2000);
                         Log.i("onReceive",mCurrentLocation.getProvider());
                         Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
                         Log.i("onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
@@ -226,6 +229,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
+                    stopSelf();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
