@@ -1,8 +1,10 @@
 package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,7 +13,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.geeky7.rohit.flash_a.Main;
 import com.google.android.gms.common.ConnectionResult;
@@ -22,8 +23,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,15 +34,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS/2;
 
-    private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mlocationRequest;
     private Location mCurrentLocation;
-    private boolean mRequestingLocationUpdates;
-    private String mLastUpdateTime;
 
-    private boolean googleApiClientConnected;
-    static Context context;
+//    private static final int GOOGLE_API_CLIENT_ID = 0;
+//    private boolean mRequestingLocationUpdates;
+//    private String mLastUpdateTime;
+
+//    private boolean googleApiClientConnected;
+//    static Context context;
 
     Main m;
 
@@ -56,15 +56,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onCreate() {
         super.onCreate();
         m = new Main(getApplicationContext());
-        mLastUpdateTime = "";
+//        mLastUpdateTime = "";
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
 
         // googleAPI is connected and ready to get location updates- start fetching current location
-        if(mGoogleApiClient.isConnected()&&mRequestingLocationUpdates)
+        if(mGoogleApiClient.isConnected()/*&&mRequestingLocationUpdates*/)
             startLocationupdates();
+
+        // for getting address
+
         geocoder = new Geocoder(this, Locale.getDefault());
+
         Log.i(TAG,"LocationService Created");
     }
     @Override
@@ -77,11 +81,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(TAG, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
-
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -117,14 +116,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         mlocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         mlocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mlocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
     }
     // method- update the new coordinates
-    protected void updateToast(){
-//        Main.showToast("From A-SUM New Coordinates: " + mCurrentLocation.getLatitude() + "\n" + mCurrentLocation.getLongitude());
+    protected void updateToastLog(){
         Log.i(TAG, mCurrentLocation.getLatitude() + "\n" + mCurrentLocation.getLongitude());
-        String address = setAddress();
-        Log.i(TAG,address);
+        Log.i(TAG,setAddress());
     }
     // fetch location now
     protected void startLocationupdates() throws SecurityException {
@@ -141,37 +137,107 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         super.onStart(intent, startId);
         mGoogleApiClient.connect();
     }
-
-
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        // if location null, get last known location, updating the time so that we don't show quite old location
-        if (mCurrentLocation==null){
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+/*//        boolean b1 = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        boolean b1 = manager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
+
+        Log.i("b1",b1+"");
+//        Log.i("b2",b2+"");
+        if(!b&&b1){
+            Log.i("b1","yes! Passive provider is being helpful");
+            mCurrentLocation = manager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             try {
-                if (b)
                 addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                sendSMS();
+                updateToastLog();
+                stopSelf();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-            if (b){
-                sendSMS();
-                updateToast();
-                this.stopSelf();
+        }*/
+
+        // if location null, get last known location, updating the time so that we don't show quite old location
+        if (mCurrentLocation==null){
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//            Log.i("LastLocation",mCurrentLocation.getLatitude()+", "+ mCurrentLocation.getLongitude());
+            try {
+                if (b){
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    sendSMS();
+                    updateToastLog();
+                    stopSelf();
+                }
+                else{
+                    Log.i("Else", "gps off");
+                    m.openLocationSettings(manager);
+                    getApplicationContext().registerReceiver(gpsReceiver,
+                            new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            else if (!b)
-                m.openLocationSettings(manager);
+//            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         }
+        /*if (mRequestingLocationUpdates)
+            startLocationupdates();*/
 
-        if (mRequestingLocationUpdates)
-            startLocationupdates();
-
-        googleApiClientConnected = true;
+//        googleApiClientConnected = true;
     }
+    private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+                //Do your stuff on GPS status change
 
+//                Log.i("onReceive","Building api client");
+//                buildGoogleApiClient();
+                /*if(!mGoogleApiClient.isConnected()){
+                    Log.i("onReceive","Not connected");
+                    mGoogleApiClient.connect();
+                }
+                geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());*/
+                Log.i("onReceive",mGoogleApiClient.isConnected()+"");
+                // googleAPI is connected and ready to get location updates- start fetching current location
+                try {
+                /*if(mGoogleApiClient.isConnected()){
+                    Log.i("onReceive","mGoogleApiClient.isConnected, starting location updates");
+                    startLocationupdates();
+                    Log.i("onReceive","Started location update");
+                }*/
+                Thread.sleep(2000);
+                    if (mCurrentLocation==null){
+                        Log.i("onReceive","Current location null. haha!");
+                        startLocationupdates();
+                        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                        Log.i("onReceive",mCurrentLocation.getProvider());
+                        Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
+                        Log.i("onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
+                    }
+                    if (mCurrentLocation!=null) {
+                        Log.i("onReceive","Don't worry, its not null anymore");
+                        addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                        Log.i("onReceive","Value for addresses list added");
+                    }
+                    Log.i("onReceive","Sending message now");
+                    sendSMS();
+                    Log.i("onReceive","Mission accomplished. You have done it man.");
+                    updateToastLog();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                catch (SecurityException se){
+                    se.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    };
     //check is user wants to monitor walking, if yes then listen to the recognised activity;
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
@@ -180,14 +246,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onLocationChanged(Location location) {
         //Main.showToast("I'm called- onLocationChanged");
-        mCurrentLocation = location;
+        /*mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         try {
             addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        updateToast();
+        updateToastLog();*/
     }
     private void sendSMS() {
         String address = setAddress();
@@ -199,13 +265,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private String setAddress() {
         for (int i = 0; i< addresses.size();i++)
             Log.i("All addresses",addresses.get(i).getAddressLine(i));
-        String address1 = addresses.get(0).getAddressLine(0);
+
+        String address = addresses.get(0).getAddressLine(0);
+
 //        String city = addresses.get(0).getLocality();
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
 //        String postalCode = addresses.get(0).getPostalCode();
 //        String knownName = addresses.get(0).getFeatureName();
-        return address1/* + " " + city + "\n" + state + " " + postalCode*/;
+
+        return address;
     }
 }
 
