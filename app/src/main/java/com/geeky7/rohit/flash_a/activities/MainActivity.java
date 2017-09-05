@@ -3,6 +3,7 @@ package com.geeky7.rohit.flash_a.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+    // from Google
+
+    private boolean checkPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
     }
     public void checkPermission() {
         ActivityCompat.requestPermissions(this,
