@@ -40,7 +40,6 @@ public class BackgroundService extends Service {
             Log.i("Message","Message is:"+ message);
 
             if ("Where".equals(message)) {
-//                Main.showToast("Location requested");
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("LocationService", "Location Service initiated");
