@@ -1,10 +1,8 @@
 package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        checkPermission();
 
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        /*final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);*/
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

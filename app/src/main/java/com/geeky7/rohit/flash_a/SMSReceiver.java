@@ -8,6 +8,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.activities.MainActivity;
+import com.geeky7.rohit.flash_a.services.BackgroundService;
 
 /**
  * Created by Rohit on 8/07/2016.
@@ -36,6 +37,12 @@ public class SMSReceiver extends BroadcastReceiver {
         intent.putExtra("Sender", senderNum);
         intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClass(context, MainActivity.class);
-        context.startActivity(intent);
+//        context.startActivity(intent);
+
+
+        Intent intent1 = new Intent(context,BackgroundService.class);
+        intent1.putExtra("Message", message);
+        intent1.putExtra("Sender", senderNum);
+        context.startService(intent1);
     }
 }
