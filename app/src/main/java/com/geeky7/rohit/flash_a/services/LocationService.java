@@ -229,7 +229,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
-                    stopLocationupdates();
+//                    stopLocationupdates();
                     stopSelf();
                 } catch (IOException e) {
                     e.printStackTrace();
