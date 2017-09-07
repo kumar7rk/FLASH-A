@@ -86,6 +86,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i("LocationService","onDestroy");
       //  Main.showToast("BackgroundServiceDestroyed");
         stopSelf();
         if (mGoogleApiClient.isConnected())
@@ -119,7 +120,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     // method- update the new coordinates
     protected void updateToastLog(){
-        Log.i(TAG, mCurrentLocation.getLatitude() + "\n" + mCurrentLocation.getLongitude());
+        Log.i(TAG, mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
         Log.i(TAG,setAddress());
     }
     // fetch location now
@@ -203,19 +204,23 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 Log.i("onReceive",mGoogleApiClient.isConnected()+"");
                 // googleAPI is connected and ready to get location updates- start fetching current location
                 try {
-                /*if(mGoogleApiClient.isConnected()){
-                    Log.i("onReceive","mGoogleApiClient.isConnected, starting location updates");
-                    startLocationupdates();
-                    Log.i("onReceive","Started location update");
-                }*/
-                Thread.sleep(2000);
+                    if(!mGoogleApiClient.isConnected()){
+                        stopSelf();
+//                        abortBroadcast();
+//                        Thread.sleep(12000);
+                        Log.i("onReceive","Google api client not connected. Mission abort");
+                        /*Log.i("onReceive","mGoogleApiClient.isConnected, starting location updates");
+                        startLocationupdates();
+                        Log.i("onReceive","Started location update");*/
+                    }
+                    Thread.sleep(2000);
                     if (mCurrentLocation==null){
                         Log.i("onReceive","Current location null. haha!");
                         Thread.sleep(2000);
 //                        startLocationupdates();
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                        Thread.sleep(2000);
+//                        Thread.sleep(2000);
                         Log.i("onReceive",mCurrentLocation.getProvider());
                         Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
                         Log.i("onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
@@ -226,12 +231,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         Log.i("onReceive","Value for addresses list added");
                     }
                     Log.i("onReceive","Sending message now");
+                    stopSelf();
+//                    unregisterReceiver(gpsReceiver);
                     sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
 //                    stopLocationupdates();
-                    stopSelf();
-                } catch (IOException e) {
+                }
+                 catch(IOException e) {
                     e.printStackTrace();
                 }
                 catch (SecurityException se){
@@ -239,7 +246,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     };

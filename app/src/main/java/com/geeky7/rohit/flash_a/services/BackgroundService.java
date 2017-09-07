@@ -51,6 +51,12 @@ public class BackgroundService extends Service {
                 // this message initiated the location service which fetches the location and converts into an address
             }
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("BackgroundService","onDestroy");
     }
 }
