@@ -43,7 +43,7 @@ public class BackgroundService extends Service {
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("LocationService", "Location Service initiated");
-
+                stopSelf();
 //              if(message.contains("Where")){
                 // this message initiated the location service which fetches the location and converts into an address
             }
