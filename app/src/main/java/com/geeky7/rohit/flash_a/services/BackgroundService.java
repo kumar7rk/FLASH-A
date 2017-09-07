@@ -33,7 +33,10 @@ public class BackgroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle extras = intent.getExtras();
+        Bundle extras = null;
+        if(intent!=null)
+            extras = intent.getExtras();
+
         if (extras != null) {
             message = extras.getString("Message");
             sender = extras.getString("Sender");
