@@ -40,12 +40,14 @@ public class BackgroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         locationPermission = preferences.getBoolean("locationPermission",false);
         Bundle extras = null;
+        SharedPreferences.Editor editor = preferences.edit();
         if(intent!=null)
             extras = intent.getExtras();
 
         if (extras != null) {
             message = extras.getString("Message");
             sender = extras.getString("Sender");
+            editor.putString("sender",sender);
             Log.i("Message","Message is:"+ message);
 
             if ("Where".equals(message) && locationPermission) {
@@ -57,6 +59,7 @@ public class BackgroundService extends Service {
                 // this message initiated the location service which fetches the location and converts into an address
             }
         }
+        editor.commit();
         return START_NOT_STICKY;
     }
 

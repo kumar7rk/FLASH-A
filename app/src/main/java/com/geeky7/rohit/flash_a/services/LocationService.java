@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -49,12 +51,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     Geocoder geocoder;
     List<Address> addresses;
+
+    SharedPreferences preferences;
+    String sender = "";
     public LocationService() {
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        sender = preferences.getString("sender","");
         m = new Main(getApplicationContext());
 //        mLastUpdateTime = "";
 
@@ -275,7 +284,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private void sendSMS() {
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
-        manager.sendTextMessage("+61410308348",null, address, null, null);
+        manager.sendTextMessage(sender,null, address, null, null);
         /*SmsManager manager1 = SmsManager.getDefault();
         manager1.sendTextMessage("+61430736226",null, address, null, null);*/
     }
