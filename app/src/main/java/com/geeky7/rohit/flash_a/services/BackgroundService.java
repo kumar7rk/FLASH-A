@@ -2,19 +2,24 @@ package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BackgroundService extends Service {
     String message = "No text";
     String sender = "Empty";
+    SharedPreferences preferences;
+    boolean locationPermission = true;
     public BackgroundService() {
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
     private void startService() {
         Intent serviceIntent = new Intent(getApplicationContext(), LocationService.class);
@@ -33,6 +38,7 @@ public class BackgroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        locationPermission = preferences.getBoolean("locationPermission",false);
         Bundle extras = null;
         if(intent!=null)
             extras = intent.getExtras();
@@ -42,7 +48,7 @@ public class BackgroundService extends Service {
             sender = extras.getString("Sender");
             Log.i("Message","Message is:"+ message);
 
-            if ("Where".equals(message)) {
+            if ("Where".equals(message) && locationPermission) {
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("LocationService", "Location Service initiated");
