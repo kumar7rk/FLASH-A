@@ -200,7 +200,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     Log.i("onReceive","Not connected");
                     mGoogleApiClient.connect();
                 }
-                geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());*/
+                geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                */
                 Log.i("onReceive",mGoogleApiClient.isConnected()+"");
                 // googleAPI is connected and ready to get location updates- start fetching current location
                 try {
@@ -232,10 +233,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     }
                     Log.i("onReceive","Sending message now");
                     stopSelf();
-//                    unregisterReceiver(gpsReceiver);
                     sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
+//                    gpsReceiver.abortBroadcast();
+                    getApplicationContext().unregisterReceiver(gpsReceiver);
 //                    stopLocationupdates();
                 }
                  catch(IOException e) {
@@ -245,6 +247,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     se.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+                finally{
+//                    unregisterReceiver(gpsReceiver);
+//                    stopSelf();
                 }
             }
         }
