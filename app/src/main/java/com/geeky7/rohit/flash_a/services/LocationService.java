@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
+
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,LocationListener{
