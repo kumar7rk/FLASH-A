@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.MyApplication;
 
 public class BackgroundService extends Service {
     String message = "No text";
@@ -23,7 +24,7 @@ public class BackgroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        m = new Main();
+        m = new Main(MyApplication.getAppContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
     private void startService() {

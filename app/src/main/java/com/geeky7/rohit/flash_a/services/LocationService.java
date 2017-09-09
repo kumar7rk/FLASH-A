@@ -17,6 +17,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
@@ -285,8 +286,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
         manager.sendTextMessage(sender,null, address, null, null);
-        /*SmsManager manager1 = SmsManager.getDefault();
-        manager1.sendTextMessage("+61430736226",null, address, null, null);*/
+        pugNotification("Location shared","Your current location shared with ",sender);
     }
     private String setAddress() {
         for (int i = 0; i< addresses.size();i++)
@@ -301,6 +301,18 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        String knownName = addresses.get(0).getFeatureName();
 
         return address;
+    }
+    public void pugNotification(String title ,String message, String bigText){
+        PugNotification.with(getApplicationContext())
+                .load()
+                .title(title)
+                .message(message)
+                .smallIcon(R.drawable.quantum_ic_stop_white_24)
+                .bigTextStyle(message+" "+bigText)
+                .largeIcon(R.drawable.cast_ic_notification_small_icon)
+                .flags(android.app.Notification.DEFAULT_ALL)
+                .simple()
+                .build();
     }
 }
 
