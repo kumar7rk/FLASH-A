@@ -8,17 +8,22 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.geeky7.rohit.flash_a.Main;
+
 public class BackgroundService extends Service {
     String message = "No text";
     String sender = "Empty";
     SharedPreferences preferences;
     boolean locationPermission = true;
+    Main m ;
+
     public BackgroundService() {
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        m = new Main();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
     private void startService() {
@@ -50,7 +55,7 @@ public class BackgroundService extends Service {
             editor.putString("sender",sender);
             Log.i("Message","Message is:"+ message);
 
-            if ("Where".equals(message) && locationPermission) {
+            if ("Where".equals(message) && locationPermission && m.isNetworkAvailable())  {
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("LocationService", "Location Service initiated");
