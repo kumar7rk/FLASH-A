@@ -11,9 +11,13 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Switch;
 
 import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.R;
@@ -27,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
     boolean locationPermission = true;
+
+    MenuItem toggleService;
+    Switch aSwitch;
+    boolean mainSwitch = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,5 +177,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        toggleService = menu.findItem(R.id.main_switch);
+        View view = MenuItemCompat.getActionView(toggleService);
+        aSwitch = (Switch) view.findViewById(R.id.a_switch);
+        
+        return super.onCreateOptionsMenu(menu);
     }
 }

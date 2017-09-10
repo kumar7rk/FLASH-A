@@ -250,7 +250,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     updateToastLog();
 //                    gpsReceiver.abortBroadcast();
                     getApplicationContext().unregisterReceiver(gpsReceiver);
-//                    stopLocationupdates();
                 }
                  catch(IOException e) {
                     e.printStackTrace();
@@ -259,10 +258,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     se.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-                finally{
-//                    unregisterReceiver(gpsReceiver);
-//                    stopSelf();
                 }
             }
         }
