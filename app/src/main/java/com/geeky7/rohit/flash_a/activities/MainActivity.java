@@ -168,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
                         Manifest.permission.READ_CONTACTS},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
     }
-    
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
