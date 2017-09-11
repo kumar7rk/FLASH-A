@@ -284,7 +284,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
         manager.sendTextMessage(sender,null, address, null, null);
-        pugNotification("Location shared","Your current location shared with ",sender);
+        boolean noti = preferences.getBoolean("notification",true);
+        if (noti)
+            pugNotification("Location shared","Your current location shared with ",sender);
     }
     private String setAddress() {
         for (int i = 0; i< addresses.size();i++)

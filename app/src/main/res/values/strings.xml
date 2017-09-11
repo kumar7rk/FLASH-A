@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FLASH-A</string>
+    <string name="app_name">FL-ASHA</string>
     <string name="permission_rationale">Location permission is needed for core functionality</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
         functionality.</string>
@@ -87,6 +87,9 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="service_running">Service Running</string>
+    <string name="keyword">Keyword</string>
+    <string name="asha">Asha</string>
 
 
 </resources>

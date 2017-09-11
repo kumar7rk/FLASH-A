@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     boolean locationPermission = true;
 
     ToggleButton serviceRunning;
+    CheckBox notification;
 //    MenuItem toggleService;
 //    Switch aSwitch;
 //    boolean mainSwitch = true;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceRunning = (ToggleButton)findViewById(R.id.serviceRunning);
+        notification = (CheckBox)findViewById(R.id.notificationValue);
 
         boolean service = preferences.getBoolean("service",true);
         serviceRunning.setChecked(service);
@@ -55,6 +58,18 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
             }
         });
+
+        boolean noti = preferences.getBoolean("notification",true);
+        notification.setChecked(noti);
+        notification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                editor.putBoolean("notification",b);
+                editor.commit();
+            }
+        });
+
+
         if(!checkPermissions())
             requestPermissions();
 
