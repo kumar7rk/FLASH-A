@@ -13,26 +13,27 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    String message = "No text";
-    String sender = "Empty";
+//    String message = "No text";
+//    String sender = "Empty";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
     SharedPreferences preferences;
     boolean locationPermission = true;
 
-    MenuItem toggleService;
-    Switch aSwitch;
-    boolean mainSwitch = true;
+    ToggleButton serviceRunning;
+//    MenuItem toggleService;
+//    Switch aSwitch;
+//    boolean mainSwitch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        final SharedPreferences.Editor editor = preferences.edit();
+        serviceRunning = (ToggleButton)findViewById(R.id.serviceRunning);
+//        String service= serviceRunning.getText().toString();
+//        Main.showToast(service);
+
+        boolean service = preferences.getBoolean("service",true);
+        serviceRunning.setChecked(service);
+        if(service) serviceRunning.setText("ON");
+        else serviceRunning.setText("OFF");
+        serviceRunning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                editor.putBoolean("service",b);
+                editor.commit();
+            }
+        });
         if(!checkPermissions())
             requestPermissions();
 

@@ -47,6 +47,9 @@ public class BackgroundService extends Service {
         locationPermission = preferences.getBoolean("locationPermission",false);
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
+        boolean service = preferences.getBoolean("service",true);
+        Main.showToast(service+" - service");
+        Log.i("Service",service+"");
         if(intent!=null)
             extras = intent.getExtras();
 
@@ -56,7 +59,7 @@ public class BackgroundService extends Service {
             editor.putString("sender",sender);
             Log.i("Message","Message is:"+ message);
 
-            if ("Where".equals(message) && locationPermission && m.isNetworkAvailable())  {
+            if ("Where".equals(message) && locationPermission && m.isNetworkAvailable()&&service)  {
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("LocationService", "Location Service initiated");

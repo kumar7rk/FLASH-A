@@ -232,6 +232,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         Thread.sleep(2000);
 //                        startLocationupdates();
                         Thread.sleep(2000);
+                        Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 //                        Thread.sleep(2000);
                         Log.i("onReceive",mCurrentLocation.getProvider());
