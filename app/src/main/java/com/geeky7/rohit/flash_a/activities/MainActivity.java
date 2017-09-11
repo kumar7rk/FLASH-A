@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.geeky7.rohit.flash_a.BuildConfig;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     ToggleButton serviceRunning;
     CheckBox notification;
+    TextView keyword;
 //    MenuItem toggleService;
 //    Switch aSwitch;
 //    boolean mainSwitch = true;
@@ -44,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         final SharedPreferences.Editor editor = preferences.edit();
+
         serviceRunning = (ToggleButton)findViewById(R.id.serviceRunning);
         notification = (CheckBox)findViewById(R.id.notificationValue);
+        keyword = (TextView)findViewById(R.id.keywordValue);
 
         boolean service = preferences.getBoolean("service",true);
         serviceRunning.setChecked(service);
