@@ -11,10 +11,8 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
@@ -179,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
-        toggleService = menu.findItem(R.id.main_switch);
+        toggleService = menu.findItem(R.id.main_Service);
         View view = MenuItemCompat.getActionView(toggleService);
         aSwitch = (Switch) view.findViewById(R.id.a_switch);
-        
+
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 }
