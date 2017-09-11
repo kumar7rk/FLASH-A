@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     ToggleButton serviceRunning;
     CheckBox notification;
     TextView keyword;
+    ImageView share;
 //    MenuItem toggleService;
 //    Switch aSwitch;
 //    boolean mainSwitch = true;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         serviceRunning = (ToggleButton)findViewById(R.id.serviceRunning);
         notification = (CheckBox)findViewById(R.id.notificationValue);
         keyword = (TextView)findViewById(R.id.keywordValue);
+        share = (ImageView)findViewById(R.id.share);
+
 
         boolean service = preferences.getBoolean("service",true);
         serviceRunning.setChecked(service);
@@ -70,6 +74,18 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 editor.putBoolean("notification",b);
                 editor.commit();
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setData(Uri.parse("sms:"));
+                sendIntent.putExtra("sms_body", "Get my current location by messaging me the secret keyword \"Asha\".");
+                startActivity(sendIntent);
+
+
             }
         });
 

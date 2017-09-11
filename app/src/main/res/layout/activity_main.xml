@@ -53,7 +53,6 @@
         android:id="@+id/keywordValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="60dp"
         android:text="@string/asha"
         android:textSize="18sp"
         android:textAlignment="viewEnd"
@@ -67,6 +66,7 @@
         android:layout_alignBaseline="@+id/keyword"
         android:layout_alignBottom="@+id/keyword"
         android:layout_alignStart="@+id/serviceRunning" />
+        <!--android:paddingLeft="60dp"-->
 
     <TextView
         android:id="@+id/notification"
@@ -89,5 +89,13 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/keywordValue"
         android:layout_alignTop="@+id/notification" />
+
+    <ImageView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/keywordValue"
+        android:layout_alignEnd="@+id/serviceRunning"
+        app:srcCompat="?attr/actionModeShareDrawable" />
 
 </RelativeLayout>
