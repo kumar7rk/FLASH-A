@@ -189,7 +189,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 }
                 else{
                     Log.i("Else", "gps off");
-                    m.openLocationSettings(manager);
+//                    m.openLocationSettings(manager);
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }

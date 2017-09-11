@@ -118,7 +118,14 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkPermissions() {
         int permissionState = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
+        int permissionState1 = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS);
+        int permissionState2 = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS);
+
+        return permissionState == PackageManager.PERMISSION_GRANTED &&
+                permissionState1 == PackageManager.PERMISSION_GRANTED &&
+                permissionState2 == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissions() {
@@ -136,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             // Request permission
-                            startLocationPermissionRequest();
+                            startPermissionRequest();
                         }
                     });
 
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
-            startLocationPermissionRequest();
+            startPermissionRequest();
         }
     }
     private void showSnackbar(final String text) {
@@ -154,11 +161,14 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
         }
     }
-    private void startLocationPermissionRequest() {
+    private void startPermissionRequest() {
         ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.SEND_SMS,
+                        Manifest.permission.READ_CONTACTS},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
-    }@Override
+    }
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         Log.i(TAG, "onRequestPermissionResult");
@@ -168,9 +178,10 @@ public class MainActivity extends AppCompatActivity {
                 // If user interaction was interrupted, the permission request is cancelled and you
                 // receive empty arrays.
                 Log.i(TAG, "User interaction was cancelled.");
-            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted.
-//                getLastLocation();
                 locationPermission = true;
             } else {
                 // Permission denied.
@@ -218,6 +229,9 @@ public class MainActivity extends AppCompatActivity {
                 0);
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                0);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_CONTACTS},
                 0);
     }
     @Override
