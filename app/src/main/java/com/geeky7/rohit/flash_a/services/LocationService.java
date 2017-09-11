@@ -6,13 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -281,13 +284,34 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         updateToastLog();*/
     }
     private void sendSMS() {
+        String name = getContactName(sender,getApplicationContext());
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
         manager.sendTextMessage(sender,null, address, null, null);
         boolean noti = preferences.getBoolean("notification",true);
+
         if (noti)
-            pugNotification("Location shared","Your current location shared with ",sender);
+            pugNotification("Location shared","Your current location shared with",name);
     }
+    public String getContactName(final String phoneNumber,Context context)
+    {
+        Uri uri=Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,Uri.encode(phoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName="";
+        Cursor cursor=context.getContentResolver().query(uri,projection,null,null,null);
+
+        if (cursor != null) {
+            if(cursor.moveToFirst()) {
+                contactName=cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return contactName;
+    }
+
     private String setAddress() {
         for (int i = 0; i< addresses.size();i++)
             Log.i("All addresses",addresses.get(i).getAddressLine(i));

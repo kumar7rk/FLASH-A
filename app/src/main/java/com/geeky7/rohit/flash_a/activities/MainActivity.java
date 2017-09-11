@@ -82,10 +82,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                 sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra("sms_body", "Get my current location by messaging me the secret keyword \"Asha\".");
+                sendIntent.putExtra("sms_body", "Get my current location by messaging me the secret keyword \"Asha\". This great app ASHA keeps us connected.");
                 startActivity(sendIntent);
-
-
             }
         });
 

@@ -72,8 +72,10 @@
         android:id="@+id/notification"
         android:layout_width="190dp"
         android:layout_height="40dp"
-        android:layout_marginTop="13dp"
-        android:text="Notification on location shared"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/keyword"
+        android:layout_marginTop="25dp"
+        android:text="Notify on location shared"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.082"
@@ -81,14 +83,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.271"
-        android:layout_below="@+id/keywordValue"
-        android:layout_alignParentStart="true" />
+        android:layout_alignEnd="@+id/notificationValue" />
     <CheckBox
         android:id="@+id/notificationValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/keywordValue"
-        android:layout_alignTop="@+id/notification" />
+        android:layout_alignTop="@+id/notification"
+        android:layout_alignEnd="@+id/share" />
 
     <ImageView
         android:id="@+id/share"
