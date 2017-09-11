@@ -8,6 +8,23 @@
     tools:context="com.geeky7.rohit.flash_a.activities.MainActivity">
 
     <TextView
+        android:id="@+id/textView6"
+        android:layout_width="190dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView5"
+        android:layout_marginTop="48dp"
+        android:text="Send notification when location shared"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.271"
+        android:layout_toStartOf="@+id/keywordValue" />
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="190dp"
         android:layout_height="40dp"
@@ -50,6 +67,22 @@
         android:layout_marginTop="30dp" />
 
     <TextView
+        android:id="@+id/textView5"
+        android:layout_width="190dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/serviceRunning"
+        android:layout_marginTop="30dp"
+        android:text="Keyword"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.271" />
+
+    <TextView
         android:id="@+id/keywordValue"
         android:layout_width="102dp"
         android:layout_height="40dp"
@@ -65,4 +98,12 @@
         android:layout_alignTop="@+id/keyword"
         android:layout_alignStart="@+id/serviceRunning"
         android:layout_marginTop="15dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/keywordValue"
+        android:layout_alignTop="@+id/textView6" />
+
 </RelativeLayout>
