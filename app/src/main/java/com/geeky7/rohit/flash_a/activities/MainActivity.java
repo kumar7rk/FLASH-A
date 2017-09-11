@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceRunning = (ToggleButton)findViewById(R.id.serviceRunning);
-//        String service= serviceRunning.getText().toString();
-//        Main.showToast(service);
 
         boolean service = preferences.getBoolean("service",true);
         serviceRunning.setChecked(service);

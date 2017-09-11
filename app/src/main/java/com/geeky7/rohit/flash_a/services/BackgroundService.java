@@ -48,7 +48,6 @@ public class BackgroundService extends Service {
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
         boolean service = preferences.getBoolean("service",true);
-        Main.showToast(service+" - service");
         Log.i("Service",service+"");
         if(intent!=null)
             extras = intent.getExtras();
