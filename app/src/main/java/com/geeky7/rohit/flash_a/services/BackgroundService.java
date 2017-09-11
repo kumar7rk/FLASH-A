@@ -58,7 +58,7 @@ public class BackgroundService extends Service {
             editor.putString("sender",sender);
             Log.i("Message","Message is:"+ message);
 
-            if ("Where".equals(message) && locationPermission && m.isNetworkAvailable()&&service)  {
+            if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message) )&& locationPermission && m.isNetworkAvailable()&&service)  {
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("LocationService", "Location Service initiated");
