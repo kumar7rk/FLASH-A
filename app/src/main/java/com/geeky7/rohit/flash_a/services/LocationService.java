@@ -157,24 +157,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onConnected(Bundle bundle)throws SecurityException {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-/*//        boolean b1 = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        boolean b1 = manager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
-
-        Log.i("b1",b1+"");
-//        Log.i("b2",b2+"");
-        if(!b&&b1){
-            Log.i("b1","yes! Passive provider is being helpful");
-            mCurrentLocation = manager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            try {
-                addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                sendSMS();
-                updateToastLog();
-                stopSelf();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
 
         // if location null, get last known location, updating the time so that we don't show quite old location
         if (mCurrentLocation==null){
@@ -189,7 +171,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 }
                 else{
                     Log.i("Else", "gps off");
-//                    m.openLocationSettings(manager);
+                    String name = getContactName(sender,getApplicationContext());
+
+//                    pugNotification("Location requested",name +" has requested your location","Click this notification to turn location on");
+                    
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
@@ -233,11 +218,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     if (mCurrentLocation==null){
                         Log.i("onReceive","Current location null. haha!");
                         Thread.sleep(2000);
-//                        startLocationupdates();
                         Thread.sleep(2000);
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//                        Thread.sleep(2000);
                         Log.i("onReceive",mCurrentLocation.getProvider());
                         Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
                         Log.i("onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
@@ -252,7 +235,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
-//                    gpsReceiver.abortBroadcast();
                     getApplicationContext().unregisterReceiver(gpsReceiver);
                 }
                  catch(IOException e) {
@@ -273,15 +255,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     @Override
     public void onLocationChanged(Location location) {
-        //Main.showToast("I'm called- onLocationChanged");
-        /*mCurrentLocation = location;
-        mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        try {
-            addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        updateToastLog();*/
     }
     private void sendSMS() {
         String name = getContactName(sender,getApplicationContext());

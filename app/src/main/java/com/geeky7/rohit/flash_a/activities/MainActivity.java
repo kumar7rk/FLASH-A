@@ -25,8 +25,6 @@ import com.geeky7.rohit.flash_a.R;
 
 public class MainActivity extends AppCompatActivity {
 
-//    String message = "No text";
-//    String sender = "Empty";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
@@ -86,35 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(sendIntent);
             }
         });
-
-
         if(!checkPermissions())
             requestPermissions();
-
-        /*final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);*/
-
-        /*Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            message = extras.getString("Message");
-            sender = extras.getString("Sender");
-            Log.i("Message","Message is:"+ message);
-
-            if ("Where".equals(message)) {
-//                Main.showToast("Location requested");
-                Log.i("Matched", "Location requested");
-                startService();
-                Log.i("LocationService", "Location Service initiated");
-
-//              if(message.contains("Where")){
-                // this message initiated the location service which fetches the location and converts into an address
-            }
-        }*/
-
     }
 
     // from Google
-
     private boolean checkPermissions() {
         int permissionState = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -222,23 +196,10 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(actionStringId), listener).show();
     }
-
-    public void checkPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_SMS},
-                0);
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                0);
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_CONTACTS},
-                0);
-    }
     @Override
     protected void onResume() {
         super.onResume();
     }
-
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
