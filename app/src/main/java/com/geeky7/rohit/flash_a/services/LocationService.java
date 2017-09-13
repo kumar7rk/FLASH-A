@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -161,7 +162,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // if location null, get last known location, updating the time so that we don't show quite old location
         if (mCurrentLocation==null){
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//            Log.i("LastLocation",mCurrentLocation.getLatitude()+", "+ mCurrentLocation.getLongitude());
             try {
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
@@ -172,9 +172,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 else{
                     Log.i("Else", "gps off");
                     String name = getContactName(sender,getApplicationContext());
-
-//                    pugNotification("Location requested",name +" has requested your location","Click this notification to turn location on");
-                    
+                    pugNotification("Location Request from "+name," has requested your location","Click this notification to turn location on");
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
@@ -183,36 +181,17 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             }
 //            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         }
-        /*if (mRequestingLocationUpdates)
-            startLocationupdates();*/
-
-//        googleApiClientConnected = true;
     }
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
                 //Do your stuff on GPS status change
-
-//                Log.i("onReceive","Building api client");
-//                buildGoogleApiClient();
-                /*if(!mGoogleApiClient.isConnected()){
-                    Log.i("onReceive","Not connected");
-                    mGoogleApiClient.connect();
-                }
-                geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                */
                 Log.i("onReceive",mGoogleApiClient.isConnected()+"");
-                // googleAPI is connected and ready to get location updates- start fetching current location
                 try {
                     if(!mGoogleApiClient.isConnected()){
                         stopSelf();
-//                        abortBroadcast();
-//                        Thread.sleep(12000);
                         Log.i("onReceive","Google api client not connected. Mission abort");
-                        /*Log.i("onReceive","mGoogleApiClient.isConnected, starting location updates");
-                        startLocationupdates();
-                        Log.i("onReceive","Started location update");*/
                     }
                     Thread.sleep(2000);
                     if (mCurrentLocation==null){
@@ -278,10 +257,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (cursor != null) {
             if(cursor.moveToFirst()) {
                 contactName=cursor.getString(0);
-            }
             cursor.close();
         }
-
         return contactName;
     }
 
@@ -300,6 +277,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return address;
     }
     public void pugNotification(String title ,String message, String bigText){
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PugNotification.with(getApplicationContext())
                 .load()
                 .title(title)
@@ -309,6 +288,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 .largeIcon(R.drawable.cast_ic_notification_small_icon)
                 .flags(android.app.Notification.DEFAULT_ALL)
                 .simple()
+                .click(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), new Bundle())
                 .build();
     }
 }
