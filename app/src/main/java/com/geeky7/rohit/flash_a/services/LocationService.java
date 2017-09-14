@@ -12,6 +12,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -29,7 +30,21 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,7 +67,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //    private String mLastUpdateTime;
 
 //    private boolean googleApiClientConnected;
-//    static Context context;
+    static Context context;
 
     Main m;
 
@@ -290,5 +305,197 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 .simple()
                 .build();
     }
+
+    public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
+        double mLatitude = -34.923792;
+        double mLongitude = 138.6047722;
+        int mRadius = 20;
+
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
+
+        String number1 = "AIzaSyCth6KThdK_C9mztGc2dadvK82yCvktO-o";
+
+        StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        sb.append("location=" + mLatitude + "," + mLongitude);
+        sb.append("&radius="+mRadius);
+        sb.append("&sensor=true");
+        sb.append("&key=" + number1);
+        Log.v("Places", sb.toString());
+        return sb;
+    }
+
+    private String downloadUrl(String strUrl) throws IOException{
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.connect();
+            iStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb = new StringBuffer();
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            data = sb.toString();
+            br.close();
+
+        } catch (Exception e) {
+        } finally {
+            if (iStream != null) {
+                iStream.close();
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return data;
+    }
+    private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
+
+        JSONObject jObject;
+
+        Context mContext;
+        public ParserTask(Context context){
+            mContext = context;
+        }
+        // Invoked by execute() method of this object
+        @Override
+        protected List<HashMap<String, String>> doInBackground(String... jsonData) {
+
+            List<HashMap<String, String>> places = null;
+            Place_JSON placeJson = new Place_JSON();
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+
+                places = placeJson.parse(jObject);
+
+            } catch (Exception e) {
+                Log.d("Exception", e.toString());
+            }
+            return places;
+        }
+
+        // Executed after the complete execution of doInBackground() method
+        @Override
+        protected void onPostExecute(List<HashMap<String, String>> list) {
+
+            if (list.size() >0){
+                HashMap<String, String> hmPlace = list.get(0);
+                String name = hmPlace.get("place_name");
+                String type = hmPlace.get("types");
+                SharedPreferences.Editor editor = preferences.edit();
+                String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+                Log.i("PlaceDetected", name);
+            }
+        }
+    }// onPostExecute
+//}// end of the parserTask class
+   public class Place_JSON {
+
+        /**
+         * Receives a JSONObject and returns a list
+         */
+        public List<HashMap<String, String>> parse(JSONObject jObject) {
+
+            JSONArray jPlaces = null;
+            try {
+                /** Retrieves all the elements in the 'places' array */
+                jPlaces = jObject.getJSONArray("results");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            /** Invoking getPlaces with the array of json object
+             * where each json object represent a place
+             */
+            return getPlaces(jPlaces);
+        }
+
+        private List<HashMap<String, String>> getPlaces(JSONArray jPlaces) {
+            int placesCount = jPlaces.length();
+            List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> place = null;
+
+            /** Taking each place, parses and adds to list object */
+            for (int i = 0; i < placesCount; i++) {
+                try {
+                    /** Call getPlace with place JSON object to parse the place */
+                    place = getPlace((JSONObject) jPlaces.get(i));
+                    placesList.add(place);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return placesList;
+        }
+
+        /**
+         * Parsing the Place JSON object
+         */
+        private HashMap<String, String> getPlace(JSONObject jPlace){
+
+            HashMap<String, String> place = new HashMap<String, String>();
+            String placeName = "-NA-";
+            String vicinity = "-NA-";
+            String latitude = "";
+            String longitude = "";
+            String reference = "";
+            String placeType = "";
+
+            try {
+                // Extracting Place name, if available
+                if (!jPlace.isNull("name")) {
+                    placeName = jPlace.getString("name");
+                }
+
+                // Extracting Place Vicinity, if available
+                if (!jPlace.isNull("vicinity")) {
+                    vicinity = jPlace.getString("vicinity");
+                }
+
+                latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
+                longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
+                reference = jPlace.getString("reference");
+                placeType = jPlace.getString("types");
+
+                place.put("place_name", placeName);
+                place.put("vicinity", vicinity);
+                place.put("lat", latitude);
+                place.put("lng", longitude);
+                place.put("reference", reference);
+                place.put("types", placeType);
+
+                Log.i("PlaceType",placeType);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return place;
+        }
+    }
+    public class PlacesTask extends AsyncTask<String, Integer, String> {
+        String data = null;
+        @Override
+        protected String doInBackground(String... url) {
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.i("Background Task", e.toString());
+            }
+            return data;
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            ParserTask parserTask = new ParserTask(context);
+            parserTask.execute(result);
+            Log.i("PlacesTaskOnPostExecute", result + "");
+        }
+    }
 }
+
 
