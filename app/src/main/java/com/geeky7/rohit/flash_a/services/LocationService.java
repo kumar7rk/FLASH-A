@@ -41,9 +41,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -74,6 +72,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     Geocoder geocoder;
     List<Address> addresses;
 
+    String string = "";
     SharedPreferences preferences;
     String sender = "";
     public LocationService() {
@@ -180,8 +179,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             try {
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    sendSMS();
-                    updateToastLog();
+                    String sb = null;
+                    try {
+                        sb = buildPlacesURL().toString();
+                        new PlacesTask().execute(sb);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+//                    Thread.sleep(5000);
+//                    sendSMS();
+//                    updateToastLog();
                     stopSelf();
                 }
                 else{
@@ -191,7 +198,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 //            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
@@ -212,8 +219,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     if (mCurrentLocation==null){
                         Log.i("onReceive","Current location null. haha!");
                         Thread.sleep(2000);
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
+//                        Thread.sleep(2000);
+//                        Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                         Log.i("onReceive",mCurrentLocation.getProvider());
                         Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
@@ -226,6 +233,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     }
                     Log.i("onReceive","Sending message now");
                     stopSelf();
+//                    Thread.sleep(10000);
                     sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
@@ -254,7 +262,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String name = getContactName(sender,getApplicationContext());
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
-        manager.sendTextMessage(sender,null, address, null, null);
+        String string1 = string;
+//        manager.sendTextMessage(sender,null, address, null, null);
+        manager.sendTextMessage(sender,null, string1, null, null);
         boolean noti = preferences.getBoolean("notification",true);
 
         if (noti)
@@ -387,11 +397,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             if (list.size() >0){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
-                String type = hmPlace.get("types");
-                SharedPreferences.Editor editor = preferences.edit();
-                String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-
-                Log.i("PlaceDetected", name);
+                string = name;
+                sendSMS();
             }
         }
     }// onPostExecute
@@ -405,9 +412,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
             JSONArray jPlaces = null;
             try {
-                /** Retrieves all the elements in the 'places' array */
                 jPlaces = jObject.getJSONArray("results");
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -434,10 +439,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             }
             return placesList;
         }
-
-        /**
-         * Parsing the Place JSON object
-         */
         private HashMap<String, String> getPlace(JSONObject jPlace){
 
             HashMap<String, String> place = new HashMap<String, String>();
