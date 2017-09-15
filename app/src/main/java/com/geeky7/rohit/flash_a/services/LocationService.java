@@ -41,6 +41,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -219,8 +220,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     if (mCurrentLocation==null){
                         Log.i("onReceive","Current location null. haha!");
                         Thread.sleep(2000);
-//                        Thread.sleep(2000);
-//                        Thread.sleep(2000);
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                         Log.i("onReceive",mCurrentLocation.getProvider());
                         Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
@@ -231,10 +232,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                         Log.i("onReceive","Value for addresses list added");
                     }
+
                     Log.i("onReceive","Sending message now");
+                    String sb = null;
+                    try {
+                        sb = buildPlacesURL().toString();
+                        new PlacesTask().execute(sb);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     stopSelf();
-//                    Thread.sleep(10000);
-                    sendSMS();
                     Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
                     getApplicationContext().unregisterReceiver(gpsReceiver);
@@ -258,13 +265,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onLocationChanged(Location location) {
     }
-    private void sendSMS() {
+    private void sendSMS(String s) {
         String name = getContactName(sender,getApplicationContext());
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
-//        String string1 = string;
+        String string1 = "I am near "+ s+ ". "+ address;
 //        manager.sendTextMessage(sender,null, address, null, null);
-        manager.sendTextMessage(sender,null, string, null, null);
+        manager.sendTextMessage(sender,null, string1, null, null);
         boolean noti = preferences.getBoolean("notification",true);
 
         if (noti)
@@ -319,16 +326,17 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = -34.923792;
         double mLongitude = 138.6047722;
-        int mRadius = 20;
+        int mRadius = 500;
 
-        /*mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();*/
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
 
         String number1 = "AIzaSyCth6KThdK_C9mztGc2dadvK82yCvktO-o";
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius="+mRadius);
+        sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
         sb.append("&sensor=true");
         sb.append("&key=" + number1);
         Log.i("Places", sb.toString());
@@ -398,7 +406,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
                 string = name;
-                sendSMS();
+                sendSMS(name);
             }
         }
     }// onPostExecute
