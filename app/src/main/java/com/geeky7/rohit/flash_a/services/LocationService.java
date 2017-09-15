@@ -262,9 +262,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String name = getContactName(sender,getApplicationContext());
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
-        String string1 = string;
+//        String string1 = string;
 //        manager.sendTextMessage(sender,null, address, null, null);
-        manager.sendTextMessage(sender,null, string1, null, null);
+        manager.sendTextMessage(sender,null, string, null, null);
         boolean noti = preferences.getBoolean("notification",true);
 
         if (noti)
@@ -321,8 +321,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         double mLongitude = 138.6047722;
         int mRadius = 20;
 
-        mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();
+        /*mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();*/
 
         String number1 = "AIzaSyCth6KThdK_C9mztGc2dadvK82yCvktO-o";
 
@@ -331,7 +331,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         sb.append("&radius="+mRadius);
         sb.append("&sensor=true");
         sb.append("&key=" + number1);
-        Log.v("Places", sb.toString());
+        Log.i("Places", sb.toString());
         return sb;
     }
 
