@@ -298,15 +298,17 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         for (int i = 0; i< addresses.size();i++)
             Log.i("All addresses",addresses.get(i).getAddressLine(i));
 
-        String address = addresses.get(0).getAddressLine(0);
+//        String address = addresses.get(0).getAddressLine(0);
 
-//        String city = addresses.get(0).getLocality();
+        String city = addresses.get(0).getLocality();
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
 //        String postalCode = addresses.get(0).getPostalCode();
-//        String knownName = addresses.get(0).getFeatureName();
+//        String knownName = addresses.get(0).getFeatureName(); // unit 32
 
-        return address;
+        String url = addresses.get(0).getUrl();
+        return city;
+//        return address;
     }
     public void pugNotification(String title ,String message, String bigText){
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -322,7 +324,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 .simple()
                 .build();
     }
-
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = -34.923792;
         double mLongitude = 138.6047722;
