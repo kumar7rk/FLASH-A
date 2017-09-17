@@ -298,17 +298,20 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         for (int i = 0; i< addresses.size();i++)
             Log.i("All addresses",addresses.get(i).getAddressLine(i));
 
-//        String address = addresses.get(0).getAddressLine(0);
+        String address = addresses.get(0).getAddressLine(0);
 
-        String city = addresses.get(0).getLocality();
+//        String city = addresses.get(0).getLocality();
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
 //        String postalCode = addresses.get(0).getPostalCode();
 //        String knownName = addresses.get(0).getFeatureName(); // unit 32
 
-        String url = addresses.get(0).getUrl();
-        return city;
-//        return address;
+//        String s1 = addresses.get(0).getSubLocality(); // null
+//        String s2 = addresses.get(0).getPremises(); // null
+//        String s3 = addresses.get(0).getThoroughfare(); //null
+//        String s4 = addresses.get(0).getSubAdminArea(); city of west torrens
+//        return s1+ " " + s2+ " " + s3+ " "+ s4;
+        return address;
     }
     public void pugNotification(String title ,String message, String bigText){
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
