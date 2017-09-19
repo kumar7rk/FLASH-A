@@ -8,8 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
+    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@drawable/rounded_shape</item>
     </style>
 
+    <style name="basic" parent="AlertDialog.AppCompat">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="basic_tv" parent="AlertDialog.AppCompat">
+        <item name="android:layout_gravity">center_horizontal|bottom</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+
+    </style>
 </resources>
