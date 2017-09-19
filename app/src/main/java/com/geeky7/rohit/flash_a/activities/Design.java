@@ -38,17 +38,43 @@ public class Design extends AppCompatActivity {
     }
 
     public void disableService(){
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_lay.setBackgroundColor(Color.RED);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_tv.setText(R.string.service_disabled);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_iv.setImageBitmap(null);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_iv.setBackgroundResource(R.drawable.service_disabled);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
+        serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
     }
 
     public void enableService(){
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_lay.setBackgroundColor(0xffff8800);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_tv.setText(R.string.service_enabled);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_iv.setImageBitmap(null);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
         serviceEnabled_iv.setBackgroundResource(R.drawable.service_enabled);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
+        serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        serviceEnabled_iv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20,20,20,20);
     }
 
     @Override
