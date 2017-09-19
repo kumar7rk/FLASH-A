@@ -16,13 +16,12 @@
             android:layout_height="match_parent"
             style="@style/basic"
             android:background="@android:color/holo_orange_dark"
-            android:onClick="serviceEnabled"
         >
             <ImageView
                 android:id="@+id/serviceEnabled_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/mr_media_play_light"
+                android:src="@drawable/service_enabled"
                 style = "@style/basic_iv"
                 />
             <TextView
