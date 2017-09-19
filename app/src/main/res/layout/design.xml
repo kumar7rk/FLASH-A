@@ -19,16 +19,17 @@
             android:onClick="serviceEnabled"
         >
             <ImageView
+                android:id="@+id/serviceEnabled_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cast_ic_expanded_controller_closed_caption"
+                android:src="@drawable/mr_media_play_light"
                 style = "@style/basic_iv"
                 />
             <TextView
                 android:id="@+id/serviceEnabled_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Service Enabled"
+                android:text="@string/service_enabled"
                 style="@style/basic_tv"
                 />
         </LinearLayout>
@@ -48,7 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Home Address"
+                android:text="@string/home_address"
                 style="@style/basic_tv"
                 />
         </LinearLayout>
@@ -74,7 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Keyword"
+                android:text="@string/keyword"
                 style="@style/basic_tv"
                 />
         </LinearLayout>
@@ -94,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Customise Message"
+                android:text="@string/customise_message"
                 style="@style/basic_tv"
                 />
         </LinearLayout>
@@ -120,7 +121,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="History"
+                android:text="@string/history"
                 style="@style/basic_tv"
                 />
         </LinearLayout>
@@ -140,7 +141,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tutorial"
+                android:text="@string/tutorial"
                 style="@style/basic_tv"
                 />
         </LinearLayout>
