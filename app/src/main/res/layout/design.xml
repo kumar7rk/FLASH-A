@@ -12,26 +12,23 @@
         android:layout_weight="0.34"
         android:weightSum="0.34">
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButton"
             android:layout_width="175dp"
             android:layout_height="match_parent"
-            android:background="@null"
-            android:contentDescription="Service Enabled"
-            android:elevation="@dimen/pugnotification_text_size_title"
+            android:text="Service Enabled"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
+            android:background="@android:color/darker_gray" />
 
-            app:srcCompat="@android:color/darker_gray" />
-
-        <ImageButton
+        <Button
             android:id="@+id/imageButton1"
             android:layout_width="175dp"
             android:layout_height="match_parent"
-            android:background="@null"
+            android:text="Home Address"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
-            app:srcCompat="@color/colorAccent" />
+            android:background="@color/colorAccent" />
     </LinearLayout>
 
 
@@ -43,23 +40,23 @@
         android:layout_weight="0.34"
         >
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButton2"
             android:layout_width="175dp"
             android:layout_height="match_parent"
-            android:background="@null"
+            android:text="Keyword"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
-            app:srcCompat="@color/common_google_signin_btn_text_light_focused" />
+            android:background="@color/common_google_signin_btn_text_light_focused" />
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButton3"
             android:layout_width="175dp"
             android:layout_height="match_parent"
-            android:background="@null"
+            android:text="Customise Message"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
-            app:srcCompat="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color" />
+            android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color" />
     </LinearLayout>
 
     <LinearLayout
@@ -70,24 +67,24 @@
         android:layout_weight="0.33"
         >
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButton4"
             android:layout_width="175dp"
             android:layout_height="match_parent"
-            android:background="@null"
+            android:text="History"
             android:paddingBottom="4dp"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
-            app:srcCompat="@color/wallet_link_text_light" />
+            android:background="@color/wallet_link_text_light" />
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButton5"
             android:layout_width="175dp"
             android:layout_height="match_parent"
-            android:background="@null"
+            android:text="Tutorial"
             android:paddingBottom="4dp"
             android:paddingStart="10dp"
             android:paddingTop="8dp"
-            app:srcCompat="?android:attr/colorPressedHighlight" />
+            android:background="?android:attr/colorPressedHighlight" />
     </LinearLayout>
 </LinearLayout>
