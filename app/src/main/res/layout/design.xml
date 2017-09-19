@@ -10,119 +10,137 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/darker_gray"
-            android:orientation="vertical"
-            android:gravity="center_horizontal|center_vertical"
-            >
+            style="@style/basic"
+            android:background="@android:color/holo_orange_dark"
+            android:onClick=""
+        >
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                android:src="@drawable/cast_ic_expanded_controller_closed_caption" />
+                android:src="@drawable/cast_ic_expanded_controller_closed_caption"
+                style = "@style/basic_iv"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Service Enabled"
-                android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal|bottom"
+                style="@style/basic_tv"
                 />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/home_addressB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
-            android:text="Home Address"
-            android:textColor="@color/pugnotification_color_white"
-            android:textAllCaps="false"
-
-            android:padding="10dp"
-
-            android:background="@color/colorAccent"
-            android:drawableStart="@drawable/mr_media_play_light"
-            android:layout_weight="1"
-            />
+            android:background="@android:color/holo_blue_bright"
+            style="@style/basic"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home_address"
+                style = "@style/basic_iv"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home Address"
+                style="@style/basic_tv"
+                />
+        </LinearLayout>
     </LinearLayout>
-
+<!--2-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         >
         <LinearLayout
-            android:id="@+id/keywordB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
-            android:text="Keyword"
-            android:textColor="@color/pugnotification_color_white"
-            android:textAllCaps="false"
-
-            android:padding="10dp"
-
-            android:drawableStart="@drawable/mr_media_play_light"
             android:background="@color/common_google_signin_btn_text_light_focused"
-            android:layout_weight="1"
-            />
+            style="@style/basic"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/keyword"
+                style = "@style/basic_iv"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keyword"
+                style="@style/basic_tv"
+                />
+        </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/customise_messageB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
-            android:text="Customise Message"
-            android:textColor="@color/pugnotification_color_white"
-            android:textAllCaps="false"
-
-            android:padding="10dp"
-
             android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
-            android:drawableStart="@drawable/mr_media_play_light"
-            android:layout_weight="1"
-            />
+            style="@style/basic"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/customise_message"
+                style = "@style/basic_iv"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customise Message"
+                style="@style/basic_tv"
+                />
+        </LinearLayout>
     </LinearLayout>
 
+<!--3-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         >
         <LinearLayout
-            android:id="@+id/historyB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
-            android:text="History"
-
-            android:textColor="@color/pugnotification_color_white"
-            android:textAllCaps="false"
-
-            android:padding="10dp"
-
             android:background="@color/wallet_link_text_light"
-            android:drawableStart="@drawable/mr_media_play_light"
-            android:layout_weight="1"
-            />
+            style="@style/basic"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/history"
+                style = "@style/basic_iv"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="History"
+                style="@style/basic_tv"
+                />
+        </LinearLayout>
+
         <LinearLayout
-            android:id="@+id/tutorialB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
-            android:text="Tutorial"
-            android:textColor="@color/pugnotification_color_white"
-            android:textAllCaps="false"
-
-            android:padding="10dp"
-
             android:background="?android:attr/colorPressedHighlight"
-            android:drawableStart="@drawable/mr_media_play_light"
-            android:layout_weight="1"
-            />
+            style="@style/basic"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tutorial"
+                style = "@style/basic_iv"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tutorial"
+                style="@style/basic_tv"
+                />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
