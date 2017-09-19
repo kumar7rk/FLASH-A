@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 
 public class Design extends AppCompatActivity {
@@ -59,11 +60,13 @@ public class Design extends AppCompatActivity {
             public void onClick(View view) {
                 final boolean service = preferences.getBoolean("service",true);
                 if(service){
+                    Main.showToast("FL-ASHA disabled");
                     editor.putBoolean("service",false);
                     editor.commit();
                     disableService();
                 }
                 else {
+                    Main.showToast("FL-ASHA enabled");
                     editor.putBoolean("service",true);
                     editor.commit();
                     enableService();
