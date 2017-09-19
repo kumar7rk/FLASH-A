@@ -8,36 +8,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        >
 
-        <Button
-            android:id="@+id/serviceB"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
-            android:text="Service Enabled"
-            android:textColor="@color/pugnotification_color_white"
-            android:textAllCaps="false"
-
-            android:padding="20dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
-
-            android:background="@android:color/darker_gray"
-
-            android:drawableStart="@drawable/cast_abc_scrubber_control_off_mtrl_alpha"
             android:layout_weight="1"
-            />
+            android:background="@android:color/darker_gray"
+            android:orientation="vertical"
+            android:gravity="center_horizontal|center_vertical"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@drawable/cast_ic_expanded_controller_closed_caption" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Service Enabled"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal|bottom"
+                />
+        </LinearLayout>
 
-        <Button
+        <LinearLayout
             android:id="@+id/home_addressB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+
             android:text="Home Address"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
+            android:textColor="@color/pugnotification_color_white"
+            android:textAllCaps="false"
+
+            android:padding="10dp"
+
             android:background="@color/colorAccent"
             android:drawableStart="@drawable/mr_media_play_light"
             android:layout_weight="1"
@@ -49,27 +55,35 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-        <Button
+        <LinearLayout
             android:id="@+id/keywordB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+
             android:text="Keyword"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
+            android:textColor="@color/pugnotification_color_white"
+            android:textAllCaps="false"
+
+            android:padding="10dp"
+
+            android:drawableStart="@drawable/mr_media_play_light"
             android:background="@color/common_google_signin_btn_text_light_focused"
             android:layout_weight="1"
             />
 
-        <Button
+        <LinearLayout
             android:id="@+id/customise_messageB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+
             android:text="Customise Message"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
+            android:textColor="@color/pugnotification_color_white"
+            android:textAllCaps="false"
+
+            android:padding="10dp"
+
             android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
+            android:drawableStart="@drawable/mr_media_play_light"
             android:layout_weight="1"
             />
     </LinearLayout>
@@ -79,28 +93,35 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-        <Button
+        <LinearLayout
             android:id="@+id/historyB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+
             android:text="History"
-            android:paddingBottom="4dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
+
+            android:textColor="@color/pugnotification_color_white"
+            android:textAllCaps="false"
+
+            android:padding="10dp"
+
             android:background="@color/wallet_link_text_light"
+            android:drawableStart="@drawable/mr_media_play_light"
             android:layout_weight="1"
             />
-        <Button
+        <LinearLayout
             android:id="@+id/tutorialB"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+
             android:text="Tutorial"
-            android:paddingBottom="4dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="8dp"
+            android:textColor="@color/pugnotification_color_white"
+            android:textAllCaps="false"
+
+            android:padding="10dp"
+
             android:background="?android:attr/colorPressedHighlight"
+            android:drawableStart="@drawable/mr_media_play_light"
             android:layout_weight="1"
             />
     </LinearLayout>
