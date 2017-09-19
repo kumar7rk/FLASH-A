@@ -90,6 +90,12 @@
     <string name="service_running">Service Running</string>
     <string name="keyword">Keyword</string>
     <string name="asha">Asha</string>
+    <string name="history">History</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="customise_message">Customise Message</string>
+    <string name="home_address">Home Address</string>
+    <string name="service_enabled">Service Enabled</string>
+    <string name="service_disabled">Service Disabled</string>
 
 
 </resources>
