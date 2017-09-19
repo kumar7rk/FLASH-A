@@ -11,11 +11,12 @@
         android:layout_weight="1"
         >
         <LinearLayout
+            android:id="@+id/serviceEnabled_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             style="@style/basic"
             android:background="@android:color/holo_orange_dark"
-            android:onClick=""
+            android:onClick="serviceEnabled"
         >
             <ImageView
                 android:layout_width="wrap_content"
@@ -24,6 +25,7 @@
                 style = "@style/basic_iv"
                 />
             <TextView
+                android:id="@+id/serviceEnabled_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Service Enabled"
