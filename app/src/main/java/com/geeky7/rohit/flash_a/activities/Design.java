@@ -43,9 +43,7 @@ public class Design extends AppCompatActivity {
         serviceEnabled_iv.setImageBitmap(null);
         serviceEnabled_iv.setImageResource(R.drawable.service_disabled);
         serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        serviceEnabled_iv.setPadding(50,50,50,50);
         serviceEnabled_tv.setPadding(20,20,20,20);
-
     }
 
     public void enableService(){
@@ -54,9 +52,7 @@ public class Design extends AppCompatActivity {
         serviceEnabled_iv.setImageBitmap(null);
         serviceEnabled_iv.setImageResource(R.drawable.service_enabled);
         serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        serviceEnabled_iv.setPadding(50,50,50,50);
-        serviceEnabled_tv.setPadding(50,50,50,50);
-
+        serviceEnabled_tv.setPadding(20,20,20,20);
     }
 
     @Override
