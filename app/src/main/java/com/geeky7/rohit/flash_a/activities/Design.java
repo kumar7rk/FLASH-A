@@ -1,5 +1,6 @@
 package com.geeky7.rohit.flash_a.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import com.geeky7.rohit.flash_a.R;
 
 public class Design extends AppCompatActivity {
 
-    LinearLayout serviceEnabled_lay;
+    LinearLayout serviceEnabled_lay,homeAddress_lay;
     TextView serviceEnabled_tv;
     ImageView serviceEnabled_iv;
 
@@ -31,12 +32,21 @@ public class Design extends AppCompatActivity {
         final boolean service = preferences.getBoolean("service",true);
 
         serviceEnabled_lay = (LinearLayout)findViewById(R.id.serviceEnabled_lay);
+        homeAddress_lay = (LinearLayout)findViewById(R.id.homeAddress_lay);
+
         serviceEnabled_tv = (TextView)findViewById(R.id.serviceEnabled_tv);
         serviceEnabled_iv = (ImageView)findViewById(R.id.serviceEnabled_iv);
         if(service) enableService();
         else disableService();
-    }
 
+
+        homeAddress_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),HomeAddress.class));
+            }
+        });
+    }
     public void disableService(){
         serviceEnabled_lay.setBackgroundColor(Color.RED);
         serviceEnabled_tv.setText(R.string.service_disabled);
