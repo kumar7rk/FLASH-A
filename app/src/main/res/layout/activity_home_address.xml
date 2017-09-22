@@ -4,4 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.geeky7.rohit.flash_a.activities.HomeAddress" />
+    tools:context="com.geeky7.rohit.flash_a.activities.HomeAddress"
+    >
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_done"
+        app:layout_anchorGravity="bottom|right|end"
+        app:backgroundTint="#FF0000"
+        app:rippleColor="#FFF000"/>
+</LinearLayout>
