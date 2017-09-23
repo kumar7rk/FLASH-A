@@ -97,8 +97,7 @@
     <string name="service_enabled">Service Enabled</string>
     <string name="service_disabled">Service Disabled</string>
 
-    <string name="open_activity">Open Autocomplete Activity</string>
-    <string name="selected_place">Last Selected Place:</string>
+    <string name="selected_place">Home Address:</string>
     <string name="place_details">
     <![CDATA[
         <b>%1$s</b>
