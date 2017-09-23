@@ -39,7 +39,7 @@ public class HomeAddress extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        String homeAddress = preferences.getString("homeAddress",null);
+        String homeAddress = preferences.getString("homeAddress","Not set! Add Home address for better experience such as ETA");
         mPlaceDetailsText.setText(homeAddress);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -83,13 +83,13 @@ public class HomeAddress extends AppCompatActivity {
 
                 mPlaceDetailsText.setText(place.getAddress());
                 editor.putString("homeAddress",place.getAddress()+"");
-
+                editor.apply();
                 // Display attributions if required.
                 CharSequence attributions = place.getAttributions();
                 if (!TextUtils.isEmpty(attributions)) {
 //                    mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
                 } else {
-                    mPlaceAttribution.setText("");
+//                    mPlaceAttribution.setText("");
                 }
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
