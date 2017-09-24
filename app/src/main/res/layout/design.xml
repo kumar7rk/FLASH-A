@@ -35,23 +35,23 @@
 
         <LinearLayout
             android:id="@+id/homeAddress_lay"
+            style="@style/basic"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:color/holo_blue_bright"
-            style="@style/basic"
+            android:background="@drawable/rounded_shape"
             >
+
             <ImageView
+                style="@style/basic_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/home_address"
-                style = "@style/basic_iv"
-                />
+                android:src="@drawable/home_address" />
+
             <TextView
+                style="@style/basic_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/home_address"
-                style="@style/basic_tv"
-                />
+                android:text="@string/home_address" />
         </LinearLayout>
     </LinearLayout>
 <!--2-->

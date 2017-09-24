@@ -35,13 +35,12 @@ public class Design extends AppCompatActivity {
         homeAddress_lay = (LinearLayout)findViewById(R.id.homeAddress_lay);
 
 
-//        homeAddress_lay.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-//        homeAddress_lay.setBackgroundColor(android.R.color.holo_blue_bright);
+        homeAddress_lay.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+
         serviceEnabled_tv = (TextView)findViewById(R.id.serviceEnabled_tv);
         serviceEnabled_iv = (ImageView)findViewById(R.id.serviceEnabled_iv);
         if(service) enableService();
         else disableService();
-
 
         homeAddress_lay.setOnClickListener(new View.OnClickListener() {
             @Override
