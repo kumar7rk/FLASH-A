@@ -16,7 +16,7 @@ import com.geeky7.rohit.flash_a.R;
 
 public class Design extends AppCompatActivity {
 
-    LinearLayout serviceEnabled_lay,homeAddress_lay;
+    LinearLayout serviceEnabled_lay,homeAddress_lay,keyword_lay,customiseMessage_lay,history_lay, tutorial_lay;
     TextView serviceEnabled_tv;
     ImageView serviceEnabled_iv;
 
@@ -26,18 +26,19 @@ public class Design extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        final boolean service = preferences.getBoolean("service",true);
-     serviceEnabled_lay = (LinearLayout)findViewById(R.id.serviceEnabled_lay);
-        homeAddress_lay = (LinearLayout)findViewById(R.id.homeAddress_lay);
-
-
-//        homeAddress_lay.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-
         serviceEnabled_tv = (TextView)findViewById(R.id.serviceEnabled_tv);
         serviceEnabled_iv = (ImageView)findViewById(R.id.serviceEnabled_iv);
+
+        serviceEnabled_lay = (LinearLayout)findViewById(R.id.serviceEnabled_lay);
+        homeAddress_lay = (LinearLayout)findViewById(R.id.homeAddress_lay);
+        keyword_lay = (LinearLayout)findViewById(R.id.keyword_lay);
+        customiseMessage_lay = (LinearLayout)findViewById(R.id.customiseMessage_lay);
+        history_lay = (LinearLayout)findViewById(R.id.);
+        tutorial_lay = (LinearLayout)findViewById(R.id.tutorial_lay);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final boolean service = preferences.getBoolean("service",true);
+
         if(service) enableService();
         else disableService();
 
@@ -48,6 +49,7 @@ public class Design extends AppCompatActivity {
             }
         });
     }
+
     public void disableService(){
         serviceEnabled_lay.setBackgroundColor(Color.RED);
         serviceEnabled_tv.setText(R.string.service_disabled);
@@ -77,13 +79,13 @@ public class Design extends AppCompatActivity {
                 if(service){
                     Main.showToast("FL-ASHA disabled");
                     editor.putBoolean("service",false);
-                    editor.commit();
+                    editor.apply();
                     disableService();
                 }
                 else {
                     Main.showToast("FL-ASHA enabled");
                     editor.putBoolean("service",true);
-                    editor.commit();
+                    editor.apply();
                     enableService();
                 }
             }
