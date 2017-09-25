@@ -90,5 +90,33 @@ public class Design extends AppCompatActivity {
                 }
             }
         });
+
+        keyword_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Main.showToast("Coming Soon!");
+            }
+        });
+
+        customiseMessage_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Main.showToast("Coming Soon!");
+            }
+        });
+
+        history_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Main.showToast("Coming Soon!");
+            }
+        });
+
+        tutorial_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Main.showToast("Coming Soon!");
+            }
+        });
     }
 }
