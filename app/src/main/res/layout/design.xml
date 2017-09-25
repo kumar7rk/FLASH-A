@@ -14,7 +14,7 @@
             android:id="@+id/serviceEnabled_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:color/holo_orange_dark"
+            android:background="@drawable/rounded_shape_service_enabled"
             style="@style/basic"
         >
             <ImageView
@@ -37,7 +37,7 @@
             android:id="@+id/homeAddress_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@drawable/rounded_shape"
+            android:background="@drawable/rounded_shape_home_address"
             style="@style/basic"
             >
 
@@ -66,7 +66,7 @@
             android:id="@+id/keyword_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/common_google_signin_btn_text_light_focused"
+            android:background="@drawable/rounded_shape_keyword"
             style="@style/basic"
             >
             <ImageView
@@ -87,7 +87,7 @@
             android:id="@+id/customiseMessage_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
+            android:background="@drawable/rounded_shape_customise_message"
             style="@style/basic"
             >
             <ImageView
@@ -115,7 +115,7 @@
             android:id="@+id/history_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/wallet_link_text_light"
+            android:background="@drawable/rounded_shape_history"
             style="@style/basic"
             >
             <ImageView
@@ -135,7 +135,7 @@
             android:id="@+id/tutorial_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="?android:attr/colorPressedHighlight"
+            android:background="@drawable/rounded_shape_tutorial"
             style="@style/basic"
             >
             <ImageView

@@ -8,10 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">@drawable/rounded_shape</item>
-    </style>
-
     <style name="basic" parent="AlertDialog.AppCompat">
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
