@@ -14,8 +14,8 @@
             android:id="@+id/serviceEnabled_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            style="@style/basic"
             android:background="@android:color/holo_orange_dark"
+            style="@style/basic"
         >
             <ImageView
                 android:id="@+id/serviceEnabled_iv"
@@ -35,23 +35,25 @@
 
         <LinearLayout
             android:id="@+id/homeAddress_lay"
-            style="@style/basic"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape"
+            style="@style/basic"
             >
 
             <ImageView
-                style="@style/basic_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/home_address" />
+                android:src="@drawable/home_address"
+                style="@style/basic_iv"
+                />
 
             <TextView
-                style="@style/basic_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/home_address" />
+                android:text="@string/home_address"
+                style="@style/basic_tv"
+                />
         </LinearLayout>
     </LinearLayout>
 <!--2-->
@@ -61,6 +63,7 @@
         android:layout_weight="1"
         >
         <LinearLayout
+            android:id="@+id/keyword_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/common_google_signin_btn_text_light_focused"
@@ -81,6 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/customiseMessage_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
@@ -108,6 +112,7 @@
         android:layout_weight="1"
         >
         <LinearLayout
+            android:id="@+id/history_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@color/wallet_link_text_light"
@@ -127,6 +132,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/tutorial_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?android:attr/colorPressedHighlight"
