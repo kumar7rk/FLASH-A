@@ -33,7 +33,7 @@ public class Design extends AppCompatActivity {
         homeAddress_lay = (LinearLayout)findViewById(R.id.homeAddress_lay);
         keyword_lay = (LinearLayout)findViewById(R.id.keyword_lay);
         customiseMessage_lay = (LinearLayout)findViewById(R.id.customiseMessage_lay);
-        history_lay = (LinearLayout)findViewById(R.id.);
+        history_lay = (LinearLayout)findViewById(R.id.history_lay);
         tutorial_lay = (LinearLayout)findViewById(R.id.tutorial_lay);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
