@@ -217,7 +217,9 @@ public class Design extends AppCompatActivity {
             }
         }
         editor.putBoolean("locationPermission",locationPermission);
-        editor.commit();
+        editor.putBoolean("SMSPermission",SMSPermission);
+        editor.putBoolean("contactPermission",contactPermission);
+        editor.apply();
     }
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {

@@ -1,11 +1,13 @@
 package com.geeky7.rohit.flash_a.services;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
@@ -18,6 +20,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -60,6 +63,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mlocationRequest;
     private Location mCurrentLocation;
+
+    boolean locationPermission = true;
+    boolean contactPermission = true;
+    boolean SMSPermission = true;
 
 //    private static final int GOOGLE_API_CLIENT_ID = 0;
 //    private boolean mRequestingLocationUpdates;
@@ -194,8 +201,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 }
                 else{
                     Log.i("Else", "gps off");
-                    String name = getContactName(sender,getApplicationContext());
+                    contactPermission = preferences.getBoolean("contactPermission",false);
+                    String name = sender;
+                    if (contactPermission && checkContactPermission()){
+                        name = getContactName(sender,getApplicationContext());
+                    }
                     pugNotification("Location Request from "+name,"Turn GPS on","");
+
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                 }
@@ -266,7 +278,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onLocationChanged(Location location) {
     }
     private void sendSMS(String s) {
-        String name = getContactName(sender,getApplicationContext());
+        String name = sender;
+        if (contactPermission&&checkContactPermission()){
+            name = getContactName(sender,getApplicationContext());
+        }
         String address = setAddress();
         SmsManager manager = SmsManager.getDefault();
         String string1 = "I am near "+ s+ ". "+ address;
@@ -276,6 +291,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         if (noti)
             pugNotification("Location shared","Your current location shared with",name);
+    }
+    public boolean checkContactPermission(){
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i("contactPermission","false");
+            return false;
+        }
+        Log.i("contactPermission","true");
+        return true;
     }
     public String getContactName(final String phoneNumber,Context context) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
