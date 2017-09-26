@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FL-ASHA</string>
-    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_rationale">Location, SMS permissions are needed for core functionality</string>
+    <string name="permission_rationale_contact">Contact permission improves notification system</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
         functionality.</string>
     <string name="settings">Settings</string>

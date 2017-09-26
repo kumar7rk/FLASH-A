@@ -28,6 +28,8 @@ public class Design extends AppCompatActivity {
     private static final String TAG = Design.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     boolean locationPermission = true;
+    boolean contactPermission = true;
+    boolean SMSPermission = true;
 
     LinearLayout serviceEnabled_lay,homeAddress_lay,keyword_lay,customiseMessage_lay,history_lay, tutorial_lay;
     TextView serviceEnabled_tv;
@@ -98,13 +100,31 @@ public class Design extends AppCompatActivity {
     }
 
     private void requestPermissions() {
-        boolean shouldProvideRationale =
+        boolean shouldProvideRationaleLocation =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.ACCESS_COARSE_LOCATION);
+        boolean shouldProvideRationaleSMS =
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_SMS);
+        boolean shouldProvideRationaleContact =
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_CONTACTS);
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
-        if (shouldProvideRationale) {
+        if (shouldProvideRationaleContact) {
+            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+
+            showSnackbar(R.string.permission_rationale_contact, android.R.string.ok,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            startPermissionRequest();
+                        }
+                    });
+        }
+        if (shouldProvideRationaleLocation || shouldProvideRationaleSMS) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
 
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
@@ -115,8 +135,9 @@ public class Design extends AppCompatActivity {
                             startPermissionRequest();
                         }
                     });
+        }
 
-        } else {
+        else {
             Log.i(TAG, "Requesting permission");
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
@@ -152,7 +173,21 @@ public class Design extends AppCompatActivity {
                     grantResults[2] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted.
                 locationPermission = true;
-            } else {
+                contactPermission = true;
+                SMSPermission = true;
+            }
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationPermission = true;
+            }
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                SMSPermission = true;
+            }
+            if(grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                contactPermission = true;
+            }
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED ||
+                    grantResults[1] == PackageManager.PERMISSION_DENIED ||
+                    grantResults[2] == PackageManager.PERMISSION_DENIED) {
                 // Permission denied.
                 locationPermission = false;
                 // Notify the user via a SnackBar that they have rejected a core permission for the
