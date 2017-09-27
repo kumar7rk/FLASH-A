@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import com.geeky7.rohit.flash_a.R;
@@ -33,21 +32,21 @@ public class HomeAddress extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_address);
-        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
+        setContentView(R.layout.activity_home_address_new);
+//        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
         String homeAddress = preferences.getString("homeAddress","Not set! Add Home address for better experience such as ETA");
-        mPlaceDetailsText.setText(homeAddress);
+        /*mPlaceDetailsText.setText(homeAddress);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     openAutocompleteActivity();
             }
-        });
+        });*/
     }
 
     private void openAutocompleteActivity() {

@@ -64,9 +64,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private LocationRequest mlocationRequest;
     private Location mCurrentLocation;
 
-    boolean locationPermission = true;
     boolean contactPermission = true;
-    boolean SMSPermission = true;
 
 //    private static final int GOOGLE_API_CLIENT_ID = 0;
 //    private boolean mRequestingLocationUpdates;
@@ -279,7 +277,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     private void sendSMS(String s) {
         String name = sender;
-        if (contactPermission&&checkContactPermission()){
+        if (contactPermission && checkContactPermission()){
             name = getContactName(sender,getApplicationContext());
         }
         String address = setAddress();
