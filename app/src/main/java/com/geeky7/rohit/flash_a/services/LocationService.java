@@ -294,7 +294,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     public boolean checkContactPermission(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION)
+                Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
             Log.i("contactPermission","false");
             return false;
