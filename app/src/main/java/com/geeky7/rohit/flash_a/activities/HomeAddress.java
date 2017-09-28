@@ -2,8 +2,11 @@ package com.geeky7.rohit.flash_a.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geeky7.rohit.flash_a.Main;
@@ -21,7 +25,14 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.StreetViewPanoramaOptions;
+import com.google.android.gms.maps.StreetViewPanoramaView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.Barcode.GeoPoint;
 
+import java.io.IOException;
+import java.util.List;
 
 public class HomeAddress extends AppCompatActivity {
 
@@ -30,14 +41,38 @@ public class HomeAddress extends AppCompatActivity {
     NestedScrollView scrollView;
 
     SharedPreferences preferences;
+    private static final LatLng SYDNEY = new LatLng(-34.9317998,138.5363813);
+    private StreetViewPanoramaView mStreetViewPanoramaView;
+    private static final String STREETVIEW_BUNDLE_KEY = "StreetViewBundleKey";
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_address_new);
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+
+        LatLng g = getLocationFromAddress(homeAddressS);
+
+        StreetViewPanoramaOptions options = new StreetViewPanoramaOptions();
+
+            options.position(g);
+        mStreetViewPanoramaView = new StreetViewPanoramaView(this, options);
+
+        addContentView(mStreetViewPanoramaView,
+                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 540));
+
+        Bundle mStreetViewBundle = null;
+        if (savedInstanceState != null) {
+            mStreetViewBundle = savedInstanceState.getBundle(STREETVIEW_BUNDLE_KEY);
+        }
+        mStreetViewPanoramaView.onCreate(mStreetViewBundle);
+
         scrollView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -48,10 +83,7 @@ public class HomeAddress extends AppCompatActivity {
         });
 
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-
-        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +93,41 @@ public class HomeAddress extends AppCompatActivity {
             }
         });
     }
+    public LatLng getLocationFromAddress(String strAddress){
 
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress,5);
+            if (address==null) {
+                return null;
+            }
+            Address location=address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+            return p1;
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Bundle mStreetViewBundle = outState.getBundle(STREETVIEW_BUNDLE_KEY);
+        if (mStreetViewBundle == null) {
+            mStreetViewBundle = new Bundle();
+            outState.putBundle(STREETVIEW_BUNDLE_KEY, mStreetViewBundle);
+        }
+
+        mStreetViewPanoramaView.onSaveInstanceState(mStreetViewBundle);
+    }
     private void openAutocompleteActivity() {
         try {
             // The autocomplete activity requires Google Play Services to be available. The intent
