@@ -114,7 +114,7 @@
     </string>
     <string name="intro_message">Intro Message</string>
 
-    <string name="home_address_address">Address</string>
-    <string name="home_address_text">This is some temporary text shown for testing purpose. Will not be shipped in the final product</string>
+    <string name="home_address_text">Not set! Add Home address for better experience such as ETA</string>
+    <string name="home_address_last_edited">Not set</string>
 
 </resources>

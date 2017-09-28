@@ -5,12 +5,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -22,9 +25,9 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 public class HomeAddress extends AppCompatActivity {
 
-//    AutoCompleteTextView homeAddress;
     FloatingActionButton floatingActionButton;
-    private TextView mPlaceDetailsText;
+    private TextView homeAddress;
+    NestedScrollView scrollView;
 
     SharedPreferences preferences;
 
@@ -33,14 +36,23 @@ public class HomeAddress extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_address_new);
-//        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
+        scrollView = (NestedScrollView)findViewById(R.id.nested);
+        homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                return true;
+            }
+        });
 
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        String homeAddress = preferences.getString("homeAddress","Not set! Add Home address for better experience such as ETA");
-//        mPlaceDetailsText.setText(homeAddress);
+        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+        homeAddress.setText(homeAddressS);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +93,8 @@ public class HomeAddress extends AppCompatActivity {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Log.i("HomeAddress", "Place Selected: " + place.getName());
 
-                mPlaceDetailsText.setText(place.getAddress());
+                homeAddress.setText(place.getAddress());
+                Main.showToast("Home address updated :)");
                 editor.putString("homeAddress",place.getAddress()+"");
                 editor.apply();
                 // Display attributions if required.
