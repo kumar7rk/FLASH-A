@@ -6,7 +6,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geeky7.rohit.flash_a.Main;
@@ -25,25 +23,29 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.StreetViewPanoramaOptions;
-import com.google.android.gms.maps.StreetViewPanoramaView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.Barcode.GeoPoint;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
-public class HomeAddress extends AppCompatActivity {
+public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback {
 
     FloatingActionButton floatingActionButton;
     private TextView homeAddress;
     NestedScrollView scrollView;
 
     SharedPreferences preferences;
-    private static final LatLng SYDNEY = new LatLng(-34.9317998,138.5363813);
-    private StreetViewPanoramaView mStreetViewPanoramaView;
-    private static final String STREETVIEW_BUNDLE_KEY = "StreetViewBundleKey";
+//    private static final LatLng SYDNEY = new LatLng(-34.9317998,138.5363813);
+//    private StreetViewPanoramaView mStreetViewPanoramaView;
+//    private static final String STREETVIEW_BUNDLE_KEY = "StreetViewBundleKey";
+
+    private GoogleMap mMap;
+    private LatLng latLng;
 
 
     @Override
@@ -57,7 +59,13 @@ public class HomeAddress extends AppCompatActivity {
 
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
 
-        LatLng g = getLocationFromAddress(homeAddressS);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
+        /*LatLng g = getLocationFromAddress(homeAddressS);
 
         StreetViewPanoramaOptions options = new StreetViewPanoramaOptions();
 
@@ -65,13 +73,13 @@ public class HomeAddress extends AppCompatActivity {
         mStreetViewPanoramaView = new StreetViewPanoramaView(this, options);
 
         addContentView(mStreetViewPanoramaView,
-                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 540));
+                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500));
 
         Bundle mStreetViewBundle = null;
         if (savedInstanceState != null) {
             mStreetViewBundle = savedInstanceState.getBundle(STREETVIEW_BUNDLE_KEY);
         }
-        mStreetViewPanoramaView.onCreate(mStreetViewBundle);
+        mStreetViewPanoramaView.onCreate(mStreetViewBundle);*/
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -116,7 +124,7 @@ public class HomeAddress extends AppCompatActivity {
         }
             return p1;
     }
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -127,7 +135,8 @@ public class HomeAddress extends AppCompatActivity {
         }
 
         mStreetViewPanoramaView.onSaveInstanceState(mStreetViewBundle);
-    }
+    }*/
+
     private void openAutocompleteActivity() {
         try {
             // The autocomplete activity requires Google Play Services to be available. The intent
@@ -178,5 +187,21 @@ public class HomeAddress extends AppCompatActivity {
                 // the user pressed the back button.
             }
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mMap = googleMap;
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+
+        LatLng g = getLocationFromAddress(homeAddressS);
+        mMap.addMarker(new MarkerOptions().position(g));
+        mMap.getCameraPosition();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(g, 12f));
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 12.0f));
+
     }
 }

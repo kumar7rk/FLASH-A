@@ -21,14 +21,19 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp">
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map"
+                class="com.google.android.gms.maps.SupportMapFragment" />
 
-            <ImageView
+            <!--<ImageView
                 android:src="@drawable/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                android:minHeight="100dp"/>
+                android:minHeight="100dp"/>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
