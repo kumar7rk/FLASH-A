@@ -40,9 +40,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     NestedScrollView scrollView;
 
     SharedPreferences preferences;
-//    private static final LatLng SYDNEY = new LatLng(-34.9317998,138.5363813);
-//    private StreetViewPanoramaView mStreetViewPanoramaView;
-//    private static final String STREETVIEW_BUNDLE_KEY = "StreetViewBundleKey";
 
     private GoogleMap mMap;
     private LatLng latLng;
@@ -64,22 +61,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-        /*LatLng g = getLocationFromAddress(homeAddressS);
-
-        StreetViewPanoramaOptions options = new StreetViewPanoramaOptions();
-
-            options.position(g);
-        mStreetViewPanoramaView = new StreetViewPanoramaView(this, options);
-
-        addContentView(mStreetViewPanoramaView,
-                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500));
-
-        Bundle mStreetViewBundle = null;
-        if (savedInstanceState != null) {
-            mStreetViewBundle = savedInstanceState.getBundle(STREETVIEW_BUNDLE_KEY);
-        }
-        mStreetViewPanoramaView.onCreate(mStreetViewBundle);*/
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -124,18 +105,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         }
             return p1;
     }
-    /*@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        Bundle mStreetViewBundle = outState.getBundle(STREETVIEW_BUNDLE_KEY);
-        if (mStreetViewBundle == null) {
-            mStreetViewBundle = new Bundle();
-            outState.putBundle(STREETVIEW_BUNDLE_KEY, mStreetViewBundle);
-        }
-
-        mStreetViewPanoramaView.onSaveInstanceState(mStreetViewBundle);
-    }*/
 
     private void openAutocompleteActivity() {
         try {
@@ -174,7 +143,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.map);
                 mapFragment.getMapAsync(this);
-                
+
                 editor.putString("homeAddress",place.getAddress()+"");
                 editor.apply();
                 // Display attributions if required.

@@ -1,0 +1,36 @@
+**HomeAddress**
+//    private static final LatLng SYDNEY = new LatLng(-34.9317998,138.5363813);
+//    private StreetViewPanoramaView mStreetViewPanoramaView;
+//    private static final String STREETVIEW_BUNDLE_KEY = "StreetViewBundleKey";
+
+ onCreate
+
+/*LatLng g = getLocationFromAddress(homeAddressS);
+
+        StreetViewPanoramaOptions options = new StreetViewPanoramaOptions();
+
+            options.position(g);
+        mStreetViewPanoramaView = new StreetViewPanoramaView(this, options);
+
+        addContentView(mStreetViewPanoramaView,
+                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500));
+
+        Bundle mStreetViewBundle = null;
+        if (savedInstanceState != null) {
+            mStreetViewBundle = savedInstanceState.getBundle(STREETVIEW_BUNDLE_KEY);
+        }
+        mStreetViewPanoramaView.onCreate(mStreetViewBundle);*/
+
+
+        /*@Override
+            public void onSaveInstanceState(Bundle outState) {
+                super.onSaveInstanceState(outState);
+
+                Bundle mStreetViewBundle = outState.getBundle(STREETVIEW_BUNDLE_KEY);
+                if (mStreetViewBundle == null) {
+                    mStreetViewBundle = new Bundle();
+                    outState.putBundle(STREETVIEW_BUNDLE_KEY, mStreetViewBundle);
+                }
+
+                mStreetViewPanoramaView.onSaveInstanceState(mStreetViewBundle);
+            }*/
