@@ -170,6 +170,11 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
                 homeAddress.setText(place.getAddress());
                 Main.showToast("Home address updated :)");
+
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(this);
+                
                 editor.putString("homeAddress",place.getAddress()+"");
                 editor.apply();
                 // Display attributions if required.
@@ -200,8 +205,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         LatLng g = getLocationFromAddress(homeAddressS);
         mMap.addMarker(new MarkerOptions().position(g));
         mMap.getCameraPosition();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(g, 12f));
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 12.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
 
     }
 }
