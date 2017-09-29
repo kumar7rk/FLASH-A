@@ -53,14 +53,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
 
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
+        refreshMap();
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -82,6 +77,13 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             }
         });
     }
+
+    private void refreshMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
     public LatLng getLocationFromAddress(String strAddress){
 
         Geocoder coder = new Geocoder(this);
@@ -140,16 +142,13 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 homeAddress.setText(place.getAddress());
                 Main.showToast("Home address updated :)");
 
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(this);
+                refreshMap();
 
                 editor.putString("homeAddress",place.getAddress()+"");
                 editor.apply();
                 // Display attributions if required.
                 CharSequence attributions = place.getAttributions();
                 if (!TextUtils.isEmpty(attributions)) {
-//                    mPlaceAttribution.setText(Html.fromHtml(attributions.toString()));
                 } else {
 //                    mPlaceAttribution.setText("");
                 }
