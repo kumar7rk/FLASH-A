@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,23 +41,28 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     SharedPreferences preferences;
 
     private GoogleMap mMap;
-    private LatLng latLng;
-
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_address_new);
+
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
+        floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
 
+        //Setting the homeAddress in the textView
+        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+        homeAddress.setText(homeAddressS);
+
+        //loading the map with a marker on the home address
         refreshMap();
 
+        // to lock the scroll on the scroll view
+        // you are still able to scroll from the mapView which is kind of cool
         scrollView.setOnTouchListener(new View.OnTouchListener() {
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // TODO Auto-generated method stub
@@ -66,10 +70,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        // clicking fab open up the search bar powered by Google
+        // Selecting one of the address updates the text view in the app and also the sharedPreference
 
-
-        homeAddress.setText(homeAddressS);
-        floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,12 +81,15 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    // The method loads the map
     private void refreshMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
+    // getting lat long from the home address
+    // returns lat long which are used to put the marker on the map
     public LatLng getLocationFromAddress(String strAddress){
 
         Geocoder coder = new Geocoder(this);
@@ -108,6 +114,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             return p1;
     }
 
+    // this open up the search bar to select the home addresss
+    // this is more like an intermediate activity which closes once the address is selected
+    // sample code Google
     private void openAutocompleteActivity() {
         try {
             // The autocomplete activity requires Google Play Services to be available. The intent
@@ -127,7 +136,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                     GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
 
         }
-    }@Override
+    }
+    // this returns the selected address from the activity and set the textView with the same
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         final SharedPreferences.Editor editor = preferences.edit();
         super.onActivityResult(requestCode, resultCode, data);
@@ -139,19 +150,22 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Log.i("HomeAddress", "Place Selected: " + place.getName());
 
+                // set the current address in the textView
                 homeAddress.setText(place.getAddress());
                 Main.showToast("Home address updated :)");
 
+                // when the home address is updated; this method dynamically loads the mapView
                 refreshMap();
 
                 editor.putString("homeAddress",place.getAddress()+"");
                 editor.apply();
-                // Display attributions if required.
+                // will test; if nothing goes wrong would delete this code the next time I read this comment
+                /*// Display attributions if required.
                 CharSequence attributions = place.getAttributions();
                 if (!TextUtils.isEmpty(attributions)) {
                 } else {
 //                    mPlaceAttribution.setText("");
-                }
+                }*/
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.e("HomeAddress", "Error: Status = " + status.toString());
@@ -162,6 +176,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    // this is the overidden method which sets the marker and shoes the mapView along with the above method refreshMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
