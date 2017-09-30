@@ -26,7 +26,9 @@ import com.geeky7.rohit.flash_a.R;
 public class Design extends AppCompatActivity {
 
     private static final String TAG = Design.class.getSimpleName();
+
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
     boolean locationPermission = true;
     boolean contactPermission = true;
     boolean SMSPermission = true;
@@ -42,9 +44,33 @@ public class Design extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
 
+        // checking if the permissions are not granted call request method which starts the procedure
+
         if(!checkPermissions())
             requestPermissions();
 
+        // finding view by id for all the associated views
+        findViewById();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final boolean service = preferences.getBoolean("service",true);
+
+        // fetching the service status from the sharedPreference and checking if its enabled or not
+        // calling respective methods
+        if(service) enableService();
+        else disableService();
+
+        // open HomeAddress activity when home address layout is clicked
+        homeAddress_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),HomeAddress.class));
+            }
+        });
+    }
+
+    // find view by id of all the views
+    private void findViewById() {
         serviceEnabled_tv = (TextView)findViewById(R.id.serviceEnabled_tv);
         serviceEnabled_iv = (ImageView)findViewById(R.id.serviceEnabled_iv);
 
@@ -54,21 +80,10 @@ public class Design extends AppCompatActivity {
         customiseMessage_lay = (LinearLayout)findViewById(R.id.customiseMessage_lay);
         history_lay = (LinearLayout)findViewById(R.id.history_lay);
         tutorial_lay = (LinearLayout)findViewById(R.id.tutorial_lay);
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean service = preferences.getBoolean("service",true);
-
-        if(service) enableService();
-        else disableService();
-
-        homeAddress_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),HomeAddress.class));
-            }
-        });
     }
 
+    //if the service is running and user hits the layout
+    // this method runs and it changes the disables the service and changes the color of the layout to red
     public void disableService(){
         serviceEnabled_lay.setBackgroundColor(Color.RED);
         serviceEnabled_tv.setText(R.string.service_disabled);
@@ -78,6 +93,8 @@ public class Design extends AppCompatActivity {
         serviceEnabled_tv.setPadding(20,20,20,20);
     }
 
+    // if the service is not running this method is called
+    // changes the color to orange or something for some reasons
     public void enableService(){
         serviceEnabled_lay.setBackgroundColor(0xffff8800);
         serviceEnabled_tv.setText(R.string.service_enabled);
@@ -86,6 +103,8 @@ public class Design extends AppCompatActivity {
         serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
         serviceEnabled_tv.setPadding(20,20,20,20);
     }
+    // this method checks if all the required permission are granted
+    // returns a boolean
     private boolean checkPermissions() {
         int permissionState = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -99,6 +118,8 @@ public class Design extends AppCompatActivity {
                 permissionState2 == PackageManager.PERMISSION_GRANTED;
     }
 
+    // this method starts the location request
+    // this method is called when the user has denied the permission once but has not checked Never ask againg checkbox
     private void requestPermissions() {
         boolean shouldProvideRationaleLocation =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -112,6 +133,8 @@ public class Design extends AppCompatActivity {
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
+
+        // if contact permission is not granted/ denied last time
         if (shouldProvideRationaleContact) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
 
@@ -124,6 +147,7 @@ public class Design extends AppCompatActivity {
                         }
                     });
         }
+        // if either location or SMS permission is not granted; request
         if (shouldProvideRationaleLocation || shouldProvideRationaleSMS) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
 
@@ -136,7 +160,6 @@ public class Design extends AppCompatActivity {
                         }
                     });
         }
-
         else {
             Log.i(TAG, "Requesting permission");
             // Request permission. It's possible this can be auto answered if device policy
@@ -145,12 +168,15 @@ public class Design extends AppCompatActivity {
             startPermissionRequest();
         }
     }
+    // just to show to user why this permission is required
     private void showSnackbar(final String text) {
         View container = findViewById(R.id.main_activity_container);
         if (container != null) {
             Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
         }
     }
+    // This method is called the first time the app is installed
+    // request all the permissions stated here
     private void startPermissionRequest() {
         ActivityCompat.requestPermissions(Design.this,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -158,6 +184,11 @@ public class Design extends AppCompatActivity {
                         Manifest.permission.READ_CONTACTS},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
     }
+    // this is the important bit which checks if the permission is granted or not
+    // and therefore change your funtionality accordingly
+    // this method sets the values of the boolean variable for location, contact and sms and store them in sharedPreference
+    // although it is not the right practice because if a user revokes the permission then these variables are not updated
+    // and can therefore cause crash
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -221,6 +252,7 @@ public class Design extends AppCompatActivity {
         editor.putBoolean("contactPermission",contactPermission);
         editor.apply();
     }
+    // just show a snackbar
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -229,6 +261,7 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
+    // would respond to the onClick listeners on layout
     @Override
     protected void onResume() {
         super.onResume();
