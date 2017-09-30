@@ -1,3 +1,6 @@
+// this activity is no longer in use from version 1.1 playstore
+// Basically it checked permission and showed the layout
+// was used in v1.0 playstore; replaced with Design
 package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
