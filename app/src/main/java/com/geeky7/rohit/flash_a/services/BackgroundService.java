@@ -1,3 +1,6 @@
+// this service runs when a SMS is received; called by SMSReceiver BroadcastReceiver
+// Checks for the keywords and then starts the locationService
+
 package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
@@ -27,6 +30,8 @@ public class BackgroundService extends Service {
         m = new Main(MyApplication.getAppContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
+
+    // calls the location service
     private void startService() {
         Intent serviceIntent = new Intent(getApplicationContext(), LocationService.class);
         startService(serviceIntent);
@@ -49,15 +54,18 @@ public class BackgroundService extends Service {
         SharedPreferences.Editor editor = preferences.edit();
         boolean service = preferences.getBoolean("service",true);
         Log.i("Service",service+"");
+
         if(intent!=null)
             extras = intent.getExtras();
 
+        // if the bundle is not null; lets get some data from it or maybe all of it :)
         if (extras != null) {
             message = extras.getString("Message");
             sender = extras.getString("Sender");
             editor.putString("sender",sender);
             Log.i("Message","Message is:"+ message);
 
+            // checks for the keyword; if matched start location service
             if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message) )&& locationPermission && m.isNetworkAvailable()&&service)  {
                 Log.i("Matched", "Location requested");
                 startService();
@@ -67,7 +75,7 @@ public class BackgroundService extends Service {
                 // this message initiated the location service which fetches the location and converts into an address
             }
         }
-        editor.commit();
+        editor.apply();
         return START_NOT_STICKY;
     }
 
