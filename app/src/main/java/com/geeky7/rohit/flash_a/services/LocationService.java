@@ -1,3 +1,6 @@
+//This is the core class which gets the location convert it into address and then find a close placeOfInterest
+// compiles a message and sends it to the sender of the message
+// Yeah that's a lot of work
 package com.geeky7.rohit.flash_a.services;
 
 import android.Manifest;
@@ -52,6 +55,8 @@ import java.util.Locale;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 
+import static android.R.attr.name;
+
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,LocationListener{
@@ -92,17 +97,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         sender = preferences.getString("sender","");
         m = new Main(getApplicationContext());
-//        mLastUpdateTime = "";
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
 
         // googleAPI is connected and ready to get location updates- start fetching current location
-        if(mGoogleApiClient.isConnected()/*&&mRequestingLocationUpdates*/)
+
+        if(mGoogleApiClient.isConnected())
             startLocationupdates();
 
-        // for getting address
-
+        // get address from the lat lng
         geocoder = new Geocoder(this, Locale.getDefault());
 
         Log.i(TAG,"LocationService Created");
@@ -133,7 +137,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
-        //return START_STICKY;
     }
 
     // add the API and builds a client
@@ -147,24 +150,27 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         createLocationRequest();
     }
 
-    // method- fetch location every `UPDATE_INTERVAL_IN_MILLISECONDS` milliseconds
+    // fetched location every `UPDATE_INTERVAL_IN_MILLISECONDS` milliseconds
+    // since the service destroys after fetching locatuon once it is of little use; I mean the interval of fetching the location
+
     private void createLocationRequest() {
         mlocationRequest = new LocationRequest();
         mlocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         mlocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mlocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
-    // method- update the new coordinates
+
+    // update new coordinates in the log
     protected void updateToastLog(){
         Log.i(TAG, mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
-        Log.i(TAG,setAddress());
+        Log.i(TAG, getAddress());
     }
-    // fetch location now
+    // requests a location
     protected void startLocationupdates() throws SecurityException {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mlocationRequest, this);
     }
-    // location update no longer needed;
+    // stop location update; no longer needed
     protected void stopLocationupdates(){
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
@@ -174,6 +180,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         super.onStart(intent, startId);
         mGoogleApiClient.connect();
     }
+    // when the googleApiClient and set to go this method is called
+    // it fetches the location and then builds the places url
+    // and finally initiate the code for actually finding the nearby place
+
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -183,31 +193,28 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (mCurrentLocation==null){
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             try {
+                // if the location service is on get that address and start places code
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    String sb = null;
-                    try {
-                        sb = buildPlacesURL().toString();
-                        new PlacesTask().execute(sb);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-//                    Thread.sleep(5000);
-//                    sendSMS();
-//                    updateToastLog();
+                    placesCode();
+                    // stop itself after message is sent
                     stopSelf();
                 }
+                // when gps if off
+                // registers a receiver when the status of the gps changes
                 else{
                     Log.i("Else", "gps off");
-                    contactPermission = preferences.getBoolean("contactPermission",false);
-                    String name = sender;
-                    if (contactPermission && checkContactPermission()){
-                        name = getContactName(sender,getApplicationContext());
-                    }
                     pugNotification("Location Request from "+name,"Turn GPS on","");
 
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+
+                 /*   contactPermission = preferences.getBoolean("contactPermission",false);
+                    String name = sender;
+                    if (contactPermission && checkContactPermission()){
+                        name = getContactName(sender,getApplicationContext());
+                    }*/
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -215,20 +222,21 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         }
     }
+    // whenever the gps status changes this code would run
+    // however we are only concerned when it is turned on
+    // this method contains similar code to if statement so maybe one day I'll put the common code in a method
+    // and just call that method
+    // Updated: Don't worry already done it :D
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
                 //Do your stuff on GPS status change
-                Log.i("onReceive",mGoogleApiClient.isConnected()+"");
                 try {
-                    if(!mGoogleApiClient.isConnected()){
+                    if(!mGoogleApiClient.isConnected())
                         stopSelf();
-                        Log.i("onReceive","Google api client not connected. Mission abort");
-                    }
                     Thread.sleep(2000);
                     if (mCurrentLocation==null){
-                        Log.i("onReceive","Current location null. haha!");
                         Thread.sleep(2000);
                         Thread.sleep(2000);
                         Thread.sleep(2000);
@@ -238,22 +246,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         Log.i("onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
                     }
                     if (mCurrentLocation!=null) {
-                        Log.i("onReceive","Don't worry, its not null anymore");
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                        Log.i("onReceive","Value for addresses list added");
                     }
-
-                    Log.i("onReceive","Sending message now");
-                    String sb = null;
-                    try {
-                        sb = buildPlacesURL().toString();
-                        new PlacesTask().execute(sb);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    placesCode();
                     stopSelf();
-                    Log.i("onReceive","Mission accomplished. You have done it man.");
                     updateToastLog();
+
+                    Log.i("onReceive","Mission accomplished. You have done it man.");
                     getApplicationContext().unregisterReceiver(gpsReceiver);
                 }
                  catch(IOException e) {
@@ -267,7 +266,18 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             }
         }
     };
-    //check is user wants to monitor walking, if yes then listen to the recognised activity;
+
+    // this code bulds the placed URL and then call the actual places code
+    private void placesCode() {
+        String sb = null;
+        try {
+            sb = buildPlacesURL().toString();
+            new PlacesTask().execute(sb);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
     }
@@ -275,21 +285,21 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onLocationChanged(Location location) {
     }
+    // Magic method to send the SMS to the sender
     private void sendSMS(String s) {
         String name = sender;
         if (contactPermission && checkContactPermission()){
             name = getContactName(sender,getApplicationContext());
         }
-        String address = setAddress();
+        String address = getAddress();
         SmsManager manager = SmsManager.getDefault();
-        String string1 = "I am near "+ s+ ". "+ address;
-//        manager.sendTextMessage(sender,null, address, null, null);
-        manager.sendTextMessage(sender,null, string1, null, null);
+        String message = "I am near "+ s+ ". "+ address;
+        manager.sendTextMessage(sender,null, message, null, null);
         boolean noti = preferences.getBoolean("notification",true);
-
         if (noti)
             pugNotification("Location shared","Your current location shared with",name);
     }
+    // checks if the contace permission is granted or not
     public boolean checkContactPermission(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_CONTACTS)
@@ -300,6 +310,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         Log.i("contactPermission","true");
         return true;
     }
+    // gets the contact name if the permission is granted
     public String getContactName(final String phoneNumber,Context context) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
@@ -317,7 +328,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             return contactName;
     }
 
-    private String setAddress() {
+    // this method gets the address and lets you make selection what parameters of address to include
+    private String getAddress() {
         for (int i = 0; i< addresses.size();i++)
             Log.i("All addresses",addresses.get(i).getAddressLine(i));
 
@@ -333,9 +345,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        String s2 = addresses.get(0).getPremises(); // null
 //        String s3 = addresses.get(0).getThoroughfare(); //null
 //        String s4 = addresses.get(0).getSubAdminArea(); city of west torrens
-//        return s1+ " " + s2+ " " + s3+ " "+ s4;
+
         return address;
     }
+    // creates notification using pugNotification library ez pz
     public void pugNotification(String title ,String message, String bigText){
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -350,6 +363,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 .simple()
                 .build();
     }
+    // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = -34.923792;
         double mLongitude = 138.6047722;
@@ -370,6 +384,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return sb;
     }
 
+    // download the data from the URL
     private String downloadUrl(String strUrl) throws IOException{
         String data = "";
         InputStream iStream = null;
@@ -399,6 +414,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
         return data;
     }
+    // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
         JSONObject jObject;
@@ -438,6 +454,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     }// onPostExecute
 //}// end of the parserTask class
+
+    // gets the details of the place to let you choose which parameters of place you want to show
    public class Place_JSON {
 
         /**
@@ -514,6 +532,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             return place;
         }
     }
+    // calls download url method above and later starts parser class
     public class PlacesTask extends AsyncTask<String, Integer, String> {
         String data = null;
         @Override
