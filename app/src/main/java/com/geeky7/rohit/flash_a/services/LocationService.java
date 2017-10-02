@@ -22,13 +22,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.Main;
-import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
@@ -52,10 +50,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import br.com.goncalves.pugnotification.notification.PugNotification;
-
-import static android.R.attr.name;
 
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
@@ -204,16 +198,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 // registers a receiver when the status of the gps changes
                 else{
                     Log.i("Else", "gps off");
-                    pugNotification("Location Request from "+name,"Turn GPS on","");
+                    String name = sender;
+                    if (contactPermission && checkContactPermission()){
+                        name = getContactName(sender,getApplicationContext());
+                    }
+                    m.pugNotification("Location Request from "+name,"Turn GPS on","");
 
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
 
-                 /*   contactPermission = preferences.getBoolean("contactPermission",false);
-                    String name = sender;
-                    if (contactPermission && checkContactPermission()){
-                        name = getContactName(sender,getApplicationContext());
-                    }*/
+                    contactPermission = preferences.getBoolean("contactPermission",false);
 
                 }
             } catch (Exception e) {
@@ -297,7 +291,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         manager.sendTextMessage(sender,null, message, null, null);
         boolean noti = preferences.getBoolean("notification",true);
         if (noti)
-            pugNotification("Location shared","Your current location shared with",name);
+            m.pugNotification("Location shared","Your current location shared with",name);
     }
     // checks if the contace permission is granted or not
     public boolean checkContactPermission(){
@@ -348,21 +342,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         return address;
     }
-    // creates notification using pugNotification library ez pz
-    public void pugNotification(String title ,String message, String bigText){
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PugNotification.with(getApplicationContext())
-                .load()
-                .title(title)
-                .message(message)
-                .smallIcon(R.drawable.quantum_ic_stop_white_24)
-                .bigTextStyle(message+" "+bigText)
-                .largeIcon(R.drawable.cast_ic_notification_small_icon)
-                .flags(android.app.Notification.DEFAULT_ALL)
-                .simple()
-                .build();
-    }
+
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = -34.923792;

@@ -1,9 +1,13 @@
 package com.geeky7.rohit.flash_a;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.widget.Toast;
+
+import br.com.goncalves.pugnotification.notification.PugNotification;
 
 /**
  * Created by Rohit on 9/08/2016.
@@ -30,5 +34,19 @@ public class Main {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
+    // creates notification using pugNotification library ez pz
+    public void pugNotification(String title ,String message, String bigText){
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PugNotification.with(MyApplication.getAppContext())
+                .load()
+                .title(title)
+                .message(message)
+                .smallIcon(R.drawable.icon)
+                .bigTextStyle(message+" "+bigText)
+                .largeIcon(R.drawable.cast_ic_notification_small_icon)
+                .flags(android.app.Notification.DEFAULT_ALL)
+                .simple()
+                .build();
+    }
 }
