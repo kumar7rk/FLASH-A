@@ -14,6 +14,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -288,29 +290,46 @@ public class Design extends AppCompatActivity {
         keyword_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.showToast("Coming Soon!");
+                Main.showToast(getResources().getString(R.string.coming_soon));
             }
         });
 
         customiseMessage_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.showToast("Coming Soon!");
+                Main.showToast(getResources().getString(R.string.coming_soon));
             }
         });
 
         history_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.showToast("Coming Soon!");
+                Main.showToast(getResources().getString(R.string.coming_soon));
             }
         });
 
         tutorial_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.showToast("Coming Soon!");
+                Main.showToast(getResources().getString(R.string.coming_soon));
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Main.showToast(getResources().getString(R.string.coming_soon));
+            case R.id.action_current_location:
+                Main.showToast(getResources().getString(R.string.coming_soon));
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

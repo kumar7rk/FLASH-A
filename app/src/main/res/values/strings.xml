@@ -116,5 +116,6 @@
 
     <string name="home_address_text">Not set! Add Home address for better experience such as ETA</string>
     <string name="home_address_last_edited">Not set</string>
+    <string name="action_current_location">Current Location</string>
 
 </resources>
