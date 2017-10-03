@@ -42,7 +42,7 @@ public class Main {
                 .load()
                 .title(title)
                 .message(message)
-                .smallIcon(R.drawable.icon)
+                .smallIcon(R.drawable.icon_notification)
                 .bigTextStyle(message+" "+bigText)
                 .largeIcon(R.drawable.cast_ic_notification_small_icon)
                 .flags(android.app.Notification.DEFAULT_ALL)
