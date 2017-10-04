@@ -197,17 +197,17 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 // when gps if off
                 // registers a receiver when the status of the gps changes
                 else{
-                    Log.i("Else", "gps off");
+                    contactPermission = preferences.getBoolean("contactPermission",false);
                     String name = sender;
                     if (contactPermission && checkContactPermission()){
                         name = getContactName(sender,getApplicationContext());
                     }
+                    Log.i("Else", "gps off");
                     m.pugNotification("Location Request from "+name,"Turn GPS on","");
 
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
 
-                    contactPermission = preferences.getBoolean("contactPermission",false);
 
                 }
             } catch (Exception e) {
@@ -342,7 +342,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         return address;
     }
-
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = -34.923792;
@@ -532,5 +531,3 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     }
 }
-
-
