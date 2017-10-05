@@ -27,14 +27,6 @@
                 android:id="@+id/map"
                 class="com.google.android.gms.maps.SupportMapFragment" />
 
-            <!--<ImageView
-                android:src="@drawable/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
-                android:minHeight="100dp"/>-->
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
