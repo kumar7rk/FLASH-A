@@ -1,10 +1,12 @@
 package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -326,8 +328,12 @@ public class Design extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_settings:
+                startActivity(new Intent(this,SettingsActivity.class));
                 Main.showToast(getResources().getString(R.string.coming_soon));
             case R.id.action_current_location:
+                final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                if (!b)
                 Main.showToast(getResources().getString(R.string.coming_soon));
         }
         return super.onOptionsItemSelected(item);
