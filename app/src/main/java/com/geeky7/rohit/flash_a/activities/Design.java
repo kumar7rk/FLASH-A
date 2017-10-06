@@ -329,7 +329,6 @@ public class Design extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_settings:
                 startActivity(new Intent(this,SettingsActivity.class));
-                Main.showToast(getResources().getString(R.string.coming_soon));
             case R.id.action_current_location:
                 final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
