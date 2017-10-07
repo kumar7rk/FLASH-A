@@ -1,13 +1,16 @@
 package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -189,7 +192,7 @@ public class Design extends AppCompatActivity {
                 REQUEST_PERMISSIONS_REQUEST_CODE);
     }
     // this is the important bit which checks if the permission is granted or not
-    // and therefore change your funtionality accordingly
+    // and therefore change your functionality accordingly
     // this method sets the values of the boolean variable for location, contact and sms and store them in sharedPreference
     // although it is not the right practice because if a user revokes the permission then these variables are not updated
     // and can therefore cause crash
@@ -332,7 +335,29 @@ public class Design extends AppCompatActivity {
             case R.id.action_current_location:
                 final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                if (!b)
+
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(getApplicationContext());
+                }
+
+                builder.setTitle("Your Current Location")
+                        .setMessage("Show current location of the user")
+                        .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.share, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Main.showToast("Sharing location, select contact");
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 Main.showToast(getResources().getString(R.string.coming_soon));
         }
         return super.onOptionsItemSelected(item);

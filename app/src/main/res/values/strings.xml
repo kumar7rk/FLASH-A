@@ -118,4 +118,7 @@
     <string name="home_address_last_edited">Not set</string>
     <string name="action_current_location">Current Location</string>
 
+    <string name="close">Close</string>
+    <string name="share">Share</string>
+
 </resources>
