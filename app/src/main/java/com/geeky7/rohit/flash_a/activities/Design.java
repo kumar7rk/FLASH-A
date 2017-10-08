@@ -356,7 +356,7 @@ public class Design extends AppCompatActivity {
                                 Main.showToast("Sharing location, select contact");
                             }
                         })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(android.R.drawable.ic_menu_mylocation)
                         .show();
                 Main.showToast(getResources().getString(R.string.coming_soon));
         }
