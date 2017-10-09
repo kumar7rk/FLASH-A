@@ -347,9 +347,9 @@ public class Design extends AppCompatActivity {
                 } else {
                     AlertDialog.Builder builder;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(Design.this, android.R.style.Theme_Material_Dialog_Alert);
+                        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
                     } else {
-                        builder = new AlertDialog.Builder(Design.this);
+                        builder = new AlertDialog.Builder(this);
                     }
                     builder.setTitle("Your Current Location")
                             .setMessage("<Show current location of the user>")
