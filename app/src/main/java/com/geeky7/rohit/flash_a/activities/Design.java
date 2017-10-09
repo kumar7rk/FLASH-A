@@ -335,30 +335,36 @@ public class Design extends AppCompatActivity {
             case R.id.action_current_location:
                 final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                // if the gps is off
+                if(!b){
+                    //open the dialog which ask to enable location
+                    // and enabled the location when the user clicks ok
 
-
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(getApplicationContext());
                 }
+                else{
 
-                builder.setTitle("Your Current Location")
-                        .setMessage("Show current location of the user")
-                        .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(getResources().getString(R.string.share, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Main.showToast("Sharing location, select contact");
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_menu_mylocation)
-                        .show();
-                Main.showToast(getResources().getString(R.string.coming_soon));
+                    AlertDialog.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                    } else {
+                        builder = new AlertDialog.Builder(getApplicationContext());
+                    }
+
+                    builder.setTitle("Your Current Location")
+                            .setMessage("Show current location of the user")
+                            .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(getResources().getString(R.string.share, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Main.showToast("Sharing location, select contact");
+                                }
+                            }))
+                            .setIcon(android.R.drawable.ic_menu_mylocation)
+                            .show();
+                }
         }
         return super.onOptionsItemSelected(item);
     }
