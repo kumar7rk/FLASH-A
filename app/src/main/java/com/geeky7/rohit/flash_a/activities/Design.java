@@ -40,7 +40,7 @@ public class Design extends AppCompatActivity {
     boolean contactPermission = true;
     boolean SMSPermission = true;
 
-    LinearLayout serviceEnabled_lay,homeAddress_lay,keyword_lay,customiseMessage_lay,history_lay, tutorial_lay;
+    LinearLayout serviceEnabled_lay, homeAddress_lay, keyword_lay, customiseMessage_lay, history_lay, tutorial_lay;
     TextView serviceEnabled_tv;
     ImageView serviceEnabled_iv;
 
@@ -53,63 +53,64 @@ public class Design extends AppCompatActivity {
 
         // checking if the permissions are not granted call request method which starts the procedure
 
-        if(!checkPermissions())
+        if (!checkPermissions())
             requestPermissions();
 
         // finding view by id for all the associated views
         findViewById();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean service = preferences.getBoolean("service",true);
+        final boolean service = preferences.getBoolean("service", true);
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
-        if(service) enableService();
+        if (service) enableService();
         else disableService();
 
         // open HomeAddress activity when home address layout is clicked
         homeAddress_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),HomeAddress.class));
+                startActivity(new Intent(getApplicationContext(), HomeAddress.class));
             }
         });
     }
 
     // find view by id of all the views
     private void findViewById() {
-        serviceEnabled_tv = (TextView)findViewById(R.id.serviceEnabled_tv);
-        serviceEnabled_iv = (ImageView)findViewById(R.id.serviceEnabled_iv);
+        serviceEnabled_tv = (TextView) findViewById(R.id.serviceEnabled_tv);
+        serviceEnabled_iv = (ImageView) findViewById(R.id.serviceEnabled_iv);
 
-        serviceEnabled_lay = (LinearLayout)findViewById(R.id.serviceEnabled_lay);
-        homeAddress_lay = (LinearLayout)findViewById(R.id.homeAddress_lay);
-        keyword_lay = (LinearLayout)findViewById(R.id.keyword_lay);
-        customiseMessage_lay = (LinearLayout)findViewById(R.id.customiseMessage_lay);
-        history_lay = (LinearLayout)findViewById(R.id.history_lay);
-        tutorial_lay = (LinearLayout)findViewById(R.id.tutorial_lay);
+        serviceEnabled_lay = (LinearLayout) findViewById(R.id.serviceEnabled_lay);
+        homeAddress_lay = (LinearLayout) findViewById(R.id.homeAddress_lay);
+        keyword_lay = (LinearLayout) findViewById(R.id.keyword_lay);
+        customiseMessage_lay = (LinearLayout) findViewById(R.id.customiseMessage_lay);
+        history_lay = (LinearLayout) findViewById(R.id.history_lay);
+        tutorial_lay = (LinearLayout) findViewById(R.id.tutorial_lay);
     }
 
     //if the service is running and user hits the layout
     // this method runs and it changes the disables the service and changes the color of the layout to red
-    public void disableService(){
+    public void disableService() {
         serviceEnabled_lay.setBackgroundColor(Color.RED);
         serviceEnabled_tv.setText(R.string.service_disabled);
         serviceEnabled_iv.setImageBitmap(null);
         serviceEnabled_iv.setImageResource(R.drawable.service_disabled);
         serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        serviceEnabled_tv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20, 20, 20, 20);
     }
 
     // if the service is not running this method is called
     // changes the color to orange or something for some reasons
-    public void enableService(){
+    public void enableService() {
         serviceEnabled_lay.setBackgroundColor(0xffff8800);
         serviceEnabled_tv.setText(R.string.service_enabled);
         serviceEnabled_iv.setImageBitmap(null);
         serviceEnabled_iv.setImageResource(R.drawable.service_enabled);
         serviceEnabled_iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        serviceEnabled_tv.setPadding(20,20,20,20);
+        serviceEnabled_tv.setPadding(20, 20, 20, 20);
     }
+
     // this method checks if all the required permission are granted
     // returns a boolean
     private boolean checkPermissions() {
@@ -166,8 +167,7 @@ public class Design extends AppCompatActivity {
                             startPermissionRequest();
                         }
                     });
-        }
-        else {
+        } else {
             Log.i(TAG, "Requesting permission");
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
@@ -175,6 +175,7 @@ public class Design extends AppCompatActivity {
             startPermissionRequest();
         }
     }
+
     // just to show to user why this permission is required
     private void showSnackbar(final String text) {
         View container = findViewById(R.id.main_activity_container);
@@ -182,6 +183,7 @@ public class Design extends AppCompatActivity {
             Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
         }
     }
+
     // This method is called the first time the app is installed
     // request all the permissions stated here
     private void startPermissionRequest() {
@@ -191,6 +193,7 @@ public class Design extends AppCompatActivity {
                         Manifest.permission.READ_CONTACTS},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
     }
+
     // this is the important bit which checks if the permission is granted or not
     // and therefore change your functionality accordingly
     // this method sets the values of the boolean variable for location, contact and sms and store them in sharedPreference
@@ -217,10 +220,10 @@ public class Design extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationPermission = true;
             }
-            if (grantResults[1] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 SMSPermission = true;
             }
-            if(grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
                 contactPermission = true;
             }
             if (grantResults[0] == PackageManager.PERMISSION_DENIED ||
@@ -254,11 +257,12 @@ public class Design extends AppCompatActivity {
                         });
             }
         }
-        editor.putBoolean("locationPermission",locationPermission);
-        editor.putBoolean("SMSPermission",SMSPermission);
-        editor.putBoolean("contactPermission",contactPermission);
+        editor.putBoolean("locationPermission", locationPermission);
+        editor.putBoolean("SMSPermission", SMSPermission);
+        editor.putBoolean("contactPermission", contactPermission);
         editor.apply();
     }
+
     // just show a snackbar
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
@@ -276,16 +280,15 @@ public class Design extends AppCompatActivity {
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final boolean service = preferences.getBoolean("service",true);
-                if(service){
+                final boolean service = preferences.getBoolean("service", true);
+                if (service) {
                     Main.showToast("FL-ASHA disabled");
-                    editor.putBoolean("service",false);
+                    editor.putBoolean("service", false);
                     editor.apply();
                     disableService();
-                }
-                else {
+                } else {
                     Main.showToast("FL-ASHA enabled");
-                    editor.putBoolean("service",true);
+                    editor.putBoolean("service", true);
                     editor.apply();
                     enableService();
                 }
@@ -323,49 +326,47 @@ public class Design extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this,SettingsActivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
             case R.id.action_current_location:
                 final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 // if the gps is off
-                if(!b){
+                if (!b) {
                     //open the dialog which ask to enable location
                     // and enabled the location when the user clicks ok
 
-                }
-                else{
-
+                    Main.showToast("Turn GPS on");
+                } else {
                     AlertDialog.Builder builder;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                        builder = new AlertDialog.Builder(Design.this, android.R.style.Theme_Material_Dialog_Alert);
                     } else {
-                        builder = new AlertDialog.Builder(getApplicationContext());
+                        builder = new AlertDialog.Builder(Design.this);
                     }
-
                     builder.setTitle("Your Current Location")
-                            .setMessage("Show current location of the user")
+                            .setMessage("<Show current location of the user>")
                             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                 }
                             })
-                            .setNegativeButton(getResources().getString(R.string.share, new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getResources().getString(R.string.share), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Main.showToast("Sharing location, select contact");
                                 }
-                            }))
+                            })
                             .setIcon(android.R.drawable.ic_menu_mylocation)
                             .show();
                 }
         }
-        return super.onOptionsItemSelected(item);
+         return super.onOptionsItemSelected(item);
     }
 }
