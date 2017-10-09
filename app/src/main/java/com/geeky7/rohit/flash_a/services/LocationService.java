@@ -27,6 +27,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
@@ -351,7 +352,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         mLatitude = mCurrentLocation.getLatitude();
         mLongitude = mCurrentLocation.getLongitude();
 
-        String number1 = "AIzaSyCth6KThdK_C9mztGc2dadvK82yCvktO-o";
+        String number1 = context.getString(R.string.API_KEY);
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
