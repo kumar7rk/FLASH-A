@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.MyApplication;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
@@ -23,7 +22,7 @@ public class ETA {
 
     SharedPreferences preferences;
     String eta = "";
-    public void eta(String origin,String dest){
+    public String eta(String origin,String dest){
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin, dest);
 
@@ -31,6 +30,8 @@ public class ETA {
 
         // Start downloading json data from Google Directions API
         downloadTask.execute(url);
+
+        return eta;
     }
     public String getDirectionsUrl(String origin,String dest){
 
@@ -87,7 +88,7 @@ public class ETA {
             br.close();
 
         }catch(Exception e){
-            Log.d("Exception downloadingURL", e.toString());
+            Log.d("ExceptionDownloadingURL", e.toString());
         }finally{
             iStream.close();
             urlConnection.disconnect();
@@ -96,7 +97,7 @@ public class ETA {
     }
 
     // Fetches data from url passed
-    private class DownloadTask extends AsyncTask<String, Void, String> {
+    private class DownloadTask extends AsyncTask<String, String, String> {
 
         // Downloading data in non-ui thread
         @Override
@@ -172,20 +173,18 @@ public class ETA {
                     }else if(j==1){ // Get duration from the list
                         duration = (String)point.get("duration");
 
+                        eta = duration;
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
 
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("eta",duration);
 
+                        editor.commit();
+
                         continue;
                     }
-
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
                 }
-
             }
         }
-    } }
+    }
+}

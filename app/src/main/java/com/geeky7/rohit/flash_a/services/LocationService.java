@@ -299,10 +299,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     private String getETA() {
         ETA ETA = new ETA();
-        ETA.eta("Adelaide,SA","Melbourne,VIC");
+        String eta1 = ETA.eta("Adelaide,SA","Sydney,NSW");
+//        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String eta = preferences.getString("eta","");
-        return eta;
+        String eta = preferences.getString("eta","NA"); // would return one old value
+        return eta+ "||" +eta1;
     }
 
     // checks if the contace permission is granted or not
