@@ -352,7 +352,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         mLatitude = mCurrentLocation.getLatitude();
         mLongitude = mCurrentLocation.getLongitude();
 
-        String number1 = context.getString(R.string.API_KEY);
+        String number1 = getApplicationContext().getString(R.string.API_KEY);
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
