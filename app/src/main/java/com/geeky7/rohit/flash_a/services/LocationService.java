@@ -28,6 +28,7 @@ import android.util.Log;
 
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.activities.ETA;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
@@ -287,13 +288,23 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             name = getContactName(sender,getApplicationContext());
         }
         String address = getAddress();
+        String eta = getETA();
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ s+ ". "+ address;
+        String message = "I am near "+ s+ ". "+ address+".ETA from home "+eta;
         manager.sendTextMessage(sender,null, message, null, null);
         boolean noti = preferences.getBoolean("notification",true);
         if (noti)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
+
+    private String getETA() {
+        ETA ETA = new ETA();
+        ETA.eta("Adelaide,SA","Melbourne,VIC");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String eta = preferences.getString("eta","");
+        return eta;
+    }
+
     // checks if the contace permission is granted or not
     public boolean checkContactPermission(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
