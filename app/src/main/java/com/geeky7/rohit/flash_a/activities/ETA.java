@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ETA {
 
@@ -29,9 +30,16 @@ public class ETA {
         DownloadTask downloadTask = new DownloadTask();
 
         // Start downloading json data from Google Directions API
-        downloadTask.execute(url);
+        String eta1 = null;
+        try {
+            eta1 = downloadTask.execute(url).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
-        return eta;
+        return eta1;
     }
     public String getDirectionsUrl(String origin,String dest){
 

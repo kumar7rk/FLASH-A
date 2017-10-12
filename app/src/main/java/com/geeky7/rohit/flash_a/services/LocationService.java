@@ -282,6 +282,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onLocationChanged(Location location) {
     }
     // Magic method to send the SMS to the sender
+	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String s) {
         String name = sender;
         if (contactPermission && checkContactPermission()){
@@ -290,7 +291,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String address = getAddress();
         String eta = getETA();
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ s+ ". "+ address+".ETA from home "+eta;
+        String message = "I am near "+ s+ ". "+ address+".ETA home"+eta;
         manager.sendTextMessage(sender,null, message, null, null);
         boolean noti = preferences.getBoolean("notification",true);
         if (noti)
@@ -440,8 +441,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             if (list.size() >0){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
-                string = name;
-                sendSMS(name);
+                    sendSMS(name);
             }
         }
     }// onPostExecute
