@@ -298,13 +298,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
-    private String getETA() {
+    public String value(String e1){
+        string = e1;
+    }
+    public String getETA() {
         ETA ETA = new ETA();
         String eta1 = ETA.eta("Adelaide,SA","Sydney,NSW");
 //        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String eta = preferences.getString("eta","NA"); // would return one old value
-        return eta+ "||" +eta1;
+        return eta+ "||" +eta1+"||"+string;
     }
 
     // checks if the contace permission is granted or not
@@ -441,7 +444,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             if (list.size() >0){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
-                    sendSMS(name);
+                sendSMS(name);
             }
         }
     }// onPostExecute

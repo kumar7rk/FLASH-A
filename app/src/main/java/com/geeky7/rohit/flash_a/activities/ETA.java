@@ -1,11 +1,14 @@
 package com.geeky7.rohit.flash_a.activities;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.geeky7.rohit.flash_a.MyApplication;
+import com.geeky7.rohit.flash_a.services.LocationService;
 
 import org.json.JSONObject;
 
@@ -15,8 +18,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 
 public class ETA {
@@ -133,6 +139,157 @@ public class ETA {
 
             // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
+
+
+            String distance = "";
+            String duration = "";
+
+            List<List<HashMap<String, String>>> result1 = new List<List<HashMap<String, String>>>() {
+                @Override
+                public int size() {
+                    return 0;
+                }
+
+                @Override
+                public boolean isEmpty() {
+                    return false;
+                }
+
+                @Override
+                public boolean contains(Object o) {
+                    return false;
+                }
+
+                @NonNull
+                @Override
+                public Iterator<List<HashMap<String, String>>> iterator() {
+                    return null;
+                }
+
+                @NonNull
+                @Override
+                public Object[] toArray() {
+                    return new Object[0];
+                }
+
+                @NonNull
+                @Override
+                public <T> T[] toArray(@NonNull T[] ts) {
+                    return null;
+                }
+
+                @Override
+                public boolean add(List<HashMap<String, String>> hashMaps) {
+                    return false;
+                }
+
+                @Override
+                public boolean remove(Object o) {
+                    return false;
+                }
+
+                @Override
+                public boolean containsAll(@NonNull Collection<?> collection) {
+                    return false;
+                }
+
+                @Override
+                public boolean addAll(@NonNull Collection<? extends List<HashMap<String, String>>> collection) {
+                    return false;
+                }
+
+                @Override
+                public boolean addAll(int i, @NonNull Collection<? extends List<HashMap<String, String>>> collection) {
+                    return false;
+                }
+
+                @Override
+                public boolean removeAll(@NonNull Collection<?> collection) {
+                    return false;
+                }
+
+                @Override
+                public boolean retainAll(@NonNull Collection<?> collection) {
+                    return false;
+                }
+
+                @Override
+                public void clear() {
+
+                }
+
+                @Override
+                public List<HashMap<String, String>> get(int i) {
+                    return null;
+                }
+
+                @Override
+                public List<HashMap<String, String>> set(int i, List<HashMap<String, String>> hashMaps) {
+                    return null;
+                }
+
+                @Override
+                public void add(int i, List<HashMap<String, String>> hashMaps) {
+
+                }
+
+                @Override
+                public List<HashMap<String, String>> remove(int i) {
+                    return null;
+                }
+
+                @Override
+                public int indexOf(Object o) {
+                    return 0;
+                }
+
+                @Override
+                public int lastIndexOf(Object o) {
+                    return 0;
+                }
+
+                @Override
+                public ListIterator<List<HashMap<String, String>>> listIterator() {
+                    return null;
+                }
+
+                @NonNull
+                @Override
+                public ListIterator<List<HashMap<String, String>>> listIterator(int i) {
+                    return null;
+                }
+
+                @NonNull
+                @Override
+                public List<List<HashMap<String, String>>> subList(int i, int i1) {
+                    return null;
+                }
+            };
+            for(int i=0;i<result1.size();i++){
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for(int j=0;j<path.size();j++){
+                    HashMap<String,String> point = path.get(j);
+
+                    if(j==0){    // Get distance from the list
+                        distance = (String)point.get("distance");
+                    }else if(j==1){ // Get duration from the list
+                        duration = (String)point.get("duration");
+
+                        eta = duration;
+                        preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("eta",duration);
+
+                        editor.commit();
+
+                    }
+                }
+            }
         }
     }
 
@@ -179,6 +336,8 @@ public class ETA {
                         distance = (String)point.get("distance");
                     }else if(j==1){ // Get duration from the list
                         duration = (String)point.get("duration");
+                        LocationService locationService = new LocationService();
+                        locationService.value(duration);
 
                         eta = duration;
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
