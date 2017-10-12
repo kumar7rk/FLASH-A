@@ -154,7 +154,7 @@ public class ETA {
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             String distance = "";
-            String duration = "";
+            String duration;
 
 
             // Traversing through all the routes
@@ -169,7 +169,6 @@ public class ETA {
 
                     if(j==0){    // Get distance from the list
                         distance = (String)point.get("distance");
-                        continue;
                     }else if(j==1){ // Get duration from the list
                         duration = (String)point.get("duration");
 
@@ -181,7 +180,6 @@ public class ETA {
 
                         editor.commit();
 
-                        continue;
                     }
                 }
             }
