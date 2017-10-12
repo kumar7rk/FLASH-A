@@ -298,7 +298,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
-    public String value(String e1){
+    public void value(String e1){
         string = e1;
     }
     public String getETA() {
@@ -310,7 +310,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return eta+ "||" +eta1+"||"+string;
     }
 
-    // checks if the contace permission is granted or not
+    // checks if the contact permission is granted or not
     public boolean checkContactPermission(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_CONTACTS)
