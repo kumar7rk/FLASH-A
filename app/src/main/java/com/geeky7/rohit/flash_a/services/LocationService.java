@@ -26,6 +26,7 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 
+import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.geeky7.rohit.flash_a.activities.ETA;
@@ -55,7 +56,7 @@ import java.util.Locale;
 
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks,LocationListener{
+        GoogleApiClient.ConnectionCallbacks,LocationListener, ETAInterface{
 
     public static final String TAG = "LocationService";
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -82,6 +83,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     String string = "";
     SharedPreferences preferences;
     String sender = "";
+
+
+    ETA eta = new ETA();
+
     public LocationService() {
     }
 
@@ -104,6 +109,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         // get address from the lat lng
         geocoder = new Geocoder(this, Locale.getDefault());
+
+        eta.res = this;
 
         Log.i(TAG,"LocationService Created");
     }
@@ -412,6 +419,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
         return data;
     }
+
+    @Override
+    public void result(String output) {
+
+    }
+
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 

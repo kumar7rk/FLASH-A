@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.services.LocationService;
 
@@ -18,12 +19,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ETA {
 
     SharedPreferences preferences;
     String eta = "";
+
+    public ETAInterface res = null;
+
     public String eta(String origin,String dest){
         // Getting URL to the Google Directions API
         String url = getDirectionsUrl(origin, dest);
@@ -31,15 +34,7 @@ public class ETA {
         DownloadTask downloadTask = new DownloadTask();
 
         // Start downloading json data from Google Directions API
-        String eta1 = null;
-        try {
-            eta1 = downloadTask.execute(url).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
+            downloadTask.execute(url);
         return "";
     }
     public String getDirectionsUrl(String origin,String dest){
@@ -182,6 +177,7 @@ public class ETA {
                         duration = (String) point.get("duration");
                         LocationService locationService = new LocationService();
                         locationService.value(duration);
+                        res.result(duration);
 
                         eta = duration;
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
