@@ -303,9 +303,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     public String getETA() {
         ETA ETA = new ETA();
-        String eta1 = ETA.eta("Adelaide,SA","Sydney,NSW");
-//        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String homeAddress = preferences.getString("homeAddress","");
+        String eta1 = ETA.eta(getAddress(),homeAddress);
+//        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
         String eta = preferences.getString("eta","NA"); // would return one old value
         return eta+ "||" +eta1+"||"+string;
     }
