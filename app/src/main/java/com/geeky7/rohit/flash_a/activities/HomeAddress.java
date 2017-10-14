@@ -184,11 +184,14 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
 
+        }
+        else{
         LatLng g = getLocationFromAddress(homeAddressS);
         mMap.addMarker(new MarkerOptions().position(g));
         mMap.getCameraPosition();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
-
+        }
     }
 }
