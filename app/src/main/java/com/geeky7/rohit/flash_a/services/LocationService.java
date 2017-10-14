@@ -305,7 +305,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
-
     public String getETA() {
         ETA ETA = new ETA();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

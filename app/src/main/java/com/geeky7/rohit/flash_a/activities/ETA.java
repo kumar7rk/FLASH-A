@@ -175,9 +175,6 @@ public class ETA {
                         distance = (String) point.get("distance");
                     } else if (j == 1) { // Get duration from the list
                         duration = (String) point.get("duration");
-                        LocationService locationService = new LocationService();
-                        locationService.value(duration);
-                        res.result(duration);
 
                         eta = duration;
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
