@@ -305,18 +305,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
-    public void value(String e1){
-        string = e1;
-    }
+
     public String getETA() {
         ETA ETA = new ETA();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         String homeAddress = preferences.getString("homeAddress","");
-        String eta1 = ETA.eta(getAddress(),homeAddress);
-//        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
         String eta = preferences.getString("eta","NA"); // would return one old value
-        return eta+ "||" +eta1+"||"+string;
+
+        String eta1 = ETA.eta(getAddress(),homeAddress);
+
+//        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
+
+        return eta+ "||" +eta1;
     }
 
     // checks if the contact permission is granted or not
