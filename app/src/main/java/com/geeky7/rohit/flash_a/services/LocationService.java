@@ -28,7 +28,9 @@ import android.util.Log;
 
 import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.activities.DirectionsJSONParser;
 import com.geeky7.rohit.flash_a.activities.ETA;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
@@ -80,12 +83,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     Geocoder geocoder;
     List<Address> addresses;
 
-    String string = "";
+    String string = "Null";
     SharedPreferences preferences;
     String sender = "";
 
 
     ETA eta = new ETA();
+
 
     public LocationService() {
     }
@@ -129,7 +133,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("LocationService","onDestroy");
+        Log.i(TAG,"onDestroy");
       //  Main.showToast("BackgroundServiceDestroyed");
         stopSelf();
         if (mGoogleApiClient.isConnected())
@@ -211,7 +215,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     if (contactPermission && checkContactPermission()){
                         name = getContactName(sender,getApplicationContext());
                     }
-                    Log.i("Else", "gps off");
+                    Log.i(TAG, "gps off");
                     m.pugNotification("Location Request from "+name,"Turn GPS on","");
 
                     getApplicationContext().registerReceiver(gpsReceiver,
@@ -244,9 +248,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         Thread.sleep(2000);
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                        Log.i("onReceive",mCurrentLocation.getProvider());
-                        Log.i("onReceive",mCurrentLocation.getAccuracy()+"");
-                        Log.i("onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
+                        Log.i(TAG+""+"onReceive",mCurrentLocation.getProvider());
+                        Log.i(TAG+""+"onReceive",mCurrentLocation.getAccuracy()+"");
+                        Log.i(TAG+""+"onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
                     }
                     if (mCurrentLocation!=null) {
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
@@ -255,7 +259,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     stopSelf();
                     updateToastLog();
 
-                    Log.i("onReceive","Mission accomplished. You have done it man.");
+                    Log.i(TAG+""+"onReceive","Mission accomplished. You have done it man.");
                     getApplicationContext().unregisterReceiver(gpsReceiver);
                 }
                  catch(IOException e) {
@@ -310,14 +314,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public String getETA() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String homeAddress = preferences.getString("homeAddress","");
+
+        String address = getAddress();
+
         String eta = preferences.getString("eta","NA"); // would return one old value
 
-        ETA ETA = new ETA();
-        String address = getAddress();
-        String eta1 = ETA.eta(address,homeAddress);
-//        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
+        String eta1 = eta(address,homeAddress);
 
-        return eta+ "||" +eta1;
+        return eta+ "||" +eta1+"||"+string;
     }
 
     // checks if the contact permission is granted or not
@@ -325,10 +329,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.i("contactPermission","false");
+            Log.i(TAG+""+"contactPermission","false");
             return false;
         }
-        Log.i("contactPermission","true");
+        Log.i(TAG+""+"contactPermission","true");
         return true;
     }
     // gets the contact name if the permission is granted
@@ -352,7 +356,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // this method gets the address and lets you make selection what parameters of address to include
     private String getAddress() {
         for (int i = 0; i< addresses.size();i++)
-            Log.i("All addresses",addresses.get(i).getAddressLine(i));
+            Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));
 
         String address = addresses.get(0).getAddressLine(0);
 
@@ -386,7 +390,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
         sb.append("&sensor=true");
         sb.append("&key=" + number1);
-        Log.i("Places", sb.toString());
+        Log.i(TAG+""+"Places", sb.toString());
         return sb;
     }
 
@@ -457,7 +461,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         @Override
         protected void onPostExecute(List<HashMap<String, String>> list) {
 
-            if (list.size() >0){
+            if (/*list.size() >0&&*/!list.isEmpty()){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
                 sendSMS(name);
@@ -536,7 +540,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 place.put("reference", reference);
                 place.put("types", placeType);
 
-                Log.i("PlaceType",placeType);
+                Log.i(TAG+""+"PlaceType",placeType);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -551,7 +555,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             try {
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
-                Log.i("Background Task", e.toString());
+                Log.i(TAG+""+"Background Task", e.toString());
             }
             return data;
         }
@@ -559,7 +563,162 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         protected void onPostExecute(String result) {
             ParserTask parserTask = new ParserTask(context);
             parserTask.execute(result);
-            Log.i("PlacesTaskOnPostExecute", result + "");
+            Log.i(TAG+""+"PlacesTaskOnPostExecute", result + "");
         }
     }
+
+    /*
+    ETA AsyncTask code
+     */
+
+    public String eta(String origin,String dest){
+        // Getting URL to the Google Directions API
+        String url = getDirectionsUrl(origin, dest);
+
+        // Start downloading json data from Google Directions API
+        new DownloadTask().execute(url);
+        return "";
+    }
+    public String getDirectionsUrl(String origin,String dest){
+        // Origin of route
+        String str_origin = "origin="+origin;
+        // Destination of route
+        String str_dest = "destination="+dest;
+        // Sensor enabled
+        String sensor = "sensor=false";
+        // Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+        Log.i(TAG,url);
+        return url;
+    }
+
+    /** A method to download json data from url */
+    private String downloadUrlETA(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(strUrl);
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+            // Connecting to url
+            urlConnection.connect();
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb  = new StringBuffer();
+            String line = "";
+            while( ( line = br.readLine())  != null){
+                sb.append(line);
+            }
+            data = sb.toString();
+            br.close();
+        }catch(Exception e){
+            Log.d("ExceptionDownloadingURL", e.toString());
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    // Fetches data from url passed
+    private class DownloadTask extends AsyncTask<String, String, String> {
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+            // For storing data from web service
+            String data = "";
+            try{
+                // Fetching the data from web service
+                data = downloadUrlETA(url[0]);
+            }catch(Exception e){
+                Log.d("Background Task",e.toString());
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            // Invokes the thread for parsing the JSON data
+            try {
+                String re1 = new ParserTaskETA().execute(result).get().toString();
+                Main.showToast("get:"+re1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /** A class to parse the Google Places in JSON format */
+    private class ParserTaskETA extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        // Executes in UI thread, after the parsing process
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            String distance = "";
+            String duration;
+
+
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    if (j == 0) {    // Get distance from the list
+                        distance = (String) point.get("distance");
+                    } else if (j == 1) { // Get duration from the list
+                        duration = (String) point.get("duration");
+                        string = duration;
+
+                        preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("eta", duration);
+
+                        editor.commit();
+
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
 }
