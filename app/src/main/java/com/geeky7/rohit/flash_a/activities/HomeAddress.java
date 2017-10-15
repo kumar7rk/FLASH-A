@@ -152,10 +152,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
                 // set the current address in the textView
                 homeAddress.setText(place.getAddress());
-                Main.showToast("Home address updated :)");
-
                 // when the home address is updated; this method dynamically loads the mapView
                 refreshMap();
+
+
+                Main.showToast("Home address updated :)");
+
 
                 editor.putString("homeAddress",place.getAddress()+"");
                 editor.apply();
