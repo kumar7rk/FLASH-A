@@ -321,7 +321,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         String eta1 = eta(address,homeAddress);
 
-        return eta+ "||" +eta1+"||"+string;
+        return eta+ "||" +eta1+"||"+string/*+"||"+string1*/;
     }
 
     // checks if the contact permission is granted or not
@@ -427,7 +427,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     @Override
     public void result(String output) {
+    }
 
+    private String myMethod(String s){
+        string = s;
+        return s;
     }
 
     // Parsing the data received
@@ -651,7 +655,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             // Invokes the thread for parsing the JSON data
             try {
                 String re1 = new ParserTaskETA().execute(result).get().toString();
-                Main.showToast("get:"+re1);
+                Log.i(TAG+""+"re1",re1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -705,6 +709,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         duration = (String) point.get("duration");
                         string = duration;
 
+                        myMethod(duration);
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
 
                         SharedPreferences.Editor editor = preferences.edit();
