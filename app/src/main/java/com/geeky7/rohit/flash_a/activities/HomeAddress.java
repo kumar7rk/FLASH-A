@@ -189,7 +189,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         }
         else{
         LatLng g = getLocationFromAddress(homeAddressS);
-        mMap.addMarker(new MarkerOptions().position(g));
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mMap.addMarker(new MarkerOptions().position(g));
         mMap.getCameraPosition();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
         }
