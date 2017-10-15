@@ -292,28 +292,29 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String s) {
         String name = sender;
-        if (contactPermission && checkContactPermission()){
+        if (contactPermission && checkContactPermission())
             name = getContactName(sender,getApplicationContext());
-        }
+
         String address = getAddress();
         String eta = getETA();
+
         SmsManager manager = SmsManager.getDefault();
         String message = "I am near "+ s+ ". "+ address+".ETA home"+eta;
         manager.sendTextMessage(sender,null, message, null, null);
+
         boolean noti = preferences.getBoolean("notification",true);
         if (noti)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
     public String getETA() {
-        ETA ETA = new ETA();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         String homeAddress = preferences.getString("homeAddress","");
         String eta = preferences.getString("eta","NA"); // would return one old value
 
-        String eta1 = ETA.eta(getAddress(),homeAddress);
-
+        ETA ETA = new ETA();
+        String address = getAddress();
+        String eta1 = ETA.eta(address,homeAddress);
 //        String eta1 = ETA.eta("Adelaide,SA","Melbourne,VIC");
 
         return eta+ "||" +eta1;

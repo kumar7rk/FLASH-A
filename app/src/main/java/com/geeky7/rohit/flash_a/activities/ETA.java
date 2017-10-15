@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.MyApplication;
-import com.geeky7.rohit.flash_a.services.LocationService;
 
 import org.json.JSONObject;
 
@@ -38,23 +37,16 @@ public class ETA {
         return "";
     }
     public String getDirectionsUrl(String origin,String dest){
-
-
         // Origin of route
         String str_origin = "origin="+origin;
-
         // Destination of route
         String str_dest = "destination="+dest;
-
         // Sensor enabled
         String sensor = "sensor=false";
-
         // Building the parameters to the web service
         String parameters = str_origin+"&"+str_dest+"&"+sensor;
-
         // Output format
         String output = "json";
-
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
@@ -68,29 +60,20 @@ public class ETA {
         HttpURLConnection urlConnection = null;
         try{
             URL url = new URL(strUrl);
-
             // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
-
             // Connecting to url
             urlConnection.connect();
-
             // Reading data from url
             iStream = urlConnection.getInputStream();
-
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
             StringBuffer sb  = new StringBuffer();
-
             String line = "";
             while( ( line = br.readLine())  != null){
                 sb.append(line);
             }
-
             data = sb.toString();
-
             br.close();
-
         }catch(Exception e){
             Log.d("ExceptionDownloadingURL", e.toString());
         }finally{
@@ -102,14 +85,11 @@ public class ETA {
 
     // Fetches data from url passed
     private class DownloadTask extends AsyncTask<String, String, String> {
-
         // Downloading data in non-ui thread
         @Override
         protected String doInBackground(String... url) {
-
             // For storing data from web service
             String data = "";
-
             try{
                 // Fetching the data from web service
                 data = downloadUrl(url[0]);
@@ -119,8 +99,7 @@ public class ETA {
             return data;
         }
 
-        // Executes in UI thread, after the execution of
-        // doInBackground()
+        // Executes in UI thread, after the execution of doInBackground()
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -177,6 +156,8 @@ public class ETA {
                         duration = (String) point.get("duration");
 
                         eta = duration;
+
+                        res.result(duration);
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
 
                         SharedPreferences.Editor editor = preferences.edit();
