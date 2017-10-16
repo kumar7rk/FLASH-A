@@ -303,7 +303,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String eta = getETA();
 
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ s+ ". "+ address+".ETA home"+eta;
+        String message = "I am near "+ s+ ". "+ address/*+".ETA home"+eta*/;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
