@@ -1,6 +1,5 @@
 package com.geeky7.rohit.flash_a.activities;
 
-import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.FloatRange;
 import android.view.View;
@@ -31,21 +30,21 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
 //                        .image(R.drawable.img_office)
-                        .title("Organize your time with us")
-                        .description("Would you try?")
+                        .title("Always worrying where your family is?")
+                        .description("Well! Always know where hey are with ASHA.")
                         .build(),
-                new MessageButtonBehaviour(new View.OnClickListener() {
+                /*new MessageButtonBehaviour(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showMessage("We provide solutions to make you love your work");
                     }
-                }, "Work with love"));
+                }, "Work with love")*/);
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
-                .title("Want more?")
-                .description("Go on")
+                .title("Set a keyword and your location is automatically send to your family person wanted to know where you are")
+                .description("It works.It's that simple!")
                 .build());
 
 //        addSlide(new CustomSlide());
@@ -53,24 +52,24 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
-                        .possiblePermissions(new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_SMS})
-                        .neededPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
 //                        .image(R.drawable.img_equipment)
-                        .title("We provide best tools")
-                        .description("ever")
+                        .title("Want to get more?")
+                        .description("Set home address to know how far are they from home.")
                         .build(),
-                new MessageButtonBehaviour(new View.OnClickListener() {
+                /*new MessageButtonBehaviour(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showMessage("Try us!");
                     }
-                }, "Tools"));
+                }, "Tools")*/);
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.fourth_slide_background)
                 .buttonsColor(R.color.fourth_slide_buttons)
-                .title("That's it")
-                .description("Would you join us?")
+                .title("In an emergency?")
+                .description("Share your current location with the click of a button")
                 .build());
+
+
     }
 }
