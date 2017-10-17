@@ -1,4 +1,4 @@
-package com.geeky7.rohit.flash_a.activities;
+package com.geeky7.rohit.flash_a;
 
 import com.google.android.gms.maps.model.LatLng;
 
