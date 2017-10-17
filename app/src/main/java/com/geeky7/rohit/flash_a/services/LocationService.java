@@ -26,12 +26,13 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
-import com.geeky7.rohit.flash_a.activities.DirectionsJSONParser;
-import com.geeky7.rohit.flash_a.activities.ETA;
+import com.geeky7.rohit.flash_a.DirectionsJSONParser;
+import com.geeky7.rohit.flash_a.ETA;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
@@ -61,7 +62,7 @@ import java.util.concurrent.ExecutionException;
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,LocationListener, ETAInterface{
 
-    public static final String TAG = "LocationService";
+    public static final String TAG = CONSTANT.LOCATION_SERVICE;
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS/2;
 
