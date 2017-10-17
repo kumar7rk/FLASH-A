@@ -319,7 +319,7 @@ public class Design extends AppCompatActivity {
         tutorial_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.showToast(getResources().getString(R.string.coming_soon));
+            startActivity(new Intent(getApplicationContext(),TutorialActivity.class));
             }
         });
     }
