@@ -7,7 +7,6 @@ import android.view.View;
 import com.geeky7.rohit.flash_a.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
-import agency.tango.materialintroscreen.MessageButtonBehaviour;
 import agency.tango.materialintroscreen.SlideFragmentBuilder;
 import agency.tango.materialintroscreen.animations.IViewTranslation;
 
@@ -32,13 +31,15 @@ public class TutorialActivity extends MaterialIntroActivity {
 //                        .image(R.drawable.img_office)
                         .title("Always worrying where your family is?")
                         .description("Well! Always know where hey are with ASHA.")
-                        .build(),
-                /*new MessageButtonBehaviour(new View.OnClickListener() {
+                        .build()
+              /*  ,
+                new MessageButtonBehaviour(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showMessage("We provide solutions to make you love your work");
                     }
-                }, "Work with love")*/);
+                }, "Work with love")*/
+                );
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
@@ -55,13 +56,15 @@ public class TutorialActivity extends MaterialIntroActivity {
 //                        .image(R.drawable.img_equipment)
                         .title("Want to get more?")
                         .description("Set home address to know how far are they from home.")
-                        .build(),
-                /*new MessageButtonBehaviour(new View.OnClickListener() {
+                        .build()
+                /*,
+                new MessageButtonBehaviour(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showMessage("Try us!");
                     }
-                }, "Tools")*/);
+                }, "Tools")*/
+                );
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.fourth_slide_background)
