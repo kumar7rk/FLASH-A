@@ -335,6 +335,7 @@ public class Design extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
+                break;
             case R.id.action_current_location:
                 final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -366,6 +367,7 @@ public class Design extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_menu_mylocation)
                             .show();
                 }
+                break;
         }
          return super.onOptionsItemSelected(item);
     }
