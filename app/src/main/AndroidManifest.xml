@@ -21,32 +21,35 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/API_KEY_GEO" />
 
-        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.MainActivity" />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+
+        <activity android:name=".activities.Design">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.HomeAddress" />
+
+
 
         <service android:name=".services.LocationService" />
-
-        <receiver android:name=".SMSReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
 
         <service
             android:name=".services.BackgroundService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity android:name=".activities.Design">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+        <receiver android:name=".SMSReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activities.HomeAddress" />
+        </receiver>
     </application>
 
 </manifest>

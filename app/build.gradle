@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.geeky7.rohit.flash_a"
         minSdkVersion 21
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -30,6 +30,9 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.github.halysongoncalves:pugnotification:1.8.1'
     compile 'com.google.android.gms:play-services:11.0.4'
-    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-v4:25.3.1'
+
+    compile 'agency.tango.android:material-intro-screen:0.0.5'
+
     testCompile 'junit:junit:4.12'
 }
