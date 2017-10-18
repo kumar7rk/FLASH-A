@@ -44,8 +44,8 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
-                .title("Set a keyword and your location is automatically send to your family person wanted to know where you are")
-                .description("It works.It's that simple!")
+                .title("Add a keyword which triggers app to send your location automatically to your family member")
+                .description("It works! It's that simple!")
                 .build());
 
 //        addSlide(new CustomSlide());
@@ -54,8 +54,8 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
 //                        .image(R.drawable.img_equipment)
-                        .title("Want to get more?")
-                        .description("Set home address to know how far are they from home.")
+                        .title("Want more?")
+                        .description("Set home address to send ETA from home. Customise message and more.")
                         .build()
                 /*,
                 new MessageButtonBehaviour(new View.OnClickListener() {
@@ -72,7 +72,5 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .title("In an emergency?")
                 .description("Share your current location with the click of a button")
                 .build());
-
-
     }
 }
