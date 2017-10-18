@@ -30,7 +30,8 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .buttonsColor(R.color.first_slide_buttons)
 //                        .image(R.drawable.img_office)
                         .title("Always worrying where your family is?")
-                        .description("Well! Always know where hey are with ASHA.")
+                //  Html.fromHtml("<b>" + myText + "</b>"
+                        .description("Well! Always know where they are with ASHA")
                         .build()
               /*  ,
                 new MessageButtonBehaviour(new View.OnClickListener() {
