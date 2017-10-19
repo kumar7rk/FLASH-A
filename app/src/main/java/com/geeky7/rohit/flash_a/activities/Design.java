@@ -341,6 +341,7 @@ public class Design extends AppCompatActivity {
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 // if the gps is off
                 if (!b) {
+                    //Ideally
                     //open the dialog which ask to enable location
                     // and enabled the location when the user clicks ok
 
