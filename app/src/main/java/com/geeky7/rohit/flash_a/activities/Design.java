@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geeky7.rohit.flash_a.BuildConfig;
+import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,8 +43,8 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 public class Design extends AppCompatActivity {
 
-    private static final String TAG = Design.class.getSimpleName();
-
+//    private static final String TAG = Design.class.getSimpleName();
+private static final String TAG = CONSTANT.DESIGN;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
     boolean locationPermission = true;

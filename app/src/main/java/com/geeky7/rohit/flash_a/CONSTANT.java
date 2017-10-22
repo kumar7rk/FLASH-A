@@ -7,4 +7,6 @@ package com.geeky7.rohit.flash_a;
 public class CONSTANT {
 
     public static final String LOCATION_SERVICE = "LocationService";
+    public static final String DESIGN= "DESIGN";
+
 }
