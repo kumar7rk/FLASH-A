@@ -352,10 +352,8 @@ public class Design extends AppCompatActivity {
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 // if the gps is off
                 if (!b) {
-                    //Ideally
-                    //open the dialog which ask to enable location
-                    // and enabled the location when the user clicks ok
-
+                    // calls this method whic open the dialog which ask to enable location
+                    // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
 //                    Main.showToast("Turn GPS on");
                 } else {
@@ -385,6 +383,8 @@ public class Design extends AppCompatActivity {
          return super.onOptionsItemSelected(item);
     }
 
+    // onClick currentLocation button in actionBar and gps is off
+    // opens a dialog which turns on gps without requiring to navigate to the location settings page
     private void displayLocationSettingsRequest(Context context) {
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
