@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -33,6 +34,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final String TAG = CONSTANT.HOME_ADDRESS;
 
     FloatingActionButton floatingActionButton;
     private TextView homeAddress;
@@ -148,7 +151,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             if (resultCode == RESULT_OK) {
                 // Get the user's selected place from the Intent.
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.i("HomeAddress", "Place Selected: " + place.getName());
+                Log.i(TAG, "Place Selected: " + place.getName());
 
                 // set the current address in the textView
                 homeAddress.setText(place.getAddress());
@@ -170,7 +173,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 }*/
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                Log.e("HomeAddress", "Error: Status = " + status.toString());
+                Log.e(TAG, "Error: Status = " + status.toString());
             } else if (resultCode == RESULT_CANCELED) {
                 // Indicates that the activity closed before a selection was made. For example if
                 // the user pressed the back button.

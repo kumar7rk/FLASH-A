@@ -44,7 +44,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 public class Design extends AppCompatActivity {
 
 //    private static final String TAG = Design.class.getSimpleName();
-private static final String TAG = CONSTANT.DESIGN;
+    private static final String TAG = CONSTANT.DESIGN;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
     boolean locationPermission = true;
