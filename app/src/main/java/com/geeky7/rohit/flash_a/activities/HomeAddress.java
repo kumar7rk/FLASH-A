@@ -59,7 +59,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         //Setting the homeAddress in the textView
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
-
+        // set back button on actionBar
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         //loading the map with a marker on the home address
         refreshMap();
 

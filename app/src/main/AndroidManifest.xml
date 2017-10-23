@@ -32,7 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.HomeAddress" />
+        <activity
+            android:name=".activities.HomeAddress"
+            android:label="Home Address">
+            </activity>
 
         <activity android:name=".activities.TutorialActivity"
             android:theme="@style/Theme.Intro">
