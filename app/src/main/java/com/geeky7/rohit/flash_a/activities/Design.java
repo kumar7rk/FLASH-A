@@ -75,6 +75,7 @@ public class Design extends AppCompatActivity {
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
+
         if (service) enableService();
         else disableService();
 
