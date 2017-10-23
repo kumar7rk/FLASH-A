@@ -356,32 +356,37 @@ public class Design extends AppCompatActivity {
                     // calls this method whic open the dialog which ask to enable location
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
+
 //                    Main.showToast("Turn GPS on");
                 } else {
-                    AlertDialog.Builder builder;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-                    } else {
-                        builder = new AlertDialog.Builder(this);
-                    }
-                    builder.setTitle("Your Current Location")
-                            .setMessage("<Show current location of the user>")
-                            .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton(getResources().getString(R.string.share), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Main.showToast("Sharing location, select contact");
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_menu_mylocation)
-                            .show();
+                    buildDialogCurrentLocation();
                 }
                 break;
         }
          return super.onOptionsItemSelected(item);
+    }
+
+    private void buildDialogCurrentLocation() {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Your Current Location")
+                .setMessage("<Show current location of the user>")
+                .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.share), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Main.showToast("Sharing location, select contact");
+                    }
+                })
+                .setIcon(android.R.drawable.ic_menu_mylocation)
+                .show();
     }
 
     // onClick currentLocation button in actionBar and gps is off
@@ -407,10 +412,15 @@ public class Design extends AppCompatActivity {
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         Log.i(TAG, "All location settings are satisfied.");
+                        buildDialogCurrentLocation();
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-
                         try {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
