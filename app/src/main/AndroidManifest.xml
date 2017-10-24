@@ -34,7 +34,8 @@
         </activity>
         <activity
             android:name=".activities.HomeAddress"
-            android:label="Home Address">
+            android:label="Home Address"
+            android:parentActivityName=".activities.Design">
             </activity>
 
         <activity android:name=".activities.TutorialActivity"
