@@ -60,8 +60,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
         // set back button on actionBar
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //loading the map with a marker on the home address
         refreshMap();
 
@@ -198,5 +199,10 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         mMap.getCameraPosition();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
