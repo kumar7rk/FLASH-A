@@ -356,8 +356,6 @@ public class Design extends AppCompatActivity {
                     // calls this method whic open the dialog which ask to enable location
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
-
-//                    Main.showToast("Turn GPS on");
                 } else {
                     buildDialogCurrentLocation();
                 }
@@ -412,12 +410,6 @@ public class Design extends AppCompatActivity {
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         Log.i(TAG, "All location settings are satisfied.");
-                        buildDialogCurrentLocation();
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
@@ -435,5 +427,13 @@ public class Design extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Main.showToast("onActivityResult"+resultCode);
+        if (resultCode==-1)
+            buildDialogCurrentLocation();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
