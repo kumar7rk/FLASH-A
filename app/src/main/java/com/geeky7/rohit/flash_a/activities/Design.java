@@ -9,6 +9,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,19 +33,22 @@ import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-public class Design extends AppCompatActivity {
+public class Design extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks, LocationListener {
 
-//    private static final String TAG = Design.class.getSimpleName();
+    //    private static final String TAG = Design.class.getSimpleName();
     private static final String TAG = CONSTANT.DESIGN;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
@@ -56,6 +61,9 @@ public class Design extends AppCompatActivity {
     ImageView serviceEnabled_iv;
 
     SharedPreferences preferences;
+
+    private Location mCurrentLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -331,7 +339,7 @@ public class Design extends AppCompatActivity {
         tutorial_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            startActivity(new Intent(getApplicationContext(),TutorialActivity.class));
+                startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
             }
         });
     }
@@ -361,18 +369,35 @@ public class Design extends AppCompatActivity {
                 }
                 break;
         }
-         return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     private void buildDialogCurrentLocation() {
         AlertDialog.Builder builder;
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                .addApi(LocationServices.API).build();
+        googleApiClient.connect();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         } else {
             builder = new AlertDialog.Builder(this);
         }
         builder.setTitle("Your Current Location")
-                .setMessage("<Show current location of the user>")
+//                .setMessage("<Show current location of the user>")
+                .setMessage(mCurrentLocation.getLatitude()+","+mCurrentLocation.getLongitude())
                 .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -398,6 +423,20 @@ public class Design extends AppCompatActivity {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(10000 / 2);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient, locationRequest, this);
+
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
@@ -435,5 +474,25 @@ public class Design extends AppCompatActivity {
         if (resultCode==-1)
             buildDialogCurrentLocation();
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 }

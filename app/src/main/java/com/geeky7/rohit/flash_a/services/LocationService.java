@@ -245,10 +245,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         stopSelf();
                     Thread.sleep(2000);
                     // in case the app force closes when the gos is off and turned on later
-                    // uncomment the below code 
+                    // uncomment the below code
                     if (mCurrentLocation==null){
-//                        Thread.sleep(2000);
-//                        Thread.sleep(2000);
+                        /*Thread.sleep(2000);
+                        Thread.sleep(2000);*/
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                         Log.i(TAG+""+"onReceive",mCurrentLocation.getProvider());
@@ -260,7 +260,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     }
                     placesCode();
                     stopSelf();
-                    updateToastLog();
+                    //updateToastLog();
 
                     Log.i(TAG+""+"onReceive","Mission accomplished. You have done it man.");
                     getApplicationContext().unregisterReceiver(gpsReceiver);
