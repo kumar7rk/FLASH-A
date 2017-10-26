@@ -361,7 +361,7 @@ public class Design extends AppCompatActivity implements GoogleApiClient.OnConne
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 // if the gps is off
                 if (!b) {
-                    // calls this method whic open the dialog which ask to enable location
+                    // calls this method which open the dialog which ask to enable location
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
@@ -377,6 +377,17 @@ public class Design extends AppCompatActivity implements GoogleApiClient.OnConne
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000 / 2);
+
+        if (googleApiClient.isConnected())
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient, locationRequest, this);
+
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -387,8 +398,8 @@ public class Design extends AppCompatActivity implements GoogleApiClient.OnConne
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
-        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        if (mCurrentLocation==null)
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -397,7 +408,7 @@ public class Design extends AppCompatActivity implements GoogleApiClient.OnConne
         }
         builder.setTitle("Your Current Location")
 //                .setMessage("<Show current location of the user>")
-                .setMessage(mCurrentLocation.getLatitude()+","+mCurrentLocation.getLongitude())
+                .setMessage(mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude())
                 .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -424,75 +435,62 @@ public class Design extends AppCompatActivity implements GoogleApiClient.OnConne
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(10000 / 2);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, locationRequest, this);
-
-
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
 
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        Log.i(TAG, "All location settings are satisfied.");
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-                        try {
-                            // Show the dialog by calling startResolutionForResult(), and check the result
-                            // in onActivityResult().
-                            status.startResolutionForResult(Design.this, 1);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.i(TAG, "PendingIntent unable to execute request.");
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
-                        break;
+            PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult result) {
+                    final Status status = result.getStatus();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            Log.i(TAG, "All location settings are satisfied.");
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+                            try {
+                                // Show the dialog by calling startResolutionForResult(), and check the result
+                                // in onActivityResult().
+                                status.startResolutionForResult(Design.this, 1);
+                            } catch (IntentSender.SendIntentException e) {
+                                Log.i(TAG, "PendingIntent unable to execute request.");
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+                            break;
+                    }
                 }
-            }
-        });
+            });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, Intent data){
 //        Main.showToast("onActivityResult"+resultCode);
-        if (resultCode==-1)
-            buildDialogCurrentLocation();
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+            if (resultCode == -1)
+                buildDialogCurrentLocation();
+            super.onActivityResult(requestCode, resultCode, data);
+        }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
+        @Override
+        public void onConnected (@Nullable Bundle bundle){
+            Main.showToast("onConnected");
+//            buildDialogCurrentLocation();
+        }
 
-    }
+        @Override
+        public void onConnectionSuspended ( int i){
 
-    @Override
-    public void onConnectionSuspended(int i) {
+        }
 
-    }
+        @Override
+        public void onConnectionFailed (@NonNull ConnectionResult connectionResult){
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        }
 
-    }
+        @Override
+        public void onLocationChanged (Location location){
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
+        }
 }
