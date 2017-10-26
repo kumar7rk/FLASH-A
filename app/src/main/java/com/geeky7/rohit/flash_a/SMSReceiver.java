@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.geeky7.rohit.flash_a.activities.MainActivity;
 import com.geeky7.rohit.flash_a.services.BackgroundService;
 
 /**
@@ -38,14 +37,6 @@ public class SMSReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             Log.e("SmsReceiver", "Exception smsReceiver" +e);
         }
-        // this code could be removed; next time I have my phone less than 3 metres away from me
-        // I would test the code and remove it
-        intent.putExtra("Message", message);
-        intent.putExtra("Sender", senderNum);
-        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setClass(context, MainActivity.class);
-//        context.startActivity(intent);
-
 
         // starting the background service with the message content and sender number
         Intent intent1 = new Intent(context,BackgroundService.class);
