@@ -35,7 +35,6 @@ import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -153,7 +152,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
-                .addApi(ActivityRecognition.API)
                 .build();
         createLocationRequest();
     }
