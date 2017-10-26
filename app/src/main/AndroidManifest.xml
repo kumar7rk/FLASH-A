@@ -24,7 +24,10 @@
         <activity android:name=".activities.MainActivity" />
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.Design">
+            </activity>
+
         <activity android:name=".activities.Design">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
