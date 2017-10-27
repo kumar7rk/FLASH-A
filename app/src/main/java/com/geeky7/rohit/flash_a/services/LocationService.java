@@ -23,6 +23,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -195,14 +196,27 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+
         // if location null, get last known location, updating the time so that we don't show quite old location
         if (mCurrentLocation==null){
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             try {
                 // if the location service is on get that address and start places code
                 if (b){
-                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    placesCode();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+//                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    addresses = geocoder.getFromLocation(-34.9506225,138.5743856,1);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    sendBroadcast();
+//                    placesCode();
                     // stop itself after message is sent
                     stopSelf();
                 }
@@ -723,5 +737,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             }
         }
     }
+    private void sendBroadcast (){
+        Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
+        intent.putExtra(CONSTANT.LATITUDE,mCurrentLocation.getLatitude());
+        intent.putExtra(CONSTANT.LONGITUDE,mCurrentLocation.getLongitude());
+        intent.putExtra(CONSTANT.ADDRESS,getAddress());
 
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 }
