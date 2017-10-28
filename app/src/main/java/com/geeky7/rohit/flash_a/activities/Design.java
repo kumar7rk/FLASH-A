@@ -61,7 +61,7 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String lat,lon, add;
+    String add;
 
 
     @Override
@@ -367,7 +367,8 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-                    buildDialogCurrentLocation();
+                    if(add!=null)
+                        buildDialogCurrentLocation();
                 }
                 break;
         }
@@ -376,11 +377,6 @@ public class Design extends AppCompatActivity {
 
     private void buildDialogCurrentLocation() {
         startService(new Intent(this, LocationService.class));
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -388,7 +384,8 @@ public class Design extends AppCompatActivity {
             builder = new AlertDialog.Builder(this);
     }
         builder.setTitle("Your Current Location")
-            .setMessage(lat+", "+lon+", "+add)
+
+            .setMessage(add)
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -454,8 +451,6 @@ public class Design extends AppCompatActivity {
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
-            lat = intent.getStringExtra(CONSTANT.LATITUDE);
-            lon = intent.getStringExtra(CONSTANT.LONGITUDE);
             add = intent.getStringExtra(CONSTANT.ADDRESS);
         }
     };

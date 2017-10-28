@@ -203,20 +203,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             try {
                 // if the location service is on get that address and start places code
                 if (b){
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 //                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    addresses = geocoder.getFromLocation(-34.9506225,138.5743856,1);
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    addresses = geocoder.getFromLocation(-34.9255062,138.5745275,1);
                     sendBroadcast();
-//                    placesCode();
+                    placesCode();
                     // stop itself after message is sent
                     stopSelf();
                 }
