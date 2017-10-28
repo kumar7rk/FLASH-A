@@ -61,7 +61,7 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String add;
+    String add = "Nothing";
 
 
     @Override
@@ -367,8 +367,7 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-                    if(add!=null)
-                        buildDialogCurrentLocation();
+                    buildDialogCurrentLocation();
                 }
                 break;
         }
@@ -382,9 +381,9 @@ public class Design extends AppCompatActivity {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         } else {
             builder = new AlertDialog.Builder(this);
-    }
-        builder.setTitle("Your Current Location")
+        }
 
+        builder.setTitle("Your Current Location")
             .setMessage(add)
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
