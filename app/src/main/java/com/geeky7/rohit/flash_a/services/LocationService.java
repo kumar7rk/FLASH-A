@@ -739,8 +739,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
-        intent.putExtra(CONSTANT.LATITUDE,mCurrentLocation.getLatitude());
-        intent.putExtra(CONSTANT.LONGITUDE,mCurrentLocation.getLongitude());
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
