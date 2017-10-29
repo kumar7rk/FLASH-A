@@ -203,8 +203,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             try {
                 // if the location service is on get that address and start places code
                 if (b){
-//                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    addresses = geocoder.getFromLocation(-34.9255062,138.5745275,1);
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+//                    addresses = geocoder.getFromLocation(-34.9255062,138.5745275,1);
                     sendBroadcast();
                     placesCode();
                     // stop itself after message is sent
