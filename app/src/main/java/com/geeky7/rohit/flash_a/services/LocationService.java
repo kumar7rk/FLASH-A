@@ -196,7 +196,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-
         // if location null, get last known location, updating the time so that we don't show quite old location
         if (mCurrentLocation==null){
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -204,8 +203,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 // if the location service is on get that address and start places code
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-//                    addresses = geocoder.getFromLocation(-34.9255062,138.5745275,1);
-                    sendBroadcast();
+//                    sendBroadcast();
+
                     placesCode();
                     // stop itself after message is sent
                     stopSelf();
