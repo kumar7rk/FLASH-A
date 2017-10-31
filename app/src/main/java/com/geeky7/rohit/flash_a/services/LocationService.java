@@ -88,11 +88,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     SharedPreferences preferences;
     String sender = "";
 
-
     ETA eta = new ETA();
 
-
     public LocationService() {
+
     }
 
     @Override
@@ -108,7 +107,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         mGoogleApiClient.connect();
 
         // googleAPI is connected and ready to get location updates- start fetching current location
-
         if(mGoogleApiClient.isConnected())
             startLocationupdates();
 
@@ -135,7 +133,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"onDestroy");
-      //  Main.showToast("BackgroundServiceDestroyed");
         stopSelf();
         if (mGoogleApiClient.isConnected())
             stopLocationupdates();
@@ -167,11 +164,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         mlocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    // update new coordinates in the log
-    protected void updateToastLog(){
-        Log.i(TAG, mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
-        Log.i(TAG, getAddress());
-    }
     // requests a location
     protected void startLocationupdates() throws SecurityException {
         LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -205,7 +197,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 //                    sendBroadcast();
 
+
+//                    initiates places code to fetch the name of the nearby place
                     placesCode();
+
                     // stop itself after message is sent
                     stopSelf();
                 }
@@ -222,8 +217,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
                     getApplicationContext().registerReceiver(gpsReceiver,
                             new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -252,18 +245,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         Thread.sleep(2000);*/
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                        Log.i(TAG+""+"onReceive",mCurrentLocation.getProvider());
-                        Log.i(TAG+""+"onReceive",mCurrentLocation.getAccuracy()+"");
-                        Log.i(TAG+""+"onReceive",mCurrentLocation.getLatitude()+", "+mCurrentLocation.getLongitude());
                     }
-                    if (mCurrentLocation!=null) {
+                    if (mCurrentLocation!=null)
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    }
                     placesCode();
                     stopSelf();
-                    //updateToastLog();
 
-                    Log.i(TAG+""+"onReceive","Mission accomplished. You have done it man.");
+                    // register a broadcast receiver - for whenver the gos is turned on/off
+                    // we do some work when it's status is turned on
                     getApplicationContext().unregisterReceiver(gpsReceiver);
                 }
                  catch(IOException e) {
@@ -278,7 +267,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     };
 
-    // this code bulds the placed URL and then call the actual places code
+    // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
         String sb = null;
         try {
@@ -339,7 +328,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         Log.i(TAG+""+"contactPermission","true");
         return true;
     }
+
     // gets the contact name if the permission is granted
+    // else the method in not called
     public String getContactName(final String phoneNumber,Context context) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
@@ -379,12 +370,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
-        double mLatitude = -34.923792;
-        double mLongitude = 138.6047722;
+        double mLatitude = mCurrentLocation.getLatitude();
+        double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
-
-        mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();
 
         String number1 = getApplicationContext().getString(R.string.API_KEY);
 
@@ -588,17 +576,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return "";
     }
     public String getDirectionsUrl(String origin,String dest){
-        // Origin of route
         String str_origin = "origin="+origin;
-        // Destination of route
         String str_dest = "destination="+dest;
-        // Sensor enabled
         String sensor = "sensor=false";
-        // Building the parameters to the web service
         String parameters = str_origin+"&"+str_dest+"&"+sensor;
-        // Output format
         String output = "json";
-        // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
         Log.i(TAG,url);
@@ -719,7 +701,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("eta", duration);
 
-                        editor.commit();
+                        editor.apply();
 
                     }
                 }
