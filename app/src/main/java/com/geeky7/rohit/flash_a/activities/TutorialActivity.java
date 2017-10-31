@@ -27,7 +27,7 @@ public class TutorialActivity extends MaterialIntroActivity {
 
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
-//                        .buttonsColor(R.color.first_slide_buttons)
+                        .buttonsColor(R.color.first_slide_buttons)
                         .image(R.drawable.tutorial1)
                         .title("End the Worries of your closed ones?")
                 //  Html.fromHtml("<b>" + myText + "</b>"
@@ -45,7 +45,7 @@ public class TutorialActivity extends MaterialIntroActivity {
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
-//                .buttonsColor(R.color.second_slide_buttons)
+                .buttonsColor(R.color.second_slide_buttons)
                 .title("Add a keyword which triggers app to send your location automatically to your family member")
                 .description("It works! It's that simple!")
                 .build());
