@@ -27,11 +27,12 @@ public class TutorialActivity extends MaterialIntroActivity {
 
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
-                        .buttonsColor(R.color.first_slide_buttons)
-//                        .image(R.drawable.img_office)
-                        .title("Always worrying where your family is?")
+//                        .buttonsColor(R.color.first_slide_buttons)
+                        .image(R.drawable.tutorial1)
+                        .title("End the Worries of your closed ones?")
                 //  Html.fromHtml("<b>" + myText + "</b>"
-                        .description("Well! Always know where they are with ASHA")
+                        .description("Whether you're driving or away from your phone. you'll always be closer to them with ASHA app.\n" +
+                                "ASHA sends your location, including address and landmark, on receiving your customised keyword.")
                         .build()
               /*  ,
                 new MessageButtonBehaviour(new View.OnClickListener() {
@@ -44,7 +45,7 @@ public class TutorialActivity extends MaterialIntroActivity {
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
-                .buttonsColor(R.color.second_slide_buttons)
+//                .buttonsColor(R.color.second_slide_buttons)
                 .title("Add a keyword which triggers app to send your location automatically to your family member")
                 .description("It works! It's that simple!")
                 .build());
