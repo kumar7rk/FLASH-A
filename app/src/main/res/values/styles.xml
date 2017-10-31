@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--for layout-->
     <style name="basic" parent="AlertDialog.AppCompat">
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
@@ -16,9 +17,10 @@
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center_horizontal|center_vertical</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_margin">4dp</item>
     </style>
 
+    <!--for textView-->
     <style name="basic_tv" parent="AlertDialog.AppCompat">
         <item name="android:layout_gravity">center_horizontal|bottom</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -26,6 +28,7 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <!--for imageView-->
     <style name="basic_iv" parent="AlertDialog.AppCompat">
         <item name="android:padding">20dp</item>
         <item name="android:scaleType">fitXY</item>
