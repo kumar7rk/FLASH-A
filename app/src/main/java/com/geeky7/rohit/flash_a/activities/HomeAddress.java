@@ -61,8 +61,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         homeAddress.setText(homeAddressS);
         // set back button on actionBar
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // commenting back arrow takes back to design class without this code
+        // working solely on parentActivity added in manifest
+
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //loading the map with a marker on the home address
         refreshMap();
 
@@ -182,7 +186,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    // this is the overidden method which sets the marker and shoes the mapView along with the above method refreshMap
+    // this is the overridden method which sets the marker and shoes the mapView along with the above method refreshMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -191,8 +195,8 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
-
         }
+
         else{
         LatLng g = getLocationFromAddress(homeAddressS);
         mMap.addMarker(new MarkerOptions().position(g));
