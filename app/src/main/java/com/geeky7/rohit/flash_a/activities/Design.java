@@ -463,6 +463,7 @@ public class Design extends AppCompatActivity {
             // Check for the request code, we might be using multiple startActivityForResult
             switch (requestCode) {
                 case CONTACT_REQUEST_CODE:
+                    Cursor cursor;
                     try {
                         String name;
                         Uri uri = data.getData();
