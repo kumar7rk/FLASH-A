@@ -70,7 +70,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private LocationRequest mlocationRequest;
     private Location mCurrentLocation;
 
-    boolean contactPermission = true;
 
 //    private static final int GOOGLE_API_CLIENT_ID = 0;
 //    private boolean mRequestingLocationUpdates;
@@ -99,8 +98,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         super.onCreate();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         sender = preferences.getString("sender","");
+
         m = new Main(getApplicationContext());
 
         buildGoogleApiClient();
@@ -133,9 +132,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"onDestroy");
+
         stopSelf();
+
         if (mGoogleApiClient.isConnected())
             stopLocationupdates();
+
         mGoogleApiClient.disconnect();
     }
 
@@ -197,7 +199,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 //                    sendBroadcast();
 
-
 //                    initiates places code to fetch the name of the nearby place
                     placesCode();
 
@@ -207,9 +208,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 // when gps if off
                 // registers a receiver when the status of the gps changes
                 else{
-                    contactPermission = preferences.getBoolean("contactPermission",false);
                     String name = sender;
-                    if (contactPermission && checkContactPermission()){
+                    if (checkContactPermission()){
                         name = getContactName(sender,getApplicationContext());
                     }
                     Log.i(TAG, "gps off");
@@ -289,7 +289,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String s) {
         String name = sender;
-        if (contactPermission && checkContactPermission())
+        if (checkContactPermission())
             name = getContactName(sender,getApplicationContext());
 
         String address = getAddress();
