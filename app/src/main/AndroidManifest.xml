@@ -25,9 +25,7 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.Design">
-            </activity>
-
+            android:parentActivityName=".activities.Design"></activity>
         <activity android:name=".activities.Design">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,13 +36,10 @@
         <activity
             android:name=".activities.HomeAddress"
             android:label="Home Address"
-            android:parentActivityName=".activities.Design">
-            </activity>
-
-        <activity android:name=".activities.TutorialActivity"
-            android:theme="@style/Theme.Intro">
-
-        </activity>
+            android:parentActivityName=".activities.Design"></activity>
+        <activity
+            android:name=".activities.TutorialActivity"
+            android:theme="@style/Theme.Intro"></activity>
 
         <service android:name=".services.LocationService" />
         <service
@@ -58,6 +53,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".activities.Keyword"></activity>
     </application>
 
 </manifest>
