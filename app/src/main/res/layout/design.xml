@@ -1,123 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <!--1Row-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
+
+        <!--1.1 square-->
         <LinearLayout
             android:id="@+id/serviceEnabled_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_service_enabled"
-            style="@style/basic"
-        >
+            style="@style/basic">
             <ImageView
                 android:id="@+id/serviceEnabled_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/service_enabled"
-                style = "@style/basic_iv"
-                />
+                style = "@style/basic_iv"/>
             <TextView
                 android:id="@+id/serviceEnabled_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/service_enabled"
-                style="@style/basic_tv"
-                />
+                style="@style/basic_tv"/>
         </LinearLayout>
-
+        <!--1.2 square-->
         <LinearLayout
             android:id="@+id/homeAddress_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_home_address"
-            style="@style/basic"
-            >
+            style="@style/basic">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/home_address"
-                style="@style/basic_iv"
-                />
-
+                style="@style/basic_iv"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/home_address"
-                style="@style/basic_tv"
-                />
+                style="@style/basic_tv"/>
         </LinearLayout>
     </LinearLayout>
-<!--2-->
+<!--2Row-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
+        <!--2.1 square-->
         <LinearLayout
             android:id="@+id/keyword_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_keyword"
-            style="@style/basic"
-            >
+            style="@style/basic">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/keyword"
-                style = "@style/basic_iv"
-                />
+                style = "@style/basic_iv"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/keyword"
-                style="@style/basic_tv"
-                />
+                style="@style/basic_tv"/>
         </LinearLayout>
-
+        <!--2.2 square-->
         <LinearLayout
             android:id="@+id/customiseMessage_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_customise_message"
-            style="@style/basic"
-            >
+            style="@style/basic">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/customise_message"
-                style = "@style/basic_iv"
-                />
+                style = "@style/basic_iv"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/customise_message"
-                style="@style/basic_tv"
-                />
+                style="@style/basic_tv"/>
         </LinearLayout>
     </LinearLayout>
 
-<!--3-->
+<!--3Row-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
+        <!--3.1 square-->
         <LinearLayout
             android:id="@+id/history_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_history"
-            style="@style/basic"
-            >
+            style="@style/basic">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,29 +113,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/history"
-                style="@style/basic_tv"
-                />
+                style="@style/basic_tv"/>
         </LinearLayout>
-
+        <!--3.2 square-->
         <LinearLayout
             android:id="@+id/tutorial_lay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_tutorial"
-            style="@style/basic"
-            >
+            style="@style/basic">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/tutorial"
-                style = "@style/basic_iv"
-                />
+                style = "@style/basic_iv"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tutorial"
-                style="@style/basic_tv"
-                />
+                style="@style/basic_tv"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
