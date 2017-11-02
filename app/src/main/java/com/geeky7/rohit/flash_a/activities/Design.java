@@ -454,42 +454,35 @@ public class Design extends AppCompatActivity {
     }
     @Override
     protected void onActivityResult ( int requestCode, int resultCode, Intent data){
-        // locationDialog- if gps is turned on build the current location dialog
-        if (resultCode == -1)
-                buildDialogCurrentLocation();
 
-        // contact- checks if a contact is selected or not
+        // check if the gps is enabled and a contact is selected
+        // if either of them is true this if runs
         if (resultCode == RESULT_OK) {
-            // Check for the request code, we might be using multiple startActivityForResult
+            // Check for the request code, multiple startActivityForResult
             switch (requestCode) {
+                // contact- checks if a contact is selected or not
                 case CONTACT_REQUEST_CODE:
                     Cursor cursor;
                     try {
-                        String name;
                         Uri uri = data.getData();
                         cursor = getContentResolver().query(uri, null, null, null, null);
                         cursor.moveToFirst();
                         int  nameIndex  = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                        name = cursor.getString(nameIndex);
+                        String name = cursor.getString(nameIndex);
                         Main.showToast("Sharing location with "+ name);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
+                // locationDialog- if gps is turned on build the current location dialog
+                case GPS_REQUEST_CODE:
+                    buildDialogCurrentLocation();
+                    break;
             }
         } else {
-            Log.e("MainActivity", "Failed to pick contact");
             Main.showToast("Cancelled");
-
         }
-
-
-
-
         super.onActivityResult(requestCode, resultCode, data);
-
-
-
     }
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
