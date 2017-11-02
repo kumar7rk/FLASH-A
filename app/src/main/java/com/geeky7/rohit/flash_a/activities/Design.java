@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -46,7 +48,10 @@ public class Design extends AppCompatActivity {
 
     //    private static final String TAG = Design.class.getSimpleName();
     private static final String TAG = CONSTANT.DESIGN;
+
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private static final int GPS_REQUEST_CODE = 42;
+    private static final int CONTACT_REQUEST_CODE = 50;
 
     boolean locationPermission = true;
     boolean contactPermission = true;
@@ -396,6 +401,9 @@ public class Design extends AppCompatActivity {
             })
             .setNegativeButton(getResources().getString(R.string.share), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
+                    intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                    startActivityForResult(intent, CONTACT_REQUEST_CODE);
                     Main.showToast("Sharing location, select contact");
                 }
             })
@@ -432,7 +440,7 @@ public class Design extends AppCompatActivity {
                             try {
                                 // Show the dialog by calling startResolutionForResult(), and check the result
                                 // in onActivityResult().
-                                status.startResolutionForResult(Design.this, 1);
+                                status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
                             } catch (IntentSender.SendIntentException e) {
                                 Log.i(TAG, "PendingIntent unable to execute request.");
                             }
@@ -446,10 +454,41 @@ public class Design extends AppCompatActivity {
     }
     @Override
     protected void onActivityResult ( int requestCode, int resultCode, Intent data){
-//      Main.showToast("onActivityResult"+resultCode);
+        // locationDialog- if gps is turned on build the current location dialog
         if (resultCode == -1)
-            buildDialogCurrentLocation();
+                buildDialogCurrentLocation();
+
+        // contact- checks if a contact is selected or not
+        if (resultCode == RESULT_OK) {
+            // Check for the request code, we might be using multiple startActivityForResult
+            switch (requestCode) {
+                case CONTACT_REQUEST_CODE:
+                    try {
+                        String name;
+                        Uri uri = data.getData();
+                        cursor = getContentResolver().query(uri, null, null, null, null);
+                        cursor.moveToFirst();
+                        int  nameIndex  = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                        name = cursor.getString(nameIndex);
+                        Main.showToast("Sharing location with "+ name);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        } else {
+            Log.e("MainActivity", "Failed to pick contact");
+            Main.showToast("Cancelled");
+
+        }
+
+
+
+
         super.onActivityResult(requestCode, resultCode, data);
+
+
+
     }
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
