@@ -157,7 +157,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
 
     // fetched location every `UPDATE_INTERVAL_IN_MILLISECONDS` milliseconds
-    // since the service destroys after fetching locatuon once it is of little use; I mean the interval of fetching the location
+    // since the service destroys after fetching location once it is of little use; I mean the interval of fetching the location
 
     private void createLocationRequest() {
         mlocationRequest = new LocationRequest();
@@ -288,7 +288,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // Magic method to send the SMS to the sender
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String s) {
+        // sender contains the phone number
         String name = sender;
+        // if the contact permission is granted get the name of the contact
+        // else name = phoneNumber use that in notification
+        // else would also run when the numner is not saved in the contact list
         if (checkContactPermission())
             name = getContactName(sender,getApplicationContext());
 
@@ -355,6 +359,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         String address = addresses.get(0).getAddressLine(0);
 
+        return address;
+
 //        String city = addresses.get(0).getLocality();
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
@@ -366,7 +372,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        String s3 = addresses.get(0).getThoroughfare(); //null
 //        String s4 = addresses.get(0).getSubAdminArea(); city of west torrens
 
-        return address;
     }
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
