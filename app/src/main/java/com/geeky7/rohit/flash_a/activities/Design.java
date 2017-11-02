@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +45,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import static android.R.attr.name;
+
 public class Design extends AppCompatActivity {
 
     //    private static final String TAG = Design.class.getSimpleName();
@@ -64,6 +67,7 @@ public class Design extends AppCompatActivity {
     SharedPreferences preferences;
 
     String add = "Could not fetch location. Retry";
+    Main m;
 
 
     @Override
@@ -71,6 +75,7 @@ public class Design extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
 
+        m = new Main(getApplicationContext());
         // checking if the permissions are not granted call request method which starts the procedure
 
         if (!checkPermissions())
@@ -480,10 +485,23 @@ public class Design extends AppCompatActivity {
                     break;
             }
         } else {
-            Main.showToast("Cancelled");
+//            Main.showToast("Cancelled");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private void sendSMS(String s) {
+        String address = getAddress();
+
+        SmsManager manager = SmsManager.getDefault();
+        String message = "I am near "+ s+ ". "+ address;
+        manager.sendTextMessage(s,null, message, null, null);
+
+        boolean noti = preferences.getBoolean("notification",true);
+        if (noti)
+            m.pugNotification("Location shared","Your current location shared with",s);
+    }
+
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
