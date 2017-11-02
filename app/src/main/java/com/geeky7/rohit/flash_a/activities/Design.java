@@ -45,8 +45,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import static android.R.attr.name;
-
 public class Design extends AppCompatActivity {
 
     //    private static final String TAG = Design.class.getSimpleName();
@@ -56,9 +54,6 @@ public class Design extends AppCompatActivity {
     private static final int GPS_REQUEST_CODE = 42;
     private static final int CONTACT_REQUEST_CODE = 50;
 
-    boolean locationPermission = true;
-    boolean contactPermission = true;
-    boolean SMSPermission = true;
 
     LinearLayout serviceEnabled_lay, homeAddress_lay, keyword_lay, customiseMessage_lay, history_lay, tutorial_lay;
     TextView serviceEnabled_tv;
@@ -246,24 +241,10 @@ public class Design extends AppCompatActivity {
                     grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[2] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted.
-                locationPermission = true;
-                contactPermission = true;
-                SMSPermission = true;
-            }
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                locationPermission = true;
-            }
-            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                SMSPermission = true;
-            }
-            if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                contactPermission = true;
             }
             if (grantResults[0] == PackageManager.PERMISSION_DENIED ||
                     grantResults[1] == PackageManager.PERMISSION_DENIED ||
                     grantResults[2] == PackageManager.PERMISSION_DENIED) {
-                // Permission denied.
-                locationPermission = false;
                 // Notify the user via a SnackBar that they have rejected a core permission for the
                 // app, which makes the Activity useless. In a real app, core permissions would
                 // typically be best requested during a welcome-screen flow.
@@ -290,10 +271,6 @@ public class Design extends AppCompatActivity {
                         });
             }
         }
-        editor.putBoolean("locationPermission", locationPermission);
-        editor.putBoolean("SMSPermission", SMSPermission);
-        editor.putBoolean("contactPermission", contactPermission);
-        editor.apply();
     }
 
     // just show a snackbar
@@ -491,8 +468,8 @@ public class Design extends AppCompatActivity {
     }
 
     private void sendSMS(String s) {
-        String address = getAddress();
-
+//        String address = getAddress();
+String address = "";
         SmsManager manager = SmsManager.getDefault();
         String message = "I am near "+ s+ ". "+ address;
         manager.sendTextMessage(s,null, message, null, null);
