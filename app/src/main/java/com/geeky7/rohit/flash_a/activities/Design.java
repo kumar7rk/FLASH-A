@@ -81,9 +81,9 @@ public class Design extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean service = preferences.getBoolean("service", true);
-        final SharedPreferences.Editor editor = preferences.edit();
+        /*final SharedPreferences.Editor editor = preferences.edit();
         editor.putString("homeAddress","");
-        editor.apply();
+        editor.apply();*/
 
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
