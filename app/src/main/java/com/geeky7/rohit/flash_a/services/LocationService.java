@@ -29,12 +29,8 @@ import android.util.Log;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.DirectionsJSONParser;
-import com.geeky7.rohit.flash_a.ETA;
-import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.Main;
-import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
-import com.geeky7.rohit.flash_a.activities.Design;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -60,7 +56,7 @@ import java.util.Locale;
 
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks,LocationListener, ETAInterface{
+        GoogleApiClient.ConnectionCallbacks,LocationListener{
 
     public static final String TAG = CONSTANT.LOCATION_SERVICE;
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -87,7 +83,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     SharedPreferences preferences;
     String sender = "";
 
-    ETA eta = new ETA();
 
     String placeName;
     String durationEta;
@@ -116,7 +111,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // get address from the lat lng
         geocoder = new Geocoder(this, Locale.getDefault());
 
-        eta.res = this;
 
         Log.i(TAG,"LocationService Created");
     }
@@ -606,21 +600,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     }
 
-    public String EtaMethodUnUsed() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String homeAddress = preferences.getString("homeAddress","");
-
-        String address = getAddress();
-
-        // eta1 - always null
-        // etaCode - from sharedPreference
-        // string - global variable updated from onPostExecute
-        etaCode();
-        String eta = preferences.getString("etaCode","NA"); // would return one old value
-
-        return eta+ " || "+string;
-    }
-
     /*
     ETA AsyncTask code
      */
@@ -757,18 +736,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     else if (j == 1) {
                         duration = point.get("duration");
 
-                        Design d = new Design();
-                        d.eta = duration;
-                        //setting a global variable with the value of duration
-                        myMethod(duration);
                         setDurationEta(duration);
                         updateLogAndToast("ETA "+duration);
-
-                        preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
-
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("etaCode", duration);
-                        editor.apply();
                     }
                 }//end for - ith route
             }// end for- al routes
@@ -785,6 +754,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     public void updateLogAndToast(String s){
         Log.i(TAG,s);
-        Main.showToast(s);
+//        Main.showToast(s);
     }
 }
