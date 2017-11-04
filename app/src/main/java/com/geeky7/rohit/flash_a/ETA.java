@@ -158,7 +158,7 @@ public class ETA {
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
 
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("eta", duration);
+                        editor.putString("etaCode", duration);
 
                         editor.commit();
 
