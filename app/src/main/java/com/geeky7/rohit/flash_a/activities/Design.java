@@ -62,8 +62,10 @@ public class Design extends AppCompatActivity {
     SharedPreferences preferences;
 
     String add = "Could not fetch location. Retry";
+
     Main m;
 
+    public String eta = "ETA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,7 +233,6 @@ public class Design extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         Log.i(TAG, "onRequestPermissionResult");
-        SharedPreferences.Editor editor = preferences.edit();
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length <= 0) {
                 // If user interaction was interrupted, the permission request is cancelled and you
@@ -273,7 +274,7 @@ public class Design extends AppCompatActivity {
         }
     }
 
-    // just show a snackbar
+    // show a Snackbar
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -451,6 +452,7 @@ public class Design extends AppCompatActivity {
                         cursor.moveToFirst();
                         int  nameIndex  = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                         String name = cursor.getString(nameIndex);
+                        sendSMS(name);
                         Main.showToast("Sharing location with "+ name);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -469,9 +471,10 @@ public class Design extends AppCompatActivity {
 
     private void sendSMS(String s) {
 //        String address = getAddress();
-String address = "";
+        String loc = "";
+        String address = "No location";
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ s+ ". "+ address;
+        String message = "I am near "+ loc+ ". "+ address;
         manager.sendTextMessage(s,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
