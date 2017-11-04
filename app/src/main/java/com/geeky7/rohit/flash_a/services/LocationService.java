@@ -310,7 +310,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        String eta = EtaMethodUnUsed();
 
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ placeS+ ". "+ address+".ETA home "+etaS;
+        if (!etaS.equals("NA"))
+            etaS += " ETA home "+etaS;
+        else
+            etaS= "";
+        String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
@@ -600,7 +604,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Getting URL to the Google Directions API
         String url = buildEtaURL();
         // Start downloading json data from Google Directions API
-        new DownloadTask().execute(url);
+        if (url.equals("")) setDurationEta("NA");
+        else new DownloadTask().execute(url);
     }
     public String buildEtaURL(){
 
@@ -609,6 +614,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         String origin = getAddress();
 
+
+        if(dest.equals(""))
+            return "";
 
         String str_origin = "origin="+origin;
         String str_dest = "destination="+dest;
@@ -732,6 +740,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     }
                 }//end for - ith route
             }// end for- al routes
+            setDurationEta("NA");
         }// end onPostExecute
 
     }
