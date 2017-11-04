@@ -194,7 +194,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
-        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
+        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))||homeAddressS.equals("")){
         }
 
         else{
