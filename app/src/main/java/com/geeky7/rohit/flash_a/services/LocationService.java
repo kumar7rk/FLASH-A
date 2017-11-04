@@ -311,7 +311,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         SmsManager manager = SmsManager.getDefault();
         if (!etaS.equals("NA"))
-            etaS += " ETA home "+etaS;
+            etaS = " ETA home "+etaS;
         else
             etaS= "";
         String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
