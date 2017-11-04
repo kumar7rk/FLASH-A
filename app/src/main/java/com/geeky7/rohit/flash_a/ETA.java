@@ -1,3 +1,4 @@
+// unused
 package com.geeky7.rohit.flash_a;
 
 import android.content.SharedPreferences;
@@ -21,7 +22,7 @@ public class ETA {
     SharedPreferences preferences;
     String eta = "";
 
-    public ETAInterface res = null;
+//    public ETAInterface res = null;
 
     public String eta(String origin,String dest){
         // Getting URL to the Google Directions API
@@ -154,7 +155,7 @@ public class ETA {
 
                         eta = duration;
 
-                        res.result(duration);
+//                        res.result(duration);
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
 
                         SharedPreferences.Editor editor = preferences.edit();
