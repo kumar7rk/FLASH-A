@@ -51,7 +51,7 @@ public class Design extends AppCompatActivity {
     private static final String TAG = CONSTANT.DESIGN;
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    private static final int GPS_REQUEST_CODE = 42;
+    private static final int GPS_REQUEST_CODE = 42; // the answer to universe
     private static final int CONTACT_REQUEST_CODE = 50;
 
 
@@ -64,8 +64,6 @@ public class Design extends AppCompatActivity {
     String add = "Could not fetch location. Retry";
 
     Main m;
-
-    public String eta = "ETA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +81,10 @@ public class Design extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean service = preferences.getBoolean("service", true);
+        final SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("homeAddress","");
+        editor.apply();
+
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
