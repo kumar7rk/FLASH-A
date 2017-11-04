@@ -34,6 +34,7 @@ import com.geeky7.rohit.flash_a.ETAInterface;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.activities.Design;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -56,7 +57,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 
 public class LocationService extends Service implements GoogleApiClient.OnConnectionFailedListener,
@@ -89,6 +89,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     ETA eta = new ETA();
 
+    String placeName;
+    String durationEta;
+
+    int counter = 0;
     public LocationService() {
 
     }
@@ -201,7 +205,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
 //                    initiates places code to fetch the name of the nearby place
                     placesCode();
-
+                    etaCode();
                     // stop itself after message is sent
                     stopSelf();
                 }
@@ -249,6 +253,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     if (mCurrentLocation!=null)
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                     placesCode();
+                    etaCode();
                     stopSelf();
 
                     // register a broadcast receiver - for whenver the gos is turned on/off
@@ -267,17 +272,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     };
 
-    // this code starts with building the places URL and then call the actual places code
-    private void placesCode() {
-        String sb = null;
-        try {
-            sb = buildPlacesURL().toString();
-            new PlacesTask().execute(sb);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
     }
@@ -292,15 +286,15 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String name = sender;
         // if the contact permission is granted get the name of the contact
         // else name = phoneNumber use that in notification
-        // else would also run when the numner is not saved in the contact list
+        // else would also run when the number is not saved in the contact list
         if (checkContactPermission())
             name = getContactName(sender,getApplicationContext());
 
         String address = getAddress();
-        String eta = getETA();
+//        String eta = EtaMethodUnUsed();
 
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ s+ ". "+ address/*+".ETA home"+eta*/;
+        String message = "I am near "+ s+ ". "+ address/*+".ETA home "+eta*/;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
@@ -308,18 +302,28 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
-    public String getETA() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String homeAddress = preferences.getString("homeAddress","");
+    private void sendSMS(String placeS, String etaS) {
+        updateLogAndToast("sendSMS 2");
+        // sender contains the phone number
+        String name = sender;
+        // if the contact permission is granted get the name of the contact
+        // else name = phoneNumber use that in notification
+        // else would also run when the number is not saved in the contact list
+        if (checkContactPermission())
+            name = getContactName(sender,getApplicationContext());
 
         String address = getAddress();
+//        String eta = EtaMethodUnUsed();
 
-        String eta = preferences.getString("eta","NA"); // would return one old value
+        SmsManager manager = SmsManager.getDefault();
+        String message = "I am near "+ placeS+ ". "+ address+".ETA home "+etaS;
+        manager.sendTextMessage(sender,null, message, null, null);
 
-        String eta1 = eta(address,homeAddress);
-
-        return eta+ "||" +eta1+"||"+string/*+"||"+string1*/;
+        boolean noti = preferences.getBoolean("notification",true);
+        if (noti)
+            m.pugNotification("Location shared","Your current location shared with",name);
     }
+
 
     // checks if the contact permission is granted or not
     public boolean checkContactPermission(){
@@ -373,6 +377,18 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        String s4 = addresses.get(0).getSubAdminArea(); city of west torrens
 
     }
+
+    // this code starts with building the places URL and then call the actual places code
+    private void placesCode() {
+        String sb = null;
+        try {
+            sb = buildPlacesURL().toString();
+            new PlacesTask().execute(sb);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = mCurrentLocation.getLatitude();
@@ -431,6 +447,26 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return s;
     }
 
+
+    public void setPlaceName(String s){
+        placeName = s;
+        counter++;
+        bothAsync();
+    }
+
+    public void setDurationEta(String s){
+        durationEta = s;
+        counter++;
+        bothAsync();
+    }
+
+    public void bothAsync(){
+        updateLogAndToast("BothAsync"+counter);
+        if(counter==2)
+            sendSMS(placeName,durationEta);
+    }
+
+
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
@@ -462,10 +498,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         @Override
         protected void onPostExecute(List<HashMap<String, String>> list) {
 
-            if (/*list.size() >0&&*/!list.isEmpty()){
+            if (!list.isEmpty()){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
-                sendSMS(name);
+                //sendSMS(name);
+                setPlaceName(name);
+                updateLogAndToast("Places "+name);
             }
         }
     }// onPostExecute
@@ -541,7 +579,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 place.put("reference", reference);
                 place.put("types", placeType);
 
-                Log.i(TAG+""+"PlaceType",placeType);
+//                Log.i(TAG+""+"PlaceType",placeType);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -568,19 +606,40 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     }
 
+    public String EtaMethodUnUsed() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String homeAddress = preferences.getString("homeAddress","");
+
+        String address = getAddress();
+
+        // eta1 - always null
+        // etaCode - from sharedPreference
+        // string - global variable updated from onPostExecute
+        etaCode();
+        String eta = preferences.getString("etaCode","NA"); // would return one old value
+
+        return eta+ " || "+string;
+    }
+
     /*
     ETA AsyncTask code
      */
 
-    public String eta(String origin,String dest){
-        // Getting URL to the Google Directions API
-        String url = getDirectionsUrl(origin, dest);
+    public void etaCode(){
 
+        // Getting URL to the Google Directions API
+        String url = buildEtaURL();
         // Start downloading json data from Google Directions API
         new DownloadTask().execute(url);
-        return "";
     }
-    public String getDirectionsUrl(String origin,String dest){
+    public String buildEtaURL(){
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String dest = preferences.getString("homeAddress","");
+
+        String origin = getAddress();
+
+
         String str_origin = "origin="+origin;
         String str_dest = "destination="+dest;
         String sensor = "sensor=false";
@@ -642,22 +701,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             // Invokes the thread for parsing the JSON data
-            try {
-                String re1 = new ParserTaskETA().execute(result).get().toString();
-                Log.i(TAG+""+"re1",re1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+            ParserTaskETA parserTaskETA = new ParserTaskETA(context);
+            parserTaskETA.execute(result);
         }
     }
 
     /** A class to parse the Google Places in JSON format */
     private class ParserTaskETA extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
 
+        Context mContext;
+        public ParserTaskETA(Context context){
+            mContext = context;
+        }
         // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
@@ -680,9 +736,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            String distance = "";
+//            String distance = "";
             String duration;
-
 
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
@@ -694,29 +749,42 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
-                    if (j == 0) {    // Get distance from the list
-                        distance = (String) point.get("distance");
-                    } else if (j == 1) { // Get duration from the list
-                        duration = (String) point.get("duration");
-                        string = duration;
+                    // Get distance from the list
+                    if (j == 0) {
+//                        distance = (String) point.get("distance");
+                    }
+                    // Get duration from the list
+                    else if (j == 1) {
+                        duration = point.get("duration");
 
+                        Design d = new Design();
+                        d.eta = duration;
+                        //setting a global variable with the value of duration
                         myMethod(duration);
+                        setDurationEta(duration);
+                        updateLogAndToast("ETA "+duration);
+
                         preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.getAppContext());
 
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("eta", duration);
-
+                        editor.putString("etaCode", duration);
                         editor.apply();
-
                     }
-                }
-            }
-        }
+                }//end for - ith route
+            }// end for- al routes
+        }// end onPostExecute
+
     }
+
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    public void updateLogAndToast(String s){
+        Log.i(TAG,s);
+        Main.showToast(s);
     }
 }
