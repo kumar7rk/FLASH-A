@@ -432,15 +432,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return data;
     }
 
-    @Override
-    public void result(String output) {
-    }
-
-    private String myMethod(String s){
-        string = s;
-        return s;
-    }
-
 
     public void setPlaceName(String s){
         placeName = s;
