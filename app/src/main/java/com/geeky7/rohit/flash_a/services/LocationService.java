@@ -273,29 +273,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onLocationChanged(Location location) {
     }
+
     // Magic method to send the SMS to the sender
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
-    private void sendSMS(String s) {
-        // sender contains the phone number
-        String name = sender;
-        // if the contact permission is granted get the name of the contact
-        // else name = phoneNumber use that in notification
-        // else would also run when the number is not saved in the contact list
-        if (checkContactPermission())
-            name = getContactName(sender,getApplicationContext());
-
-        String address = getAddress();
-//        String eta = EtaMethodUnUsed();
-
-        SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ s+ ". "+ address/*+".ETA home "+eta*/;
-        manager.sendTextMessage(sender,null, message, null, null);
-
-        boolean noti = preferences.getBoolean("notification",true);
-        if (noti)
-            m.pugNotification("Location shared","Your current location shared with",name);
-    }
-
     private void sendSMS(String placeS, String etaS) {
         updateLogAndToast("sendSMS 2");
         // sender contains the phone number
@@ -310,10 +290,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        String eta = EtaMethodUnUsed();
 
         SmsManager manager = SmsManager.getDefault();
-        if (!etaS.equals("NA"))
-            etaS = " ETA home "+etaS;
-        else
-            etaS= "";
+
+        if (!etaS.equals("NA")) etaS = " ETA home "+etaS;
+        else etaS= "";
+
         String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
         manager.sendTextMessage(sender,null, message, null, null);
 
@@ -321,7 +301,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (noti)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
-
 
     // checks if the contact permission is granted or not
     public boolean checkContactPermission(){
