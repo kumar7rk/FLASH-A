@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -290,8 +292,7 @@ public class Design extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-//        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
-
+        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -369,7 +370,7 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-//        startService(new Intent(this, 3.class));
+        // startService(new Intent(this, LocationService.class));
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -493,6 +494,6 @@ public class Design extends AppCompatActivity {
 
     protected void onPause (){
         super.onPause();
-//        LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
     }
 }
