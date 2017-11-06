@@ -30,6 +30,7 @@ import android.util.Log;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.DirectionsJSONParser;
 import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -735,4 +736,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         Log.i(TAG,s);
 //        Main.showToast(s);
     }
+    public String startServices(){
+//        startService(new Intent(this,LocationService.class));
+
+        startService(new Intent(MyApplication.getAppContext(),LocationService.class));
+        return getAddress();
+    }
+
 }
