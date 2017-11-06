@@ -12,6 +12,7 @@ public class CONSTANT {
     public static final String LATITUDE = "LATITUDE";
     public static final String LONGITUDE = "LONGITUDE";
     public static final String ADDRESS = "ADDRESS";
+    public static final String PLACE_NAME = "PLACE_NAME";
 
 
 }
