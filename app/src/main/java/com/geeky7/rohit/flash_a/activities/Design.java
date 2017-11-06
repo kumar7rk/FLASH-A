@@ -37,6 +37,7 @@ import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.services.LocationService;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -64,6 +65,7 @@ public class Design extends AppCompatActivity {
     SharedPreferences preferences;
 
     String add = "Could not fetch location. Retry";
+    String place = "Could not fetch location. Retry";
 
     Main m;
 
@@ -293,6 +295,8 @@ public class Design extends AppCompatActivity {
         super.onResume();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
+        startService(new Intent(this, LocationService.class));
+
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -370,7 +374,6 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-        // startService(new Intent(this, LocationService.class));
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -453,9 +456,11 @@ public class Design extends AppCompatActivity {
                         Uri uri = data.getData();
                         cursor = getContentResolver().query(uri, null, null, null, null);
                         cursor.moveToFirst();
+                        int phoneIndex  = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                         int  nameIndex  = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                        String phone = cursor.getString(phoneIndex);
                         String name = cursor.getString(nameIndex);
-                        sendSMS(name);
+                        sendSMS(phone,name);
                         Main.showToast("Sharing location with "+ name);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -472,23 +477,21 @@ public class Design extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void sendSMS(String s) {
-//        String address = getAddress();
-        String loc = "";
-        String address = "No location";
+    private void sendSMS(String s,String name) {
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ loc+ ". "+ address;
+        String message = "I am near "+ place+ ". "+ add;
         manager.sendTextMessage(s,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
         if (noti)
-            m.pugNotification("Location shared","Your current location shared with",s);
+            m.pugNotification("Location shared","Your current location shared with",name);
     }
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             add = intent.getStringExtra(CONSTANT.ADDRESS);
+            place = intent.getStringExtra(CONSTANT.PLACE_NAME);
         }
     };
 
