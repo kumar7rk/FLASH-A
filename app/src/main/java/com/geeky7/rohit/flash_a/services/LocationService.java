@@ -30,7 +30,6 @@ import android.util.Log;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.DirectionsJSONParser;
 import com.geeky7.rohit.flash_a.Main;
-import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -196,11 +195,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 // if the location service is on get that address and start places code
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-//                    sendBroadcast();
+                    sendBroadcast();
 
 //                    initiates places code to fetch the name of the nearby place
                     placesCode();
-                    etaCode();
+//                    etaCode();
                     // stop itself after message is sent
                     stopSelf();
                 }
@@ -247,6 +246,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     }
                     if (mCurrentLocation!=null)
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+
+                    sendBroadcast();
                     placesCode();
                     etaCode();
                     stopSelf();
@@ -728,6 +729,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
+        intent.putExtra(CONSTANT.PLACE_NAME,placeName);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
@@ -736,11 +738,4 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         Log.i(TAG,s);
 //        Main.showToast(s);
     }
-    public String startServices(){
-//        startService(new Intent(this,LocationService.class));
-
-        startService(new Intent(MyApplication.getAppContext(),LocationService.class));
-        return getAddress();
-    }
-
 }
