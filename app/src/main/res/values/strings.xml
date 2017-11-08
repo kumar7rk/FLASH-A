@@ -120,5 +120,6 @@
 
     <string name="close">Close</string>
     <string name="share">Share</string>
+    <string name="refresh">Refresh</string>
 
 </resources>
