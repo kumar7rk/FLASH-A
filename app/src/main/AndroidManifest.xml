@@ -22,43 +22,34 @@
             android:value="@string/API_KEY_GEO" />
 
         <activity android:name=".activities.MainActivity" />
-
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.Design"/>
-
+            android:parentActivityName=".activities.Design" />
         <activity android:name=".activities.Design">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.HomeAddress"
             android:label="@string/home_address"
-            android:parentActivityName=".activities.Design">
-        </activity>
-
+            android:parentActivityName=".activities.Design"></activity>
         <activity
             android:name=".activities.TutorialActivity"
-            android:theme="@style/Theme.Intro"/>
-
+            android:theme="@style/Theme.Intro" />
         <activity
             android:name=".activities.Keyword"
             android:label="@string/keyword"
-            android:parentActivityName=".activities.Design">
-        </activity>
-
+            android:parentActivityName=".activities.Design"></activity>
 
         <service android:name=".services.LocationService" />
-
         <service
             android:name=".services.BackgroundService"
             android:enabled="true"
             android:exported="true" />
-
 
         <receiver android:name=".SMSReceiver">
             <intent-filter android:priority="1000">
@@ -66,6 +57,10 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".services.LocationService2"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

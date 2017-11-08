@@ -50,7 +50,7 @@ import java.util.Locale;
 public class LocationService2 extends Service implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,LocationListener{
 
-    public static final String TAG = CONSTANT.LOCATION_SERVICE;
+    public static final String TAG = CONSTANT.LOCATION_SERVICE2;
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS/2;
 

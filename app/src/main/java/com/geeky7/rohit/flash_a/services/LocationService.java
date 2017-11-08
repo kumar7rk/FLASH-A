@@ -197,7 +197,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
 //                    initiates places code to fetch the name of the nearby place
                     placesCode();
-//                    etaCode();
+                    etaCode();
                     // stop itself after message is sent
                     stopSelf();
                 }
@@ -250,7 +250,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     etaCode();
                     stopSelf();
 
-                    // register a broadcast receiver - for whenver the gos is turned on/off
+                    // register a broadcast receiver - for whenever the gps is turned on/off
                     // we do some work when it's status is turned on
                     getApplicationContext().unregisterReceiver(gpsReceiver);
                 }
