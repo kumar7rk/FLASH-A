@@ -37,7 +37,7 @@ import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
-import com.geeky7.rohit.flash_a.services.LocationService;
+import com.geeky7.rohit.flash_a.services.LocationService2;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -68,6 +68,7 @@ public class Design extends AppCompatActivity {
     String place = "Could not fetch location. Retry";
 
     Main m;
+    private boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,7 +296,12 @@ public class Design extends AppCompatActivity {
         super.onResume();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
-        startService(new Intent(this, LocationService.class));
+
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (b)
+            startService(new Intent(this, LocationService2.class));
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
@@ -366,6 +372,7 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
+                    startService(new Intent(this, LocationService2.class));
                     buildDialogCurrentLocation();
                 }
                 break;
@@ -380,9 +387,8 @@ public class Design extends AppCompatActivity {
         } else {
             builder = new AlertDialog.Builder(this);
         }
-
         builder.setTitle("Your Current Location")
-            .setMessage(add)
+            .setMessage(add+" " +place)
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -396,10 +402,20 @@ public class Design extends AppCompatActivity {
                     Main.showToast("Sharing location, select contact");
                 }
             })
+            /*.setNeutralButton(getResources().getString(R.string.refresh), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    flag = false;
+                }
+            })*/
             .setIcon(android.R.drawable.ic_menu_mylocation)
             .show();
-    }
 
+        /*if (!flag){
+            builder.show();
+            flag = true;
+        }*/
+    }
     // onClick currentLocation button in actionBar and gps is off
     // opens a dialog which turns on gps without requiring to navigate to the location settings page
     private void displayLocationSettingsRequest(Context context) {
@@ -415,31 +431,31 @@ public class Design extends AppCompatActivity {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
 
-            PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                @Override
-                public void onResult(LocationSettingsResult result) {
-                    final Status status = result.getStatus();
-                    switch (status.getStatusCode()) {
-                        case LocationSettingsStatusCodes.SUCCESS:
-                            Log.i(TAG, "All location settings are satisfied.");
-                            break;
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-                            try {
-                                // Show the dialog by calling startResolutionForResult(), and check the result
-                                // in onActivityResult().
-                                status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
-                            } catch (IntentSender.SendIntentException e) {
-                                Log.i(TAG, "PendingIntent unable to execute request.");
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
-                            break;
-                    }
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        Log.i(TAG, "All location settings are satisfied.");
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+                        try {
+                            // Show the dialog by calling startResolutionForResult(), and check the result
+                            // in onActivityResult().
+                            status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.i(TAG, "PendingIntent unable to execute request.");
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+                        break;
                 }
-            });
+            }
+        });
     }
     @Override
     protected void onActivityResult ( int requestCode, int resultCode, Intent data){
@@ -468,6 +484,7 @@ public class Design extends AppCompatActivity {
                     break;
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
+                    startService(new Intent(this, LocationService2.class));
                     buildDialogCurrentLocation();
                     break;
             }
