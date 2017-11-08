@@ -79,7 +79,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     Geocoder geocoder;
     List<Address> addresses;
 
-    String string = "Null";
     SharedPreferences preferences;
     String sender = "";
 
@@ -111,6 +110,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // get address from the lat lng
         geocoder = new Geocoder(this, Locale.getDefault());
 
+        String className = new Exception().getStackTrace()[0].getClassName();
+        updateLogAndToast(className+" className");
 
         Log.i(TAG,"LocationService Created");
     }
