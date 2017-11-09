@@ -177,7 +177,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 //                    initiates places code to fetch the name of the nearby place
                     placesCode();
-                    sendBroadcast();
                     stopSelf();
                 }
                 // when gps if off
@@ -215,7 +214,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
                     placesCode();
-                    sendBroadcast();
                     stopSelf();
 
                     // register a broadcast receiver - for whenever the gos is turned on/off
@@ -352,6 +350,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 //sendSMS(name);
                 setPlaceName(name);
                 updateLogAndToast("Places "+name);
+                sendBroadcast();
             }
         }
     }// onPostExecute
