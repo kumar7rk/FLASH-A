@@ -175,9 +175,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 // if the location service is on get that address and start places code
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    sendBroadcast();
 //                    initiates places code to fetch the name of the nearby place
                     placesCode();
+                    sendBroadcast();
                     stopSelf();
                 }
                 // when gps if off
@@ -214,8 +214,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     if (mCurrentLocation!=null)
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
-                    sendBroadcast();
                     placesCode();
+                    sendBroadcast();
                     stopSelf();
 
                     // register a broadcast receiver - for whenever the gos is turned on/off
