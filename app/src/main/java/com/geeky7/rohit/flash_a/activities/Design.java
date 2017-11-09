@@ -300,7 +300,7 @@ public class Design extends AppCompatActivity {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if (b)
+//        if (b)
             startService(new Intent(this, LocationService2.class));
 
         final SharedPreferences.Editor editor = preferences.edit();
@@ -372,7 +372,7 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-                    startService(new Intent(this, LocationService2.class));
+//                    startService(new Intent(this, LocationService2.class));
                     buildDialogCurrentLocation();
                 }
                 break;
@@ -503,7 +503,7 @@ public class Design extends AppCompatActivity {
 
     private void sendSMS(String s,String name) {
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ place+ ". "+ add;
+        String message = "I am near "+ place+ " ("+ add+")";
         manager.sendTextMessage(s,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
