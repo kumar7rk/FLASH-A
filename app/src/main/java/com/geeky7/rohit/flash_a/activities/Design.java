@@ -64,8 +64,8 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String add = "Could not fetch location. Retry";
-    String place = "Could not fetch location. Retry";
+    String add = "Could not fetch location.";
+    String place = "Retry.";
 
     Main m;
     private boolean flag = true;
@@ -382,6 +382,12 @@ public class Design extends AppCompatActivity {
 
     private void buildDialogCurrentLocation() {
 
+        /*try {
+            Thread.sleep(2000);
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
