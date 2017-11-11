@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
@@ -40,6 +41,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     FloatingActionButton floatingActionButton;
     private TextView homeAddress;
     NestedScrollView scrollView;
+    private ImageView delete;
 
     SharedPreferences preferences;
 
@@ -53,11 +55,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
+        delete = (ImageView) findViewById(R.id.delete_iv);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Setting the homeAddress in the textView
-        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+        final String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
         // set back button on actionBar
 
@@ -87,6 +90,13 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                     openAutocompleteActivity();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeAddress.setText(getResources().getString(R.string.home_address_text));
             }
         });
     }
