@@ -294,7 +294,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (!etaS.equals("NA")) etaS = " ETA home "+etaS;
         else etaS= "";
 
-        String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
+//        String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
+        String message = "Near "+ placeS+ " ("+ address + ")"+ etaS;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);

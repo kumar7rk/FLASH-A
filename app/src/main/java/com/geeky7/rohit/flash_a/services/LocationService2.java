@@ -347,7 +347,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             if (!list.isEmpty()){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
-                //sendSMS(name);
                 setPlaceName(name);
                 updateLogAndToast("Places "+name);
                 sendBroadcast();

@@ -503,7 +503,8 @@ public class Design extends AppCompatActivity {
 
     private void sendSMS(String s,String name) {
         SmsManager manager = SmsManager.getDefault();
-        String message = "I am near "+ place+ " ("+ add+")";
+//        String message = "I am near "+ place+ " ("+ add+")";
+        String message = "Near "+ place+ " ("+ add+")";
         manager.sendTextMessage(s,null, message, null, null);
 
         boolean noti = preferences.getBoolean("notification",true);
