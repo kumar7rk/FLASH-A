@@ -339,21 +339,24 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         for (int i = 0; i< addresses.size();i++)
             Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));
 
-        String address = addresses.get(0).getAddressLine(0);
 
-        return address;
+        String street = addresses.get(0).getFeatureName();
+        String city = addresses.get(0).getLocality();
 
-//        String city = addresses.get(0).getLocality();
+//        String address = addresses.get(0).getAddressLine(0);
 //        String state = addresses.get(0).getAdminArea();
 //        String country = addresses.get(0).getCountryName();
 //        String postalCode = addresses.get(0).getPostalCode();
 //        String knownName = addresses.get(0).getFeatureName(); // unit 32
+//        String s4 = addresses.get(0).getSubAdminArea(); //city of west torrens
+//         null- getSubLocality(),getPremises(),getThoroughfare()
 
-//        String s1 = addresses.get(0).getSubLocality(); // null
-//        String s2 = addresses.get(0).getPremises(); // null
-//        String s3 = addresses.get(0).getThoroughfare(); //null
-//        String s4 = addresses.get(0).getSubAdminArea(); city of west torrens
-
+//        Log.i("address","City: "+city);
+//        Log.i("address","State: "+state);
+//        Log.i("address","Country: "+country);
+//        Log.i("address","street: "+street);
+//        return address;
+        return street+", "+ city;
     }
 
     // this code starts with building the places URL and then call the actual places code

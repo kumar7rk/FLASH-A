@@ -1,6 +1,7 @@
 //This is the core class which gets the location convert it into address and then find a close placeOfInterest
 // compiles a message and sends it to the sender of the message
 // Yeah that's a lot of work
+// And this code is only used by the action bar button- current location
 package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
@@ -245,9 +246,24 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         for (int i = 0; i< addresses.size();i++)
             Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));
 
-        String address = addresses.get(0).getAddressLine(0);
 
-        return address;
+        String street = addresses.get(0).getFeatureName();
+        String city = addresses.get(0).getLocality();
+
+//        String address = addresses.get(0).getAddressLine(0);
+//        String state = addresses.get(0).getAdminArea();
+//        String country = addresses.get(0).getCountryName();
+//        String postalCode = addresses.get(0).getPostalCode();
+//        String knownName = addresses.get(0).getFeatureName(); // unit 32
+//        String s4 = addresses.get(0).getSubAdminArea(); //city of west torrens
+//         null- getSubLocality(),getPremises(),getThoroughfare()
+
+//        Log.i("address","City: "+city);
+//        Log.i("address","State: "+state);
+//        Log.i("address","Country: "+country);
+//        Log.i("address","street: "+street);
+//        return address;
+        return street+", "+ city;
     }
 
     // this code starts with building the places URL and then call the actual places code
