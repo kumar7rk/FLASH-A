@@ -346,9 +346,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String address = addresses.get(0).getAddressLine(0)
                 .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
-        String stateFF = addresses.get(0).getPremises();
-        Log.i("address","State: "+state);
-
 //        String street = addresses.get(0).getFeatureName();
 //        String city = addresses.get(0).getLocality();
 //        String number = addresses.get(0).getFeatureName();

@@ -430,7 +430,6 @@ public class Design extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Main.showToast("onClick");
                             buildDialogCurrentLocation();
                         }
                     });
