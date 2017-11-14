@@ -294,7 +294,7 @@ public class Design extends AppCompatActivity {
                                View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
                 getString(mainTextStringId),
-                Snackbar.LENGTH_SHORT)
+                Snackbar.LENGTH_LONG)
                 .setAction(getString(actionStringId), listener).show();
     }
 
@@ -380,7 +380,9 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-//                    startService(new Intent(this, LocationService2.class));
+                    stopService(new Intent(this, LocationService2.class));
+                    startService(new Intent(this, LocationService2.class));
+                    // gps is on so build dialog
                     buildDialogCurrentLocation();
                 }
                 break;
@@ -389,8 +391,8 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-        stopService(new Intent(Design.this, LocationService2.class));
-        startService(new Intent(Design.this, LocationService2.class));
+        /*stopService(new Intent(this, LocationService2.class));
+        startService(new Intent(this, LocationService2.class));*/
         /*try {
             Thread.sleep(2000);
             Thread.sleep(2000);
@@ -406,7 +408,7 @@ public class Design extends AppCompatActivity {
         }
 
         builder.setTitle("Your Current Location")
-            .setMessage(add+" " +place)
+            .setMessage(add+" (" +place+")")
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -420,8 +422,7 @@ public class Design extends AppCompatActivity {
                     Main.showToast("Sharing location, select contact");
                 }
             })
-            .setIcon(android.R.drawable.ic_menu_mylocation)
-            .show();
+            .setIcon(android.R.drawable.ic_menu_mylocation);
 
         if(!add.equals("")) builder.show();
         else{
@@ -429,8 +430,7 @@ public class Design extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                    /*        stopService(new Intent(Design.this, LocationService2.class));
-                            startService(new Intent(Design.this, LocationService2.class))*/;
+                            Main.showToast("onClick");
                             buildDialogCurrentLocation();
                         }
                     });
@@ -504,7 +504,9 @@ public class Design extends AppCompatActivity {
                     break;
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
-//                    startService(new Intent(this, LocationService2.class));
+                    stopService(new Intent(this, LocationService2.class));
+                    startService(new Intent(this, LocationService2.class));
+                    // gps dialog was shown and the user clicked ok build dialog
                     buildDialogCurrentLocation();
                     break;
             }
