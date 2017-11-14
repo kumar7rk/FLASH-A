@@ -122,4 +122,7 @@
     <string name="share">Share</string>
     <string name="refresh">Refresh</string>
 
+    <string name="error_fetching_location">Error fetching your location</string>
+    <string name="retry">Retry</string>
+
 </resources>

@@ -339,24 +339,29 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         for (int i = 0; i< addresses.size();i++)
             Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));
 
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
 
-        String street = addresses.get(0).getFeatureName();
-        String city = addresses.get(0).getLocality();
+        String address = addresses.get(0).getAddressLine(0)
+                .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
-//        String address = addresses.get(0).getAddressLine(0);
-//        String state = addresses.get(0).getAdminArea();
-//        String country = addresses.get(0).getCountryName();
-//        String postalCode = addresses.get(0).getPostalCode();
-//        String knownName = addresses.get(0).getFeatureName(); // unit 32
-//        String s4 = addresses.get(0).getSubAdminArea(); //city of west torrens
+        String stateFF = addresses.get(0).getPremises();
+        Log.i("address","State: "+state);
+
+//        String street = addresses.get(0).getFeatureName();
+//        String city = addresses.get(0).getLocality();
+//        String number = addresses.get(0).getFeatureName();
+//        String council = addresses.get(0).getSubAdminArea();
 //         null- getSubLocality(),getPremises(),getThoroughfare()
 
 //        Log.i("address","City: "+city);
 //        Log.i("address","State: "+state);
 //        Log.i("address","Country: "+country);
 //        Log.i("address","street: "+street);
-//        return address;
-        return street+", "+ city;
+//        return street+", "+ city;
+
+        return address;
     }
 
     // this code starts with building the places URL and then call the actual places code

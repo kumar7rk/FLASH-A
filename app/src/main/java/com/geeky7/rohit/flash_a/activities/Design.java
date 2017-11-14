@@ -64,8 +64,8 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String add = "Could not fetch location.";
-    String place = "Retry.";
+    String add = "";
+    String place = "";
 
     Main m;
     private boolean flag = true;
@@ -290,6 +290,14 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
+    private void showSnackbar2(final int mainTextStringId, final int actionStringId,
+                              View.OnClickListener listener) {
+        Snackbar.make(findViewById(android.R.id.content),
+                getString(mainTextStringId),
+                Snackbar.LENGTH_SHORT)
+                .setAction(getString(actionStringId), listener).show();
+    }
+
     // would respond to the onClick listeners on layout
     @Override
     protected void onResume() {
@@ -381,19 +389,22 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-
+        stopService(new Intent(Design.this, LocationService2.class));
+        startService(new Intent(Design.this, LocationService2.class));
         /*try {
             Thread.sleep(2000);
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
+
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         } else {
             builder = new AlertDialog.Builder(this);
         }
+
         builder.setTitle("Your Current Location")
             .setMessage(add+" " +place)
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
@@ -409,19 +420,21 @@ public class Design extends AppCompatActivity {
                     Main.showToast("Sharing location, select contact");
                 }
             })
-            /*.setNeutralButton(getResources().getString(R.string.refresh), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    flag = false;
-                }
-            })*/
-            .setIcon(android.R.drawable.ic_menu_mylocation)
-            .show();
+            .setIcon(android.R.drawable.ic_menu_mylocation);
 
-        /*if (!flag){
-            builder.show();
-            flag = true;
-        }*/
+
+        if(!add.equals("")) builder.show();
+        else{
+            showSnackbar2(R.string.error_fetching_location, R.string.retry,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                    /*        stopService(new Intent(Design.this, LocationService2.class));
+                            startService(new Intent(Design.this, LocationService2.class))*/;
+                            buildDialogCurrentLocation();
+                        }
+                    });
+        }
     }
     // onClick currentLocation button in actionBar and gps is off
     // opens a dialog which turns on gps without requiring to navigate to the location settings page
@@ -491,7 +504,7 @@ public class Design extends AppCompatActivity {
                     break;
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
-                    startService(new Intent(this, LocationService2.class));
+//                    startService(new Intent(this, LocationService2.class));
                     buildDialogCurrentLocation();
                     break;
             }
