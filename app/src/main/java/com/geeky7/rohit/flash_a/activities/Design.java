@@ -403,7 +403,7 @@ public class Design extends AppCompatActivity {
         }
 
         builder.setTitle("Your Current Location")
-            .setMessage(add+" (" +place+")")
+            .setMessage(add+" (Near" +place+")")
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -425,16 +425,9 @@ public class Design extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            R.string.error_fetching_location, R.string.retry,
-                                    new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            sh
-                                        }
-                                    });
                             buildDialogCurrentLocation();
                         }
-                    });
+                   });
         }
     }
     // onClick currentLocation button in actionBar and gps is off
