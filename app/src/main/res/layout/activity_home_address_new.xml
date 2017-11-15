@@ -59,15 +59,17 @@
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/homeAddress_tv"
-                    android:layout_width="320dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.90"
                     android:layout_margin="22dp"
                     android:text="@string/home_address_text"/>
-                <ImageButton
+                <ImageView
                     android:id="@+id/delete_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="22dp"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.10"
+                    android:layout_margin="22dp"
                     android:src="@drawable/delete"/>
         </LinearLayout>
 
