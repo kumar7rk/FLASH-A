@@ -58,10 +58,14 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         delete = (ImageView) findViewById(R.id.delete_iv);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        final SharedPreferences.Editor editor = preferences.edit();
         //Setting the homeAddress in the textView
         final String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
+
+        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
+            delete.setVisibility(View.INVISIBLE);
+        }
 
         // set back button on actionBar
 
@@ -97,8 +101,10 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Main.showToast("Clicked");
                 homeAddress.setText(getResources().getString(R.string.home_address_text));
+                editor.putString("homeAddress",homeAddress.getText().toString());
+                editor.apply();
+                delete.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -174,6 +180,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
                 // set the current address in the textView
                 homeAddress.setText(place.getAddress());
+                delete.setVisibility(View.VISIBLE);
                 // when the home address is updated; this method dynamically loads the mapView
                 refreshMap();
 
