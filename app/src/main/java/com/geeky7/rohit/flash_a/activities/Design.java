@@ -68,7 +68,6 @@ public class Design extends AppCompatActivity {
     String place = "";
 
     Main m;
-    private boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +85,6 @@ public class Design extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean service = preferences.getBoolean("service", true);
-        /*final SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("homeAddress","");
-        editor.apply();*/
-
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
@@ -430,6 +425,13 @@ public class Design extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            R.string.error_fetching_location, R.string.retry,
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            sh
+                                        }
+                                    });
                             buildDialogCurrentLocation();
                         }
                     });
