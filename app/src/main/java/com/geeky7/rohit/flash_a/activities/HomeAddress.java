@@ -39,7 +39,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     private static final String TAG = CONSTANT.HOME_ADDRESS;
 
     FloatingActionButton floatingActionButton;
-    private TextView homeAddress;
+    private TextView homeAddress, info;
     NestedScrollView scrollView;
     private ImageView delete;
 
@@ -54,6 +54,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
+        info = (TextView) findViewById(R.id.homeAddress_tv1);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         delete = (ImageView) findViewById(R.id.delete_iv);
 

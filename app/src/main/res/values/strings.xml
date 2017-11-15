@@ -114,7 +114,10 @@
     </string>
     <string name="intro_message">Intro Message</string>
 
-    <string name="home_address_text">Not set! Add Home address for better experience such as ETA</string>
+    <string name="home_address_text">Home address not set!</string>
+
+    <string name="home_address_info">Home address is used for improved user experience such as sending ETA!</string>
+
     <string name="home_address_last_edited">Not set</string>
     <string name="action_current_location">Current Location</string>
 
