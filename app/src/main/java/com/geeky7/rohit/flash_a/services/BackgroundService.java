@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.MyApplication;
 
@@ -52,7 +53,7 @@ public class BackgroundService extends Service {
         locationPermission = preferences.getBoolean("locationPermission",false);
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
-        boolean service = preferences.getBoolean("service",true);
+        boolean service = preferences.getBoolean(CONSTANT.SERVICE,true);
         Log.i("Service",service+"");
 
         if(intent!=null)
