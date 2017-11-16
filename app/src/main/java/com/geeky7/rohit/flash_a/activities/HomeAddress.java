@@ -61,7 +61,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
         //Setting the homeAddress in the textView
-        final String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+        final String homeAddressS = preferences.getString(CONSTANT.HOME_ADDRESS,getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
 
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
@@ -103,7 +103,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 homeAddress.setText(getResources().getString(R.string.home_address_text));
-                editor.putString("homeAddress",homeAddress.getText().toString());
+                editor.putString(CONSTANT.HOME_ADDRESS,homeAddress.getText().toString());
                 editor.apply();
                 delete.setVisibility(View.INVISIBLE);
             }
@@ -187,7 +187,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
                 Main.showToast("Home address updated :)");
 
-                editor.putString("homeAddress",place.getAddress()+"");
+                editor.putString(CONSTANT.HOME_ADDRESS,place.getAddress()+"");
                 editor.apply();
                 // will test; if nothing goes wrong would delete this code the next time I read this comment
                 /*// Display attributions if required.
@@ -213,7 +213,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String homeAddressS = preferences.getString("homeAddress",getResources().getString(R.string.home_address_text));
+        String homeAddressS = preferences.getString(CONSTANT.HOME_ADDRESS,getResources().getString(R.string.home_address_text));
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))||homeAddressS.equals("")){
         }
 

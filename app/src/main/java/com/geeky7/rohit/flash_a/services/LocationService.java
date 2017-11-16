@@ -594,7 +594,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public String buildEtaURL(){
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String dest = preferences.getString("homeAddress","");
+        String dest = preferences.getString(CONSTANT.HOME_ADDRESS,"");
 
         String origin = getAddress();
 
