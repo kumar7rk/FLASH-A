@@ -84,7 +84,7 @@ public class Design extends AppCompatActivity {
         findViewById();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final boolean service = preferences.getBoolean("service", true);
+        final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
@@ -310,15 +310,15 @@ public class Design extends AppCompatActivity {
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final boolean service = preferences.getBoolean("service", true);
+                final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
                 if (service) {
                     Main.showToast("FL-ASHA disabled");
-                    editor.putBoolean("service", false);
+                    editor.putBoolean(CONSTANT.SERVICE, false);
                     editor.apply();
                     disableService();
                 } else {
                     Main.showToast("FL-ASHA enabled");
-                    editor.putBoolean("service", true);
+                    editor.putBoolean(CONSTANT.SERVICE, true);
                     editor.apply();
                     enableService();
                 }
