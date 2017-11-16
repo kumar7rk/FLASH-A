@@ -70,10 +70,8 @@ public class BackgroundService extends Service {
             if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message) )&& locationPermission && m.isNetworkAvailable()&&service)  {
                 Log.i("Matched", "Location requested");
                 startService();
-                Log.i("LocationService", "Location Service initiated");
+                Log.i("BackgroundService", "Location Service initiated");
                 stopSelf();
-//              if(message.contains("Where")){
-                // this message initiated the location service which fetches the location and converts into an address
             }
         }
         editor.apply();
