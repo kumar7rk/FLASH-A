@@ -16,6 +16,7 @@ public class CONSTANT {
     public static final String PLACE_NAME = "PLACE_NAME";
     public static final String SERVICE = "SERVICE";
     public static final String SENDER = "SENDER";
+    public static final String KEYWORD = "KEYWORD";
 
 
 }
