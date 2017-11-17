@@ -216,6 +216,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     }
                     if (mCurrentLocation!=null) addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
+                    // only call the code when the gps is turned on
                     if(b) placesCode();
                     stopSelf();
 
