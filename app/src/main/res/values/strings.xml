@@ -127,5 +127,6 @@
 
     <string name="error_fetching_location">Error fetching your location</string>
     <string name="retry">Retry</string>
+    <string name="save">Save</string>
 
 </resources>
