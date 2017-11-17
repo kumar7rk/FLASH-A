@@ -204,6 +204,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 try {
                     if(!mGoogleApiClient.isConnected())
                         stopSelf();
+                    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
                     Thread.sleep(2000);
                     // in case the app force closes when the gos is off and turned on later
                     // uncomment the below code
@@ -211,10 +214,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
-                    if (mCurrentLocation!=null)
-                        addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    if (mCurrentLocation!=null) addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
-                    placesCode();
+                    if(b) placesCode();
                     stopSelf();
 
                     // register a broadcast receiver - for whenever the gos is turned on/off
