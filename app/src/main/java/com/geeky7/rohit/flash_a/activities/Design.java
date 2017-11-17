@@ -69,6 +69,8 @@ public class Design extends AppCompatActivity {
 
     Main m;
 
+
+    private Keyword keyword = new Keyword();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +105,7 @@ public class Design extends AppCompatActivity {
         keyword_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Keyword.class));
+                keyword.show(getFragmentManager(),"Keyword");
             }
         });
     }
@@ -325,10 +327,13 @@ public class Design extends AppCompatActivity {
             }
         });
 
+
         keyword_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.showToast(getResources().getString(R.string.coming_soon));
+                keyword.show(getFragmentManager(),"Keyword");
+
+//                startActivity(new Intent(getApplicationContext(), Keyword.class));
             }
         });
 
@@ -533,4 +538,5 @@ public class Design extends AppCompatActivity {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
     }
+
 }
