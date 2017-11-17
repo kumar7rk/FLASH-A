@@ -25,23 +25,20 @@ public class Keyword extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
-        alertDialog = new AlertDialog.Builder(getActivity());
-
-        alertDialog.setTitle("Edit Keyword");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
         View view = inflater.inflate(R.layout.activity_keyword, null);
-        keyword= (EditText) view.findViewById(R.id.keyword_et);
 
+        keyword= (EditText) view.findViewById(R.id.keyword_et);
         keyword.setSelection(keyword.getText().length());
 
-        alertDialog.setView(inflater.inflate(R.layout.activity_keyword, null))
-
+        alertDialog = new AlertDialog.Builder(getActivity())
+        .setTitle("Edit Keyword")
+        .setView(inflater.inflate(R.layout.activity_keyword, null))
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String keywordS = keyword.getText().toString();
@@ -51,7 +48,6 @@ public class Keyword extends DialogFragment {
                     }
                 })
                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -63,8 +59,9 @@ public class Keyword extends DialogFragment {
     public void onResume() {
         super.onResume();
         keyword = (EditText) getDialog().findViewById(R.id.keyword_et);
+        // get the stored keyword
         keyword.setText(preferences.getString(CONSTANT.KEYWORD,"Asha"));
+        // move the caret to the last of the text; front by default
         keyword.setSelection(keyword.getText().length());
     }
-
 }
