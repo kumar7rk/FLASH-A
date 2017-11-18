@@ -337,6 +337,14 @@ public class Design extends AppCompatActivity {
             }
         });
 
+        keyword_lay.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Main.showToast("Your keyword is : "+ preferences.getString(CONSTANT.KEYWORD,""));
+                return false;
+            }
+        });
+
         customiseMessage_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
