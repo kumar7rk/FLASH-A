@@ -337,11 +337,12 @@ public class Design extends AppCompatActivity {
             }
         });
 
+        // show keyword in a toast message when the keyword is clicked and hodl
         keyword_lay.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Main.showToast("Your keyword is : "+ preferences.getString(CONSTANT.KEYWORD,""));
-                return false;
+                return true;
             }
         });
 
