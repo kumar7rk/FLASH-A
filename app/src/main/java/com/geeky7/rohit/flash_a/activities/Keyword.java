@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -51,7 +53,18 @@ public class Keyword extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
-                });
+                })
+        .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                \"Asha"
+                String keyword = preferences.getString(CONSTANT.KEYWORD,"");
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setData(Uri.parse("sms:"));
+                sendIntent.putExtra("sms_body", "Get my current location by messaging me the secret keyword" + "\"" + keyword+"\""+". This great app ASHA keeps us connected. http://bit.ly/get-asha");
+                startActivity(sendIntent);
+            }
+        });
         return alertDialog.create();
     }
 
