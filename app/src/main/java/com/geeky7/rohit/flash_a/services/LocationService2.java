@@ -284,6 +284,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
+        if (mCurrentLocation==null){
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
