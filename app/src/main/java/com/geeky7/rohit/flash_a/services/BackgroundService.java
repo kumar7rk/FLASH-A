@@ -54,6 +54,7 @@ public class BackgroundService extends Service {
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
         boolean service = preferences.getBoolean(CONSTANT.SERVICE,true);
+        String keyword = preferences.getString(CONSTANT.KEYWORD,"Asha");
         Log.i("Service",service+"");
 
         if(intent!=null)
@@ -66,8 +67,10 @@ public class BackgroundService extends Service {
             editor.putString("sender",sender);
             Log.i("Message","Message is:"+ message);
 
+//            if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message))        && locationPermission && m.isNetworkAvailable()&&service)
             // checks for the keyword; if matched start location service
-            if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message) )&& locationPermission && m.isNetworkAvailable()&&service)  {
+            if (keyword.equals(message) && locationPermission && m.isNetworkAvailable()&&service)
+            {
                 Log.i("Matched", "Location requested");
                 startService();
                 Log.i("BackgroundService", "Location Service initiated");
