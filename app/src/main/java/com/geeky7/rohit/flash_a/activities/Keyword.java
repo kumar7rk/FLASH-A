@@ -23,11 +23,15 @@ public class Keyword extends DialogFragment {
     AlertDialog.Builder alertDialog;
 
     public Keyword() {
+        if(!isAdded())
+            return;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        if(!isAdded())
+            return null;
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
 
@@ -71,6 +75,8 @@ public class Keyword extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if(!isAdded())
+            return ;
         keyword = (EditText) getDialog().findViewById(R.id.keyword_et);
         // get the stored keyword
         keyword.setText(preferences.getString(CONSTANT.KEYWORD,"Asha"));

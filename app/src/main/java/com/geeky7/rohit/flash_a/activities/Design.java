@@ -105,6 +105,7 @@ public class Design extends AppCompatActivity {
         keyword_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    return;
                 keyword.show(getFragmentManager(),"Keyword");
             }
         });
