@@ -1,3 +1,5 @@
+// Let's you update the keyword; save it in sharePreference; share with your family friends via SMS
+
 package com.geeky7.rohit.flash_a.activities;
 
 import android.app.AlertDialog;
@@ -44,6 +46,7 @@ public class Keyword extends DialogFragment {
         alertDialog = new AlertDialog.Builder(getActivity())
         .setTitle("Edit Keyword")
         .setView(inflater.inflate(R.layout.activity_keyword, null))
+                // save button, onClick updates the keyword in sharedPreference
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -53,15 +56,17 @@ public class Keyword extends DialogFragment {
                         Main.showToast("Keyword updated :)");
                     }
                 })
+                // close button to close the dialog
                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 })
+                //share button to share the keyword via sms
+                // open the default messaging app with pre added text with keyword
         .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                \"Asha"
                 String keyword = preferences.getString(CONSTANT.KEYWORD,"");
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                 sendIntent.setData(Uri.parse("sms:"));
