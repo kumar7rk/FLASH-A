@@ -1,3 +1,8 @@
+/*
+Shows a tutorial
+
+*/
+
 package com.geeky7.rohit.flash_a.activities;
 
 import android.os.Bundle;
@@ -25,14 +30,16 @@ public class TutorialActivity extends MaterialIntroActivity {
                     }
                 });
 
+        /*Whether you're driving or away from your phone. you'll always be closer to them with ASHA app.
+        " +
+        "ASHA sends your location, including address and landmark, on receiving your customised keyword in an SMS.*/
+                //  Html.fromHtml("<b>" + myText + "</b>"
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
                         .image(R.drawable.tutorial1)
-                        .title("End the Worries of your closed ones?")
-                //  Html.fromHtml("<b>" + myText + "</b>"
-                        .description("Whether you're driving or away from your phone. you'll always be closer to them with ASHA app.\n" +
-                                "ASHA sends your location, including address and landmark, on receiving your customised keyword.")
+                        .title("Stay close to your close ones!")
+                        .description("Whether you're driving or away from your phone you'll always be close to them with ASHA app.")
                         .build()
               /*  ,
                 new MessageButtonBehaviour(new View.OnClickListener() {
@@ -43,11 +50,14 @@ public class TutorialActivity extends MaterialIntroActivity {
                 }, "Work with love")*/
                 );
 
+        //It works! It's that simple!
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
-                .title("Share your current location automatically with your family member using your chosen keyword for incoming SMS")
-                .description("It works! It's that simple!")
+                .title("Receive an SMS. Share location.")
+                .description("\n Whenever you receive an SMS with your chosen keyword. Your location will be shared with the sender of the message. " +
+                        "\n"+
+                        "You'll be notified when your location is shared")
                 .build());
 
 //        addSlide(new CustomSlide());
@@ -56,8 +66,10 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
 //                        .image(R.drawable.img_equipment)
-                        .title("Want more?")
-                        .description("Set home address to send home ETA. Customise message, check history and more.")
+                        .title("Stay safe & in control")
+                        .description("You can set your home address to send home ETA, edit keyword for your convenience." +
+                                "\n"+
+                                "You're in complete control when the app runs. You can turn in off with just one click when you want privacy.")
                         .build()
                 /*,
                 new MessageButtonBehaviour(new View.OnClickListener() {
@@ -71,8 +83,8 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.fourth_slide_background)
                 .buttonsColor(R.color.fourth_slide_buttons)
-                .title("In an emergency?")
-                .description("Share your current location with the click of a button")
+                .title("Running into an emergency?")
+                .description("You can share your current location with anyone with just a few clicks.")
                 .build());
     }
 }
