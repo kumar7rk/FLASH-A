@@ -137,9 +137,9 @@ public class Design extends AppCompatActivity {
     }
 
     // if the service is not running this method is called
-    // changes the color to orange or something for some reasons
+    // changes the color to orange or something for some reasons--> not now it's funny
     public void enableService() {
-        serviceEnabled_lay.setBackgroundColor(0xffff8800);
+        serviceEnabled_lay.setBackgroundColor(Color.parseColor("#27e833"));
         serviceEnabled_tv.setText(R.string.service_enabled);
         serviceEnabled_iv.setImageBitmap(null);
         serviceEnabled_iv.setImageResource(R.drawable.service_enabled);
