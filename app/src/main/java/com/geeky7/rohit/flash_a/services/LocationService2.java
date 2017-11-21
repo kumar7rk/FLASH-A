@@ -2,6 +2,7 @@
 // compiles a message and sends it to the sender of the message
 // Yeah that's a lot of work
 // And this code is only used by the action bar button- current location
+
 package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
@@ -334,6 +335,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         return data;
     }
 
+    //set the place name to the global variable
     public void setPlaceName(String s){
         placeName = s;
     }
@@ -421,10 +423,10 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             HashMap<String, String> place = new HashMap<String, String>();
             String placeName = "-NA-";
             String vicinity = "-NA-";
-            String latitude = "";
-            String longitude = "";
-            String reference = "";
-            String placeType = "";
+            String latitude;
+            String longitude;
+            String reference;
+            String placeType;
 
             try {
                 // Extracting Place name, if available
@@ -449,7 +451,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 place.put("reference", reference);
                 place.put("types", placeType);
 
-//                Log.i(TAG+""+"PlaceType",placeType);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -476,6 +477,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         }
     }
 
+    //sends the broadcast when the place name is fetched
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
@@ -484,6 +486,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    // method to show toast during testing and then comment the toast code in the production code
     public void updateLogAndToast(String s){
         Log.i(TAG,s);
 //        Main.showToast(s);
