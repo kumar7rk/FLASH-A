@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#d4662b</color>
 
-
+<!--Tutorial-->
     <!--3a8be6 runner up-->
     <color name="first_slide_background">#2789fd</color>
     <color name="first_slide_buttons">#880E4F</color>
@@ -20,4 +20,13 @@
 
     <color name="custom_slide_background">#3F51B5</color>
     <color name="custom_slide_buttons">#1A237E</color>
+
+    <!--Design-->
+    <color name="service_enabled_background">#ffff8800</color>
+    <color name="home_address_background">#ff00ddff</color>
+    <color name="keyword_background">#90000000</color>
+    <color name="customise_message_background">#2196F3</color>
+    <color name="history_background">#0000ee</color>
+    <color name="tutorial_background">#2789fd</color>
+
 </resources>
