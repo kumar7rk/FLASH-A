@@ -5,6 +5,7 @@
         android:radius="3dp"   >
     </corners>
 <solid
-    android:color="?android:attr/colorPressedHighlight">
+    android:color="@color/tutorial_background">
 </solid>
 </shape>
+    <!--android:color="?android:attr/colorPressedHighlight">-->

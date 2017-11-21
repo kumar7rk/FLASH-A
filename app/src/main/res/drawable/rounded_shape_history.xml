@@ -5,6 +5,7 @@
         android:radius="3dp"   >
     </corners>
 <solid
-    android:color="@color/wallet_link_text_light">
+    android:color="@color/history_background">
 </solid>
 </shape>
+    <!--android:color="@color/wallet_link_text_light">-->

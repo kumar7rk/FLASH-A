@@ -5,6 +5,7 @@
         android:radius="3dp"   >
     </corners>
 <solid
-    android:color="@color/common_google_signin_btn_text_light_focused">
+    android:color="@color/keyword_background">
 </solid>
 </shape>
+    <!--android:color="@color/common_google_signin_btn_text_light_focused">-->

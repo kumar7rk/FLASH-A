@@ -5,6 +5,7 @@
         android:radius="3dp"   >
     </corners>
 <solid
-    android:color="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color">
+    android:color="@color/customise_message_background">
 </solid>
 </shape>
+    <!--android:color="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color">-->
