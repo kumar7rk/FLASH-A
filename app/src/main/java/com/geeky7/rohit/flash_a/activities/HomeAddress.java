@@ -1,3 +1,10 @@
+/*
+Class to play around with the home address
+update home address, delete, shows a mapView
+
+Everything packed up in cheesy classic design
+*/
+
 package com.geeky7.rohit.flash_a.activities;
 
 import android.content.Intent;
@@ -52,21 +59,18 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_address_new);
 
-        scrollView = (NestedScrollView)findViewById(R.id.nested);
-        homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
-        info = (TextView) findViewById(R.id.homeAddress_tv1);
-        floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
-        delete = (ImageView) findViewById(R.id.delete_iv);
+        // find the views of all the elements in the xml
+        findViewByIds();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
+
         //Setting the homeAddress in the textView
         final String homeAddressS = preferences.getString(CONSTANT.HOME_ADDRESS,getResources().getString(R.string.home_address_text));
         homeAddress.setText(homeAddressS);
 
-        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
-            delete.setVisibility(View.INVISIBLE);
-        }
+        // hides the delete button when there is no homeAddress set
+        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))) delete.setVisibility(View.INVISIBLE);
 
         // set back button on actionBar
 
@@ -76,11 +80,11 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 //        getSupportActionBar().setHomeButtonEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //loading the map with a marker on the home address
+        //updates the map with a marker on the home address
         refreshMap();
 
         // to lock the scroll on the scroll view
-        // you are still able to scroll from the mapView which is kind of cool
+        // you are still able to scroll from the mapView which is kind of cool--> nah blocked as well
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -90,8 +94,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         });
 
         // clicking fab open up the search bar powered by Google
-        // Selecting one of the address updates the text view in the app and also the sharedPreference
-
+        // Selecting one of the address updates the text view in the app and also the sharedPreferences
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +102,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        // delete icon which removes the address from the layout as well as SharedPreferences
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +114,17 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    //a method for finding view by ids
+    private void findViewByIds() {
+        scrollView = (NestedScrollView)findViewById(R.id.nested);
+        homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
+        info = (TextView) findViewById(R.id.homeAddress_tv1);
+        floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
+        delete = (ImageView) findViewById(R.id.delete_iv);
+    }
+
     // The method loads the map
+    // called onCreate and when the homeAddress is updated
     private void refreshMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
