@@ -129,4 +129,9 @@
     <string name="retry">Retry</string>
     <string name="save">Save</string>
 
+
+    <string name="settings_send_eta">Settings_Send_ETA</string>
+    <string name="settings_notification">Settings_notification</string>
+    <string name="settings_landmark">Settings_Landmark</string>
+
 </resources>
