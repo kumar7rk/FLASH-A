@@ -25,8 +25,8 @@
     <color name="service_enabled_background">#ffff8800</color>
     <color name="home_address_background">#ff00ddff</color>
     <color name="keyword_background">#90000000</color>
-    <color name="customise_message_background">#2196F3</color>
-    <color name="history_background">#0000ee</color>
+    <color name="customise_message_background">#31395c</color>
+    <color name="history_background">#787aa8</color>
     <color name="tutorial_background">#2789fd</color>
 
 </resources>
