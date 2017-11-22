@@ -36,14 +36,10 @@
         <activity
             android:name=".activities.HomeAddress"
             android:label="@string/home_address"
-            android:parentActivityName=".activities.Design"></activity>
+            android:parentActivityName=".activities.Design"/>
         <activity
             android:name=".activities.TutorialActivity"
             android:theme="@style/Theme.Intro" />
-        <activity
-            android:name=".activities.Keyword"
-            android:label="@string/keyword"
-            android:parentActivityName=".activities.Design"></activity>
 
         <service android:name=".services.LocationService" />
         <service
@@ -51,16 +47,17 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".services.LocationService2"
+            android:enabled="true"
+            android:exported="true"/>
+
         <receiver android:name=".SMSReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".services.LocationService2"
-            android:enabled="true"
-            android:exported="true"></service>
     </application>
 
 </manifest>
