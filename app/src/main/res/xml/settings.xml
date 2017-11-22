@@ -1,13 +1,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference android:title="Send ETA"
+    <SwitchPreference
+        android:id="@+id/settings_send_eta"
+        android:title="Send ETA"
         android:key="@string/settings_send_eta"
         android:summary="Include ETA to home"
         />
-    <CheckBoxPreference android:title="Notification when location shared"
+    <CheckBoxPreference
+        android:id="@+id/settings_notification"
+        android:title="Notification when location shared"
         android:key="@string/settings_notification"
         android:summary="Get notified by a notification which shows with whom is your location shared."
         />
-    <SwitchPreference android:title="Include Landmark"
+    <SwitchPreference
+        android:id="@+id/settings_landmark"
+        android:title="Include Landmark"
         android:key="@string/settings_landmark"
         android:summary="Include any nearby landmark of up to 500 metres"
         />
