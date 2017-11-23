@@ -67,13 +67,13 @@ public class BackgroundService extends Service {
             editor.putString("sender",sender);
             Log.i(TAG,"Message is:"+ message);
 
-//            if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message))        && locationPermission && m.isNetworkAvailable()&&service)
-            // checks for the keyword; if matched start location service
+            // checks for the keyword, location permission, internet and if service is enabled from the app
+            // if matched start location service
             if (keyword.equals(message) && locationPermission && m.isNetworkAvailable()&&service)
             {
-                Log.i(TAG, "Location requested");
+//                Log.i(TAG, "Location requested");
                 startService();
-                Log.i(TAG, "Location Service initiated");
+//                Log.i(TAG, "Location Service initiated");
                 stopSelf();
             }
         }
