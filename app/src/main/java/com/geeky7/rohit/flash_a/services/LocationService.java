@@ -277,7 +277,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // Magic method to send the SMS to the sender
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String placeS, String etaS) {
-        updateLogAndToast("sendSMS 2");
+        updateLogAndToast("sendSMS");
         // sender contains the phone number
         String name = sender;
         // if the contact permission is granted get the name of the contact

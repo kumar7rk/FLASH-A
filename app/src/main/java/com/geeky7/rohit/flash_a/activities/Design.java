@@ -93,23 +93,6 @@ public class Design extends AppCompatActivity {
 
         if (service) enableService();
         else disableService();
-
-        // open HomeAddress activity when home address layout is clicked
-        homeAddress_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomeAddress.class));
-            }
-        });
-
-        keyword_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (keyword.isAdded()&&keyword!=null)
-                    return;
-                keyword.show(getFragmentManager(),"Keyword");
-            }
-        });
     }
 
     // find view by id of all the views
@@ -125,7 +108,7 @@ public class Design extends AppCompatActivity {
         tutorial_lay = (LinearLayout) findViewById(R.id.tutorial_lay);
     }
 
-    //if the service is running and user hits the layout
+    // if the service is running and user hits the layout
     // this method runs and it changes the disables the service and changes the color of the layout to red
     public void disableService() {
         serviceEnabled_lay.setBackgroundColor(Color.RED);
@@ -329,13 +312,19 @@ public class Design extends AppCompatActivity {
             }
         });
 
+//      open HomeAddress activity when home address layout is clicked
+        homeAddress_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomeAddress.class));
+            }
+        });
 
         keyword_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyword.show(getFragmentManager(),"Keyword");
-
-//                startActivity(new Intent(getApplicationContext(), Keyword.class));
+                if (!keyword.isAdded())
+                    keyword.show(getFragmentManager(),"Keyword");
             }
         });
 
