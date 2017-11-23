@@ -275,15 +275,19 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
         String sb = null;
         try {
-            sb = buildPlacesURL().toString();
-            new PlacesTask().execute(sb);
+            if(b){
+                sb = buildPlacesURL().toString();
+                new PlacesTask().execute(sb);
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
-
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         if (mCurrentLocation==null) mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
