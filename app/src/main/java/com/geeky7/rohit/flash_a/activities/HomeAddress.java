@@ -156,8 +156,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         }
             return p1;
     }
-
-    // this open up the search bar to select the home addresss
+    // this open up the search bar to select the home address
     // this is more like an intermediate activity which closes once the address is selected
     // sample code Google
     private void openAutocompleteActivity() {
@@ -177,7 +176,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             // resolvable.
             String message = "Google Play Services is not available: " +
                     GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
-
         }
     }
     // this returns the selected address from the activity and set the textView with the same
@@ -203,13 +201,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
                 editor.putString(CONSTANT.HOME_ADDRESS,place.getAddress()+"");
                 editor.apply();
-                // will test; if nothing goes wrong would delete this code the next time I read this comment
-                /*// Display attributions if required.
-                CharSequence attributions = place.getAttributions();
-                if (!TextUtils.isEmpty(attributions)) {
-                } else {
-//                    mPlaceAttribution.setText("");
-                }*/
+
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 Log.e(TAG, "Error: Status = " + status.toString());
