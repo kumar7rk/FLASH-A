@@ -291,15 +291,26 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         SmsManager manager = SmsManager.getDefault();
 
-        if (!etaS.equals("NA")) etaS = " ETA home "+etaS;
+        boolean sendEta = preferences.getBoolean(getResources().getString(R.string.settings_send_eta),false);
+        boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
+
+        if (!etaS.equals("NA")&&sendEta) etaS = " ETA home "+etaS+".";
         else etaS= "";
 
+        if (!landmark){
+            placeS = "";
+        }
+        else{
+            placeS = "Near "+placeS;
+            address = " ("+ address + ").";
+        }
+
 //        String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
-        String message = "Near "+ placeS+ " ("+ address + ")"+ etaS;
+        String message = placeS+ address+ etaS;
         manager.sendTextMessage(sender,null, message, null, null);
 
-        boolean noti = preferences.getBoolean("notification",true);
-        if (noti)
+        boolean notification = preferences.getBoolean(getResources().getString(R.string.settings_notification),false);
+        if (notification)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
