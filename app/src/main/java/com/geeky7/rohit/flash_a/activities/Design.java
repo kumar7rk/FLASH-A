@@ -64,8 +64,8 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String add = "";
-    String place = "";
+    String address = "";
+    String placeS = "";
 
     Main m;
 
@@ -368,6 +368,7 @@ public class Design extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
             }
         });
+
     }
 
     @Override
@@ -419,7 +420,7 @@ public class Design extends AppCompatActivity {
         }
 
         builder.setTitle("Your Current Location")
-            .setMessage(add+" (Near" +place+")")
+            .setMessage(address +" (Near" + placeS +")")
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -435,7 +436,7 @@ public class Design extends AppCompatActivity {
             })
             .setIcon(android.R.drawable.ic_menu_mylocation);
 
-        if(!add.equals("")) builder.show();
+        if(!address.equals("")) builder.show();
         else{
             showSnackbar2(R.string.error_fetching_location, R.string.retry,
                     new View.OnClickListener() {
@@ -526,22 +527,29 @@ public class Design extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void sendSMS(String s,String name) {
+    private void sendSMS(String sender,String name) {
         SmsManager manager = SmsManager.getDefault();
-//        String message = "I am near "+ place+ " ("+ add+")";
-        String message = "Near "+ place+ " ("+ add+")";
-        manager.sendTextMessage(s,null, message, null, null);
+        boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
+        if (!landmark){
+            placeS = "";
+        }
+        else{
+            placeS = "Near "+ placeS;
+            address = " ("+ address + ").";
+        }
+        String message = placeS+ address;
+        manager.sendTextMessage(sender,null, message, null, null);
 
-        boolean noti = preferences.getBoolean("notification",true);
-        if (noti)
+        boolean notification = preferences.getBoolean(getResources().getString(R.string.settings_notification),false);
+        if (notification)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
-            add = intent.getStringExtra(CONSTANT.ADDRESS);
-            place = intent.getStringExtra(CONSTANT.PLACE_NAME);
+            address = intent.getStringExtra(CONSTANT.ADDRESS);
+            placeS = intent.getStringExtra(CONSTANT.PLACE_NAME);
         }
     };
 
