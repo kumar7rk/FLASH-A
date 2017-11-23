@@ -16,6 +16,7 @@ import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.MyApplication;
 
 public class BackgroundService extends Service {
+    public static final String TAG = CONSTANT.BACKGROUND_SERVICE;
     String message = "No text";
     String sender = "Empty";
     SharedPreferences preferences;
@@ -55,8 +56,7 @@ public class BackgroundService extends Service {
         SharedPreferences.Editor editor = preferences.edit();
         boolean service = preferences.getBoolean(CONSTANT.SERVICE,true);
         String keyword = preferences.getString(CONSTANT.KEYWORD,"Asha");
-        Log.i("Service",service+"");
-
+        Log.i(TAG,service+"");
         if(intent!=null)
             extras = intent.getExtras();
 
@@ -65,15 +65,15 @@ public class BackgroundService extends Service {
             message = extras.getString("Message");
             sender = extras.getString("Sender");
             editor.putString("sender",sender);
-            Log.i("Message","Message is:"+ message);
+            Log.i(TAG,"Message is:"+ message);
 
 //            if (("Where".equals(message) ||"Where ".equals(message) ||"Asha".equals(message) ||"Asha ".equals(message))        && locationPermission && m.isNetworkAvailable()&&service)
             // checks for the keyword; if matched start location service
             if (keyword.equals(message) && locationPermission && m.isNetworkAvailable()&&service)
             {
-                Log.i("Matched", "Location requested");
+                Log.i(TAG, "Location requested");
                 startService();
-                Log.i("BackgroundService", "Location Service initiated");
+                Log.i(TAG, "Location Service initiated");
                 stopSelf();
             }
         }
@@ -84,6 +84,6 @@ public class BackgroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("BackgroundService","onDestroy");
+        Log.i(TAG,"onDestroy");
     }
 }
