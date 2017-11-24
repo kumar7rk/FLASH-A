@@ -86,11 +86,17 @@ public class Design extends AppCompatActivity {
         findViewById();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
         final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
+        boolean firstTime = preferences.getBoolean(CONSTANT.APP_OPENED_FIRST_TIME,true);
+
+        if (firstTime){
+            startActivity(new Intent(this,TutorialActivity.class));
+            editor.putBoolean(CONSTANT.APP_OPENED_FIRST_TIME,false).apply();
+        }
 
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
-
         if (service) enableService();
         else disableService();
     }
