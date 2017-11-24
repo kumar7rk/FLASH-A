@@ -99,6 +99,14 @@ public class Design extends AppCompatActivity {
         // calling respective methods
         if (service) enableService();
         else disableService();
+
+        keyword_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!keyword.isAdded())
+                    keyword.show(getFragmentManager(),"Keyword");
+            }
+        });
     }
 
     // find view by id of all the views
