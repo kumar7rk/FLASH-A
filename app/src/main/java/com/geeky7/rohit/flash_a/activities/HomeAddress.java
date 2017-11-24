@@ -193,6 +193,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
                 // set the current address in the textView
                 homeAddress.setText(place.getAddress());
+
                 delete.setVisibility(View.VISIBLE);
                 // when the home address is updated; this method dynamically loads the mapView
                 refreshMap();
@@ -224,10 +225,15 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         }
 
         else{
-        LatLng g = getLocationFromAddress(homeAddressS);
-        mMap.addMarker(new MarkerOptions().position(g));
-        mMap.getCameraPosition();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
+
+            Main m = new Main(getApplicationContext());
+            LatLng g = null;
+            Log.i(CONSTANT.HOME_ADDRESS,homeAddressS);
+            if(m.isNetworkAvailable()) g = getLocationFromAddress(homeAddressS);
+            if (null==g)return;
+            mMap.addMarker(new MarkerOptions().position(g));
+            mMap.getCameraPosition();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
         }
     }
 
