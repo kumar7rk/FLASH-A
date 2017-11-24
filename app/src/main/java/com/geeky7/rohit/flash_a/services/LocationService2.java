@@ -178,6 +178,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 if (b){
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 //                    initiates places code to fetch the name of the nearby place
+                    mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     placesCode();
                     stopSelf();
                 }
@@ -217,6 +218,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     }
                     if (mCurrentLocation!=null) addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
+                    mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     // only call the code when the gps is turned on
                     if(b) placesCode();
 
@@ -290,7 +292,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     }
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
-        if (mCurrentLocation==null) mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mCurrentLocation==null) {
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
@@ -342,6 +346,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     public void setPlaceName(String s){
         placeName = s;
     }
+
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
@@ -354,15 +359,12 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         // Invoked by execute() method of this object
         @Override
         protected List<HashMap<String, String>> doInBackground(String... jsonData) {
-
-            List<HashMap<String, String>> places = null;
+//            List<HashMap<String, String>> places = null;
+            List<HashMap<String, String>> places = new ArrayList<>();
             Place_JSON placeJson = new Place_JSON();
-
             try {
                 jObject = new JSONObject(jsonData[0]);
-
                 places = placeJson.parse(jObject);
-
             } catch (Exception e) {
                 Log.d("Exception", e.toString());
             }
