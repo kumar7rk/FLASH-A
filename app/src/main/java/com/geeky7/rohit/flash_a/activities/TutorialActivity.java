@@ -87,4 +87,10 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .description("You can share your current location with anyone with just a few clicks.")
                 .build());
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
