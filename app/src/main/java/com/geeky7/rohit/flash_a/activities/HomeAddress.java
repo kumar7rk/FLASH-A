@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,7 +47,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     private static final String TAG = CONSTANT.HOME_ADDRESS;
 
     FloatingActionButton floatingActionButton;
-    private TextView homeAddress, info;
+    private TextView homeAddress;
     NestedScrollView scrollView;
     private ImageView delete;
 
@@ -71,14 +72,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
         // hides the delete button when there is no homeAddress set
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))) delete.setVisibility(View.INVISIBLE);
-
-        // set back button on actionBar
-
-        // commenting back arrow takes back to design class without this code
-        // working solely on parentActivity added in manifest
-
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //updates the map with a marker on the home address
         refreshMap();
@@ -118,7 +111,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     private void findViewByIds() {
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
-        info = (TextView) findViewById(R.id.homeAddress_tv1);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         delete = (ImageView) findViewById(R.id.delete_iv);
     }
@@ -141,15 +133,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
         try {
             address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
-                return null;
-            }
+            if (address==null) return null;
             Address location=address.get(0);
             location.getLatitude();
             location.getLongitude();
 
             p1 = new LatLng(location.getLatitude(), location.getLongitude() );
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -216,27 +205,59 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     // this is the overridden method which sets the marker and shoes the mapView along with the above method refreshMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         String homeAddressS = preferences.getString(CONSTANT.HOME_ADDRESS,getResources().getString(R.string.home_address_text));
+        // if home address is not set
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))||homeAddressS.equals("")){
         }
 
+        // We've a homeAddress. Let's go to place and say hello!!!!!
         else{
-
             Main m = new Main(getApplicationContext());
-            LatLng g = null;
             Log.i(CONSTANT.HOME_ADDRESS,homeAddressS);
-            if(m.isNetworkAvailable()) g = getLocationFromAddress(homeAddressS);
-            if (null==g)return;
-            mMap.addMarker(new MarkerOptions().position(g));
-            mMap.getCameraPosition();
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
+            if(m.isNetworkAvailable()){
+                Log.i(TAG,"Network is available");
+                LatLng g = getLocationFromAddress(homeAddressS);
+                if (null==g){
+                    Main.showToast("Error loading map.");
+                    Log.i(TAG,"Error loading map.");
+                    return;
+                }
+                mMap.addMarker(new MarkerOptions().position(g));
+                mMap.getCameraPosition();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
+            }
+            else{
+                showSnackbar(R.string.map_no_internet_home_address, R.string.retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String homeAddressS = preferences.getString(CONSTANT.HOME_ADDRESS,getResources().getString(R.string.home_address_text));
+                        Main m = new Main(getApplicationContext());
+                        LatLng g = null;
+                        if(m.isNetworkAvailable()) g = getLocationFromAddress(homeAddressS);
+                        Log.i(TAG,g+ " value");
+                        if (null==g){
+                            Main.showToast("Error loading map.");
+                            Log.i(TAG,"Error loading map.");
+                            return;
+                        }
+                        mMap.addMarker(new MarkerOptions().position(g));
+                        mMap.getCameraPosition();
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
+                    }
+                });
+            }
         }
     }
-
+    private void showSnackbar(final int mainTextStringId, final int actionStringId,
+                              View.OnClickListener listener) {
+        Snackbar.make(findViewById(android.R.id.content),
+                getString(mainTextStringId),
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(actionStringId), listener).show();
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
