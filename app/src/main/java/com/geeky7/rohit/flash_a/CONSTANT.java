@@ -19,4 +19,7 @@ public class CONSTANT {
     public static final String MESSAGE = "MESSAGE";
     public static final String KEYWORD = "KEYWORD";
     public static final String BACKGROUND_SERVICE = "BACKGROUND_SERVICE";
+    public static final String APP_OPENED_FIRST_TIME = "APP_OPENED_FIRST_TIME";
+
+
 }
