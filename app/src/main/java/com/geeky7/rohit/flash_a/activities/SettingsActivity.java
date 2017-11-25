@@ -13,6 +13,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // adds a fragment which extract a preference screen
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -23,6 +24,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            // getting the preference data from xml
             addPreferencesFromResource(R.xml.settings);
         }
     }
