@@ -117,6 +117,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
     // The method loads the map
     // called onCreate and when the homeAddress is updated
+    // this method calls onMapReady method- an overridden method
     private void refreshMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -130,7 +131,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         Geocoder coder = new Geocoder(this);
         List<Address> address;
         LatLng p1 = null;
-
         try {
             address = coder.getFromLocationName(strAddress,5);
             if (address==null) return null;
@@ -139,7 +139,6 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             location.getLongitude();
 
             p1 = new LatLng(location.getLatitude(), location.getLongitude() );
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -217,6 +216,9 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         else{
             Main m = new Main(getApplicationContext());
             Log.i(CONSTANT.HOME_ADDRESS,homeAddressS);
+            //checking if internet is available because showing marker required internet
+            // would cause force close if activity is started with no internet access
+            // bug founded by monkey yeaaahh!!! Been there done that (don't think about this too hard, alright, you gonna hurt yourself)
             if(m.isNetworkAvailable()){
                 Log.i(TAG,"Network is available");
                 LatLng g = getLocationFromAddress(homeAddressS);
@@ -229,6 +231,8 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 mMap.getCameraPosition();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
             }
+            // if no internet is availabe shows a snackbar with a button to retry
+            // it basically contains the same logic as above
             else{
                 showSnackbar(R.string.map_no_internet_home_address, R.string.retry, new View.OnClickListener() {
                     @Override
