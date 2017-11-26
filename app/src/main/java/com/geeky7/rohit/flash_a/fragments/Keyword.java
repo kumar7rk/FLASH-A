@@ -1,4 +1,4 @@
-// Let's you update the keyword; save it in sharePreference; share with your family friends via SMS
+// Let's you update the keyword; save it in sharePreferences; share with your family friends via SMS
 
 package com.geeky7.rohit.flash_a.fragments;
 
@@ -25,15 +25,16 @@ public class Keyword extends DialogFragment {
     AlertDialog.Builder alertDialog;
 
     public Keyword() {
-        if(!isAdded())
-            return;
+//        if(!isAdded())
+//            return;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        if(!isAdded())
-            return null;
+//        if(!isAdded())
+//            return null;
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
 
@@ -43,6 +44,7 @@ public class Keyword extends DialogFragment {
         keyword= (EditText) view.findViewById(R.id.keyword_et);
         keyword.setSelection(keyword.getText().length());
 
+        //on click save button save the keyword in the sharedPreferences
         alertDialog = new AlertDialog.Builder(getActivity())
         .setTitle("Edit Keyword")
         .setView(inflater.inflate(R.layout.activity_keyword, null))
