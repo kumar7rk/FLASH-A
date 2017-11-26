@@ -37,6 +37,7 @@ import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.fragments.Keyword;
 import com.geeky7.rohit.flash_a.services.LocationService2;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
