@@ -34,6 +34,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
+            // going back to design activity when the back arrow is clicked
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
