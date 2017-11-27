@@ -20,7 +20,6 @@ public class BackgroundService extends Service {
     String message = "No text";
     String sender = "Empty";
     SharedPreferences preferences;
-    boolean locationPermission = true;
     Main m ;
 
     public BackgroundService() {
@@ -51,12 +50,11 @@ public class BackgroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        locationPermission = preferences.getBoolean("locationPermission",false);
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
         boolean service = preferences.getBoolean(CONSTANT.SERVICE,true);
         String keyword = preferences.getString(CONSTANT.KEYWORD,"Asha");
-        Log.i(TAG,service+"");
+//        Log.i(TAG,service+"");
         if(intent!=null)
             extras = intent.getExtras();
 
@@ -65,6 +63,7 @@ public class BackgroundService extends Service {
             message = extras.getString("Message");
             sender = extras.getString("Sender");
             editor.putString("sender",sender);
+            editor.apply();
             Log.i(TAG,"Message is:"+ message);
 
             //removing trailing spaces- when selected text from suggested words, a space at the last is automatically added
@@ -73,20 +72,13 @@ public class BackgroundService extends Service {
 
             // checks for the keyword, location permission, internet and if service is enabled from the app
             // if matched start location service
-
-
-            if (keyword.equals(message) && locationPermission && m.isNetworkAvailable()&&service)
-            {
-//                Log.i(TAG, "Location requested");
+            if (keyword.equals(message) && m.isNetworkAvailable()&&service){
                 startService();
-//                Log.i(TAG, "Location Service initiated");
                 stopSelf();
             }
         }
-        editor.apply();
         return START_NOT_STICKY;
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
