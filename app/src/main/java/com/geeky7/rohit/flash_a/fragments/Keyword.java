@@ -77,8 +77,6 @@ public class Keyword extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!isAdded())
-            return ;
         keyword = (EditText) getDialog().findViewById(R.id.keyword_et);
         // get the stored keyword
         keyword.setText(preferences.getString(CONSTANT.KEYWORD,"Asha"));
