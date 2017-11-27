@@ -12,6 +12,7 @@ import android.view.View;
 import com.geeky7.rohit.flash_a.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
+import agency.tango.materialintroscreen.MessageButtonBehaviour;
 import agency.tango.materialintroscreen.SlideFragmentBuilder;
 import agency.tango.materialintroscreen.animations.IViewTranslation;
 
@@ -37,7 +38,7 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
-                        .image(R.drawable.tutorial1)
+                        .image(R.drawable.tutorial_fragment_1)
                         .title("Stay close to your close ones!")
                         .description("Whether you're driving or away from your phone you'll always be close to them with ASHA app.")
                         .build()
@@ -54,9 +55,11 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
+                .image(R.drawable.tutorial_fragment_2b)
                 .title("Receive an SMS. Share location.")
+//                .title("Receive location request in SMS. Automatically share your location.")
                 .description("\n Whenever you receive an SMS with your chosen keyword. Your location will be shared with the sender of the message. " +
-                        "\n"+
+                        "\n\n"+
                         "You'll be notified when your location is shared")
                 .build());
 
@@ -65,27 +68,28 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
-//                        .image(R.drawable.img_equipment)
+                        .image(R.drawable.tutorial_fragment_3)
                         .title("Stay safe & in control")
                         .description("You can set your home address to send home ETA, edit keyword for your convenience." +
-                                "\n"+
-                                "You're in complete control when the app runs. You can turn in off with just one click when you want privacy.")
+                                "\n\n"+
+                                "You're in complete control when the app runs. You can enable or disable with a click when you want privacy.")
                         .build()
-                /*,
-                new MessageButtonBehaviour(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showMessage("Try us!");
-                    }
-                }, "Tools")*/
                 );
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.fourth_slide_background)
                 .buttonsColor(R.color.fourth_slide_buttons)
+                .image(R.drawable.tutorial_fragment_4)
                 .title("Running into an emergency?")
                 .description("You can share your current location with anyone with just a few clicks.")
-                .build());
+                .build()
+                ,
+                new MessageButtonBehaviour(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                }, "Watch video!")
+                );
     }
 
     @Override
