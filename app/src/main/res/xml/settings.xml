@@ -3,7 +3,7 @@
         android:id="@+id/settings_send_eta"
         android:title="Send ETA"
         android:key="@string/settings_send_eta"
-        android:summary="Include ETA to home"
+        android:summary="When you location is shared also send expected time of arrival to home"
         />
     <CheckBoxPreference
         android:id="@+id/settings_notification"
@@ -15,6 +15,6 @@
         android:id="@+id/settings_landmark"
         android:title="Include Landmark"
         android:key="@string/settings_landmark"
-        android:summary="Include any nearby landmark of up to 500 metres"
+        android:summary="Include a nearby landmark (up to 500 metres) in the sms"
         />
 </PreferenceScreen>
