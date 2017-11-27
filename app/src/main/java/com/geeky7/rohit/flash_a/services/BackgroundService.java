@@ -67,8 +67,14 @@ public class BackgroundService extends Service {
             editor.putString("sender",sender);
             Log.i(TAG,"Message is:"+ message);
 
+            //removing trailing spaces- when selected text from suggested words, a space at the last is automatically added
+            keyword = keyword.trim();
+            message = message .trim();
+
             // checks for the keyword, location permission, internet and if service is enabled from the app
             // if matched start location service
+
+
             if (keyword.equals(message) && locationPermission && m.isNetworkAvailable()&&service)
             {
 //                Log.i(TAG, "Location requested");
