@@ -35,6 +35,8 @@ public class TutorialActivity extends MaterialIntroActivity {
         " +
         "ASHA sends your location, including address and landmark, on receiving your customised keyword in an SMS.*/
                 //  Html.fromHtml("<b>" + myText + "</b>"
+
+        //It works! It's that simple!
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
@@ -42,16 +44,8 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .title("Stay close to your close ones!")
                         .description("Whether you're driving or away from your phone you'll always be close to them with ASHA app.")
                         .build()
-              /*  ,
-                new MessageButtonBehaviour(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showMessage("We provide solutions to make you love your work");
-                    }
-                }, "Work with love")*/
                 );
 
-        //It works! It's that simple!
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
@@ -62,8 +56,6 @@ public class TutorialActivity extends MaterialIntroActivity {
                         "\n\n"+
                         "You'll be notified when your location is shared")
                 .build());
-
-//        addSlide(new CustomSlide());
 
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.third_slide_background)
@@ -80,8 +72,8 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .backgroundColor(R.color.fourth_slide_background)
                 .buttonsColor(R.color.fourth_slide_buttons)
                 .image(R.drawable.tutorial_fragment_4)
-                .title("Running into an emergency?")
-                .description("You can share your current location with anyone with just a few clicks.")
+                .title("Running into an emergency or need to share your location?")
+                .description("You can send your current location including address and nearby landmark via SMS with anyone with just a few clicks.")
                 .build()
                 ,
                 new MessageButtonBehaviour(new View.OnClickListener() {
