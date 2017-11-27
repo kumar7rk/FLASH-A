@@ -52,7 +52,7 @@ public class Keyword extends DialogFragment {
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        String keywordS = keyword.getText().toString();
+                        String keywordS = keyword.getText().toString().trim();
                         editor.putString(CONSTANT.KEYWORD,keywordS);
                         editor.apply();
                         Main.showToast("Keyword updated :)");
