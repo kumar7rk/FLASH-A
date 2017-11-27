@@ -31,7 +31,7 @@ public class SMSReceiver extends BroadcastReceiver {
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();
                     senderNum = phoneNumber;
                     message = currentMessage.getDisplayMessageBody();
-                    Log.i("SmsReceiver", "senderNum: " + senderNum + "; message: " + message);
+                    Log.i("SmsReceiver", "Sender: " + senderNum + "; Message: " + message);
                 }
             }
         } catch (Exception e) {
