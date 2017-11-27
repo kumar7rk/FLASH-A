@@ -25,15 +25,10 @@ public class Keyword extends DialogFragment {
     AlertDialog.Builder alertDialog;
 
     public Keyword() {
-//        if(!isAdded())
-//            return;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-//        if(!isAdded())
-//            return null;
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
@@ -64,15 +59,15 @@ public class Keyword extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 })
-                //share button to share the keyword via sms
-                // open the default messaging app with pre added text with keyword
+        //share button to share the keyword via sms
+        // open the default messaging app with pre added text with keyword
         .setNeutralButton(R.string.share, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String keyword = preferences.getString(CONSTANT.KEYWORD,"");
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                 sendIntent.setData(Uri.parse("sms:"));
-                sendIntent.putExtra("sms_body", "Get my current location by messaging me the secret keyword" + "\"" + keyword+"\""+". This great app ASHA keeps us connected. http://bit.ly/get-asha");
+                sendIntent.putExtra("sms_body", "Get my current location by messaging me the secret keyword " + "\"" + keyword+"\""+".Shhhh. This great app ASHA keeps us connected. http://bit.ly/get-asha");
                 startActivity(sendIntent);
             }
         });
