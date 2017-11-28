@@ -94,7 +94,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         // get address from the lat lng
         geocoder = new Geocoder(this, Locale.getDefault());
 
-        Log.i(TAG,"LocationService Created");
+        Log.i(TAG,"LocationService2 Created");
     }
     @Override
     public IBinder onBind(Intent intent) {
@@ -250,8 +250,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // this method gets the address and lets you make selection what parameters of address to include
     private String getAddress() {
-        for (int i = 0; i< addresses.size();i++)
-            Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));
+        /*for (int i = 0; i< addresses.size();i++)
+            Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));*/
 
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
@@ -265,13 +265,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 //        String number = addresses.get(0).getFeatureName();
 //        String council = addresses.get(0).getSubAdminArea();
 //         null- getSubLocality(),getPremises(),getThoroughfare()
-
-//        Log.i("address","City: "+city);
-//        Log.i("address","State: "+state);
-//        Log.i("address","Country: "+country);
-//        Log.i("address","street: "+street);
-//        return street+", "+ city;
-
         return address;
     }
 
@@ -307,7 +300,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
         sb.append("&sensor=true");
         sb.append("&key=" + number1);
-        Log.i(TAG+""+"Places", sb.toString());
+        Log.i(TAG+""+" PlacesURL", sb.toString());
         return sb;
     }
 
@@ -366,7 +359,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 jObject = new JSONObject(jsonData[0]);
                 places = placeJson.parse(jObject);
             } catch (Exception e) {
-                Log.d("Exception", e.toString());
             }
             return places;
         }
@@ -470,7 +462,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             try {
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
-                Log.i(TAG+""+"Background Task", e.toString());
             }
             return data;
         }
@@ -478,7 +469,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         protected void onPostExecute(String result) {
             ParserTask parserTask = new ParserTask(context);
             parserTask.execute(result);
-            Log.i(TAG+""+"PlacesTaskOnPostExecute", result + "");
         }
     }
 
