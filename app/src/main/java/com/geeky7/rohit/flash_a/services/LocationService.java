@@ -297,15 +297,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (!etaS.equals("NA")&&sendEta) etaS = " ETA home "+etaS+".";
         else etaS= "";
 
-        if (!landmark){
+        if (!landmark)
             placeS = "";
-        }
         else{
             placeS = "Near "+placeS;
             address = " ("+ address + ").";
         }
 
-//        String message = "I am near "+ placeS+ " ("+ address + ")"+ etaS;
         String message = placeS+ address+ etaS;
         manager.sendTextMessage(sender,null, message, null, null);
 
