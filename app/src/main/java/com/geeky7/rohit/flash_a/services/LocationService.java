@@ -387,14 +387,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
 
-        String number1 = getApplicationContext().getString(R.string.API_KEY);
+        String key = getApplicationContext().getString(R.string.API_KEY);
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius="+mRadius);
         sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
         sb.append("&sensor=true");
-        sb.append("&key=" + number1);
+        sb.append("&key=" + key);
         Log.i(TAG+""+"Places", sb.toString());
         return sb;
     }
@@ -430,25 +430,28 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         return data;
     }
 
-
+    // sets the name of the place found in a global variable and increments a counter which counts if both the async tasks are finished- to sendSMS
+    // called from onpostExecute of parser task
     public void setPlaceName(String s){
         placeName = s;
         counter++;
         bothAsync();
     }
 
+    //sets the caluclated eta to global variable and increments a counter which counts if both the async tasks are finshed - to sendSMS
+    // called from onPostExecute parsetTask for eta
     public void setDurationEta(String s){
         durationEta = s;
         counter++;
         bothAsync();
     }
 
+    // checks if both async tasks are completed if so sendSMS
     public void bothAsync(){
         updateLogAndToast("BothAsync"+counter);
         if(counter==2)
             sendSMS(placeName,durationEta);
     }
-
 
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
@@ -588,10 +591,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
     }
 
-    /*
-    ETA AsyncTask code
-     */
-
+    //this method calls the eta async task
     public void etaCode(){
 
         // Getting URL to the Google Directions API
@@ -600,6 +600,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (url.equals("")) setDurationEta("NA");
         else new DownloadTask().execute(url);
     }
+    // called to build eta url from etaCode
     public String buildEtaURL(){
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -738,6 +739,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     }
 
+    // sends a broadcast
+    // called when the eta and palces code have been called
+    // purpose is to send address and place name to
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
@@ -746,6 +750,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    //updated the log and the toast message
+    //why is this method here? it helps to suppress all the toast messaged used during the testing by just commenting one LOC
     public void updateLogAndToast(String s){
         Log.i(TAG,s);
 //        Main.showToast(s);
