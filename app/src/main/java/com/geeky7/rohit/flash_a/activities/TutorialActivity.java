@@ -40,7 +40,7 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
-                        .image(R.drawable.tutorial_fragment_1)
+                        .image(R.drawable.tutorial_slide_1)
                         .title("Stay close to your dear ones!")
                         .description("Whether you're driving or could not reach your your phone, you'll always be closer to them with ASHA app.")
                         .build()
@@ -49,7 +49,7 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
-                .image(R.drawable.tutorial_fragment_2b)
+                .image(R.drawable.tutorial_slide_2)
                 .title("Receive an SMS request. Share location.")
 //                .title("Receive location request in SMS. Automatically share your location.")
                 .description("\n Whenever you receive an SMS with your chosen keyword. Your current location will be shared with them. " +
@@ -60,7 +60,7 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
-                        .image(R.drawable.tutorial_fragment_3a)
+                        .image(R.drawable.tutorial_slide_3)
                         .title("Stay safe & in control")
                         .description("You can set your home address to send ETA home , edit keyword for your convenience." +
                                 "\n\n"+
@@ -71,7 +71,7 @@ public class TutorialActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.fourth_slide_background)
                 .buttonsColor(R.color.fourth_slide_buttons)
-                .image(R.drawable.tutorial_fragment_4a)
+                .image(R.drawable.tutorial_slide_4)
                 .title("Running into an emergency?")
                 .description("No worries! You can share your current location including address and nearby landmark via SMS in under 5 seconds.")
                 .build()
