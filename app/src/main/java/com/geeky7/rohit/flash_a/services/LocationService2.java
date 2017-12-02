@@ -167,30 +167,30 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
+//        boolean internet = m.isNetworkAvailable();
+//        Main.showToast(internet+"");
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        // if location null, get last known location, updating the time so that we don't show quite old location
-        if (mCurrentLocation==null){
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            try {
-                // if the location service is on get that address and start places code
-                if (b){
-                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-//                    initiates places code to fetch the name of the nearby place
+        boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        try {
+            // if the location service and internet is on get that address and start places code
+            if (gps/*&&internet*/){
+                // if location null, get last known location, updating the time so that we don't show quite old location
+                if (mCurrentLocation==null)
                     mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    placesCode();
-                    stopSelf();
-                }
-                // when gps if off
-                // registers a receiver when the status of the gps changes
-                else{
-                    getApplicationContext().registerReceiver(gpsReceiver,
-                            new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+//                initiates places code to fetch the name of the nearby place
+                mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                placesCode();
+                stopSelf();
             }
+            // when gps if off
+            // registers a receiver when the status of the gps changes
+            else{
+                getApplicationContext().registerReceiver(gpsReceiver,
+                        new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     // whenever the gps status changes this code would run
@@ -201,42 +201,41 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-                //Do your stuff on GPS status change
-                try {
-                    if(!mGoogleApiClient.isConnected())
-                        stopSelf();
-                    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            //Do your stuff on GPS status change
+        if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+            try {
+                if(!mGoogleApiClient.isConnected())
+                    stopSelf();
 
-                    Thread.sleep(2000);
-                    // in case the app force closes when the gos is off and turned on later
-                    // uncomment the below code
+                final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                boolean internet = m.isNetworkAvailable();
+
+                Thread.sleep(2000);
+
+                // only call the code when the gps is turned on
+                if(gps&&internet){
                     if (mCurrentLocation==null){
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
-                    if (mCurrentLocation!=null) addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-
-                    mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    // only call the code when the gps is turned on
-                    if(b) placesCode();
-
-                    stopSelf();
-
-                    // register a broadcast receiver - for whenever the gos is turned on/off
-                    // we do some work when it's status is turned on
-                    getApplicationContext().unregisterReceiver(gpsReceiver);
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    placesCode();
                 }
-                catch(IOException e) {
-                    e.printStackTrace();
-                }
-                catch (SecurityException se){
-                    se.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                stopSelf();
+                // register a broadcast receiver - for whenever the gos is turned on/off
+                // we do some work when it's status is turned on
+                getApplicationContext().unregisterReceiver(gpsReceiver);
             }
+            catch(IOException e) {
+                e.printStackTrace();
+            }
+            catch (SecurityException se){
+                se.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         }
     };
 
@@ -271,29 +270,33 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+//        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         String sb = null;
         try {
-            if(b){
+//            if(b){
                 sb = buildPlacesURL().toString();
                 new PlacesTask().execute(sb);
-            }
+//            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
+        double mLatitude = 0;
+        double mLongitude = 0;
+        int mRadius = 500;
+        String number1 = getApplicationContext().getString(R.string.API_KEY);
+
         if (mCurrentLocation==null) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
-        double mLatitude = mCurrentLocation.getLatitude();
-        double mLongitude = mCurrentLocation.getLongitude();
-        int mRadius = 500;
 
-        String number1 = getApplicationContext().getString(R.string.API_KEY);
+        if(!m.isNetworkAvailable()) return new StringBuilder(CONSTANT.NO_INTERNET);
 
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius="+mRadius);
