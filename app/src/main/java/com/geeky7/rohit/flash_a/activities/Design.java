@@ -212,10 +212,9 @@ public class Design extends AppCompatActivity {
 
     // just to show to user why this permission is required
     private void showSnackbar(final String text) {
-        View container = findViewById(R.id.main_activity_container);
-        if (container != null) {
-            Snackbar.make(container, text, Snackbar.LENGTH_LONG).show();
-        }
+        Snackbar.make(findViewById(android.R.id.content),text,
+                Snackbar.LENGTH_LONG)
+                .show();
     }
 
     // This method is called the first time the app is installed
@@ -390,8 +389,13 @@ public class Design extends AppCompatActivity {
             case R.id.action_current_location:
                 final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                boolean internet = m.isNetworkAvailable();
+
+                //if no internet show a snackbar informing a user
+                if (!internet)
+                    showSnackbar("No internet Connectivity. Please turn on internet");
                 // if the gps is off
-                if (!b) {
+                else if (!b) {
                     // calls this method which open the dialog which ask to enable location
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
