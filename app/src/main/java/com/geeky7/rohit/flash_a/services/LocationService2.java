@@ -219,7 +219,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
-                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    if (mCurrentLocation!=null)
+                        addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                     placesCode();
                 }
                 stopSelf();
