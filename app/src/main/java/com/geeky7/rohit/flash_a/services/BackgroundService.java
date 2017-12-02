@@ -72,7 +72,12 @@ public class BackgroundService extends Service {
 
             // checks for the keyword, location permission, internet and if service is enabled from the app
             // if matched start location service
-            if (keyword.equals(message) && m.isNetworkAvailable()&&service){
+
+            boolean internet = m.isNetworkAvailable();
+            if (!internet)
+                m.pugNotification("Location requested","No internet Connectivity.","Please turn on internet");
+
+            if (keyword.equals(message) && internet && service){
                 startService();
                 stopSelf();
             }
