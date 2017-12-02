@@ -95,10 +95,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onCreate() {
         super.onCreate();
 
+        m = new Main(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         sender = preferences.getString("sender","");
 
-        m = new Main(getApplicationContext());
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -184,40 +184,38 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        try {
+            // if the location service and internet is on get that address and start places code
+            if (gps/*&&internet*/){
+                // if location null, get last known location, updating the time so that we don't show quite old location
+                if (mCurrentLocation==null)
+                    mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        // if location null, get last known location, updating the time so that we don't show quite old location
-        if (mCurrentLocation==null){
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            try {
-                // if the location service is on get that address and start places code
-                if (b){
-                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
-//                    initiates places code to fetch the name of the nearby place
-                    placesCode();
-                    etaCode();
-                    sendBroadcast();
-                    // stop itself after message is sent
-                    stopSelf();
-                }
-                // when gps if off
-                // registers a receiver when the status of the gps changes
-                else{
-                    String name = sender;
-                    if (checkContactPermission()){
-                        name = getContactName(sender,getApplicationContext());
-                    }
-                    Log.i(TAG, "gps off");
-                    m.pugNotification("Location Request from "+name,"Turn GPS on","");
-
-                    getApplicationContext().registerReceiver(gpsReceiver,
-                            new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+//              initiates places code to fetch the name of the nearby place
+                placesCode();
+                etaCode();
+                sendBroadcast();
+                // stop itself after message is sent
+                stopSelf();
             }
-//            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+            // when gps if off
+            // registers a receiver when the status of the gps changes
+            else{
+                String name = sender;
+                if (checkContactPermission()){
+                    name = getContactName(sender,getApplicationContext());
+                }
+                Log.i(TAG, "gps off");
+                m.pugNotification("Location Request from "+name,"Turn GPS on","");
+
+                getApplicationContext().registerReceiver(gpsReceiver,
+                        new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     // whenever the gps status changes this code would run
@@ -228,41 +226,44 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-                //Do your stuff on GPS status change
-                try {
-                    if(!mGoogleApiClient.isConnected())
-                        stopSelf();
-                    Thread.sleep(2000);
-                    // in case the app force closes when the gos is off and turned on later
-                    // uncomment the below code
+        if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
+
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean internet = m.isNetworkAvailable();
+
+        //Do your stuff on GPS status change
+            try {
+                if(!mGoogleApiClient.isConnected())
+                    stopSelf();
+                Thread.sleep(2000);
+                // in case the app force closes when the gos is off and turned on later
+                // uncomment the below code
+                if(gps&&internet){
                     if (mCurrentLocation==null){
-                        /*Thread.sleep(2000);
-                        Thread.sleep(2000);*/
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
-                    if (mCurrentLocation!=null)
-                        addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                     placesCode();
                     etaCode();
-                    sendBroadcast();
-                    stopSelf();
+                }
+                sendBroadcast();
+                stopSelf();
 
-                    // register a broadcast receiver - for whenever the gps is turned on/off
-                    // we do some work when it's status is turned on
-                    getApplicationContext().unregisterReceiver(gpsReceiver);
-                }
-                 catch(IOException e) {
-                    e.printStackTrace();
-                }
-                catch (SecurityException se){
-                    se.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                // register a broadcast receiver - for whenever the gps is turned on/off
+                // we do some work when it's status is turned on
+                getApplicationContext().unregisterReceiver(gpsReceiver);
             }
+             catch(IOException e) {
+                e.printStackTrace();
+            }
+            catch (SecurityException se){
+                se.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         }
     };
 
