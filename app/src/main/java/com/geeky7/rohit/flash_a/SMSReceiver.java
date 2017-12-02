@@ -1,4 +1,5 @@
 // This class receives an incoming message, put the content in a intent and sends it to the backgroundService
+// Along with that on 2q12 the receiver was would also start when a device completes boot
 package com.geeky7.rohit.flash_a;
 
 import android.content.BroadcastReceiver;
