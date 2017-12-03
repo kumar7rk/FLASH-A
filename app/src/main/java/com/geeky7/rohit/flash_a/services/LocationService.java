@@ -247,8 +247,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                     placesCode();
                     etaCode();
+                    sendBroadcast();
                 }
-                sendBroadcast();
                 stopSelf();
 
                 // register a broadcast receiver - for whenever the gps is turned on/off
