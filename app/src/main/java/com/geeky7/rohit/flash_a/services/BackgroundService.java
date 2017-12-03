@@ -4,8 +4,12 @@
 package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -68,15 +72,18 @@ public class BackgroundService extends Service {
 
             //removing trailing spaces- when selected text from suggested words, a space at the last is automatically added
             keyword = keyword.trim();
-            message = message .trim();
+            message = message.trim();
 
             // checks for the keyword, location permission, internet and if service is enabled from the app
             // if matched start location service
 
             boolean internet = m.isNetworkAvailable();
-            if (!internet)
+            if (keyword.equals(message) && !internet && service){
                 m.pugNotification("Location requested","No internet Connectivity.","Please turn on internet");
 
+                getApplicationContext().registerReceiver(internetReceiver,
+                        new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+            }
             if (keyword.equals(message) && internet && service){
                 startService();
                 stopSelf();
@@ -84,6 +91,21 @@ public class BackgroundService extends Service {
         }
         return START_NOT_STICKY;
     }
+
+    private BroadcastReceiver internetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().matches("android.net.conn.CONNECTIVITY_CHANGE")) {
+
+                if (m.isNetworkAvailable()){
+                    Main.showToast("Internet status seems to be changed? Is it correct? Yes! Crazy");
+                    startService();
+                    stopSelf();
+                }
+
+            }
+        }
+    };
     @Override
     public void onDestroy() {
         super.onDestroy();
