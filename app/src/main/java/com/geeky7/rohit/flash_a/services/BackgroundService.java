@@ -73,30 +73,36 @@ public class BackgroundService extends Service {
             //removing trailing spaces- when selected text from suggested words, a space at the last is automatically added
             keyword = keyword.trim();
             message = message.trim();
-
-            // checks for the keyword, location permission, internet and if service is enabled from the app
-            // if matched start location service
-
             boolean internet = m.isNetworkAvailable();
-            if (keyword.equals(message) && !internet && service){
-                m.pugNotification("Location requested","No internet Connectivity.","Please turn on internet");
-
-                getApplicationContext().registerReceiver(internetReceiver,
-                        new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-            }
-            if (keyword.equals(message) && internet && service){
-                startService();
-                stopSelf();
+            // message is the keyword and service is enabled in the app then we are interested
+            if (keyword.equals(message) && service){
+                // if no internet show a notification to turn internet on
+                // and register the network connected broadcast receiver
+                if (!internet){
+                    m.pugNotification("Location requested","No internet Connectivity.","Please turn on internet");
+                    getApplicationContext().registerReceiver(internetReceiver,
+                            new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                }
+                // if internet is available then start locationService
+                // and stop background service
+                else if (internet){
+                    startService();
+                    stopSelf();
+                }
             }
         }
         return START_NOT_STICKY;
     }
 
+    // runs when internet status is changed- that is turned on if it was off and vice versa
+    // we are only interested if the internet is turned on but was off when the location was requested
     private BroadcastReceiver internetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().matches("android.net.conn.CONNECTIVITY_CHANGE")) {
 
+                // if internet is available start locationService
+                // and stop backgroundService
                 if (m.isNetworkAvailable()){
                     Main.showToast("Internet status seems to be changed? Is it correct? Yes! Crazy");
                     startService();
