@@ -12,7 +12,6 @@ import android.view.View;
 import com.geeky7.rohit.flash_a.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
-import agency.tango.materialintroscreen.MessageButtonBehaviour;
 import agency.tango.materialintroscreen.SlideFragmentBuilder;
 import agency.tango.materialintroscreen.animations.IViewTranslation;
 
