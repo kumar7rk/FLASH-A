@@ -75,12 +75,12 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .title("Running into an emergency?")
                 .description("No worries! You can share your current location including address and nearby landmark via SMS in under 5 seconds.")
                 .build()
-                ,
+                /*,
                 new MessageButtonBehaviour(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
-                }, "Watch video!")
+                }, "Stay Connected!")*/
                 );
     }
 
