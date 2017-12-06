@@ -5,6 +5,7 @@
 
 package com.geeky7.rohit.flash_a.services;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -270,7 +271,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         String sb = null;
@@ -284,6 +285,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         }
     }
     // builds the url for fetching the nearby places
+    @SuppressLint("LongLogTag")
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = 0;
         double mLongitude = 0;
@@ -384,7 +386,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // gets the details of the place to let you choose which parameters of place you want to show
     public class Place_JSON {
-
         /**
          * Receives a JSONObject and returns a list
          */
