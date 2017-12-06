@@ -35,7 +35,6 @@ public class TutorialActivity extends MaterialIntroActivity {
         "ASHA sends your location, including address and landmark, on receiving your customised keyword in an SMS.*/
                 //  Html.fromHtml("<b>" + myText + "</b>"
 
-        //It works! It's that simple!
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
