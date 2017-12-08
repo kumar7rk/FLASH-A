@@ -211,6 +211,7 @@ public class Design extends AppCompatActivity {
     }
 
     // just to show to user why this permission is required
+    // no button snackbar
     private void showSnackbar(final String text) {
         Snackbar.make(findViewById(android.R.id.content),text,
                 Snackbar.LENGTH_LONG)
@@ -277,7 +278,7 @@ public class Design extends AppCompatActivity {
         }
     }
 
-    // show a Snackbar
+    // show a Snackbar indefinitely. IDK why
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -286,6 +287,7 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
+    // same as above but only long length of
     private void showSnackbar2(final int mainTextStringId, final int actionStringId,
                                View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -496,6 +498,8 @@ public class Design extends AppCompatActivity {
             }
         });
     }
+    // checks for the name of the contact, calls sendSMS and also buildCurrentLocationDialog
+    // yeah a lot of works looks like never had problems with this part of the code
     @Override
     protected void onActivityResult ( int requestCode, int resultCode, Intent data){
 
@@ -535,6 +539,8 @@ public class Design extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    // sends an SMS. Enough said
+    // no eta just address and landmark
     private void sendSMS(String sender,String name) {
         SmsManager manager = SmsManager.getDefault();
         boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
@@ -553,6 +559,8 @@ public class Design extends AppCompatActivity {
             m.pugNotification("Location shared","Your current location shared with",name);
     }
 
+    // when the sendBroadcast method is called in locationService this code runs
+    // gets the address and the place name
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -561,6 +569,8 @@ public class Design extends AppCompatActivity {
         }
     };
 
+    // not interested in any updated when app is closed
+    // unregister the above receiver
     protected void onPause (){
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
