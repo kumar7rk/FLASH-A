@@ -1,7 +1,6 @@
-//This is the core class which gets the location convert it into address and then find a close placeOfInterest
-// compiles a message and sends it to the sender of the message
-// Yeah that's a lot of work
-// And this code is only used by the action bar button- current location
+// This class gets the location convert it into address and find a landmark
+// code only used by the action bar button- current location
+// class is called when the gps and internet is on and the app is opened
 
 package com.geeky7.rohit.flash_a.services;
 
@@ -60,17 +59,17 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mlocationRequest;
     private Location mCurrentLocation;
+    private Geocoder geocoder;
 
     static Context context;
 
     Main m;
 
-    Geocoder geocoder;
     List<Address> addresses;
 
     SharedPreferences preferences;
-    String sender = "";
 
+    String sender = "";
     String placeName;
 
     public LocationService2() {
@@ -173,7 +172,10 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         try {
-            // if the location service and internet is on get that address and start places code
+            // if the location service is on get that address and start places code
+            // not checking for internet because to connect to playServices the internet is required anyway. Simple logic.
+            // but still we have internet in comment- next time you find this comment and there has been no crash because of this
+            // delete this comment and relevant code too
             if (gps/*&&internet*/){
                 // if location null, get last known location, updating the time so that we don't show quite old location
                 if (mCurrentLocation==null)
@@ -184,8 +186,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 placesCode();
                 stopSelf();
             }
-            // when gps if off
-            // registers a receiver when the status of the gps changes
+            // when gps if off registers a receiver listening for status of the gps to change
             else{
                 getApplicationContext().registerReceiver(gpsReceiver,
                         new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
@@ -214,7 +215,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
                 Thread.sleep(2000);
 
-                // only call the code when the gps is turned on
+                // only call the code when the gps and internet is turned on
                 if(gps&&internet){
                     if (mCurrentLocation==null){
                         Thread.sleep(2000);
@@ -478,6 +479,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     }
 
     //sends the broadcast when the place name is fetched
+    // the broadcast is registered in the class where the data is required
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
