@@ -573,6 +573,7 @@ public class Design extends AppCompatActivity {
     // unregister the above receiver
     protected void onPause (){
         super.onPause();
+        stopService(new Intent(this, LocationService2.class));
         LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
     }
 
