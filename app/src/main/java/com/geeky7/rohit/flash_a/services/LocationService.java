@@ -237,10 +237,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 if(!mGoogleApiClient.isConnected())
                     stopSelf();
                 Thread.sleep(2000);
-                // in case the app force closes when the gos is off and turned on later
+                // in case the app force closes when the gps is off and turned on later
                 // uncomment the below code
                 if(gps&&internet){
                     if (mCurrentLocation==null){
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
