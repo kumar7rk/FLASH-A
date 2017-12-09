@@ -307,7 +307,8 @@ public class Design extends AppCompatActivity {
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
 //        if (b)
-            startService(new Intent(this, LocationService2.class));
+        stopService(new Intent(this, LocationService2.class));
+        startService(new Intent(this, LocationService2.class));
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
@@ -395,7 +396,7 @@ public class Design extends AppCompatActivity {
 
                 //if no internet show a snackbar informing a user
                 if (!internet)
-                    showSnackbar("No internet Connectivity. Please turn on internet");
+                    showSnackbar("No internet Connectivity. Please connect to a network and retry");
                 // if the gps is off
                 else if (!b) {
                     // calls this method which open the dialog which ask to enable location
@@ -441,7 +442,7 @@ public class Design extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
                     intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                     startActivityForResult(intent, CONTACT_REQUEST_CODE);
-                    Main.showToast("Sharing location, select contact");
+                    Main.showToast("Sharing location. Select contact");
                 }
             })
             .setIcon(android.R.drawable.ic_menu_mylocation);
@@ -529,6 +530,13 @@ public class Design extends AppCompatActivity {
                 case GPS_REQUEST_CODE:
                     stopService(new Intent(this, LocationService2.class));
                     startService(new Intent(this, LocationService2.class));
+                    try {
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     // gps dialog was shown and the user clicked ok build dialog
                     buildDialogCurrentLocation();
                     break;
