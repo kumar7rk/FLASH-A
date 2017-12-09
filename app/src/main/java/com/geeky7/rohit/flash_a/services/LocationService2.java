@@ -219,11 +219,15 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 if(gps&&internet){
                     if (mCurrentLocation==null){
                         Thread.sleep(2000);
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
-                    if (mCurrentLocation!=null)
+                    if (mCurrentLocation!=null){
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    placesCode();
+                        placesCode();
+
+                    }
                 }
                 stopSelf();
                 // register a broadcast receiver - for whenever the gos is turned on/off
