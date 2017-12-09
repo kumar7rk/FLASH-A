@@ -71,6 +71,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     String sender = "";
     String placeName;
+    private String address;
 
     public LocationService2() {
     }
@@ -255,9 +256,11 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     }
 
     // this method gets the address and lets you make selection what parameters of address to include
+    @SuppressLint("LongLogTag")
     private String getAddress() {
-        /*for (int i = 0; i< addresses.size();i++)
-            Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));*/
+//        for (int i = 0; i< addresses.size();i++)
+//            Log.i(TAG+""+" AllAddresses",addresses.get(i).getAddressLine(i));
+
 
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
@@ -266,6 +269,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         String address = addresses.get(0).getAddressLine(0)
                 .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
+        Log.i(TAG+" Address",address);
 //        String street = addresses.get(0).getFeatureName();
 //        String city = addresses.get(0).getLocality();
 //        String number = addresses.get(0).getFeatureName();
@@ -382,7 +386,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
                 setPlaceName(name);
-                updateLogAndToast("Places "+name);
+                updateLog("Places "+name);
+                address = getAddress();
+
                 sendBroadcast();
             }
         }
@@ -485,15 +491,21 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     //sends the broadcast when the place name is fetched
     // the broadcast is registered in the class where the data is required
     private void sendBroadcast (){
+//        String address = getAddress();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
-        intent.putExtra(CONSTANT.ADDRESS,getAddress());
+        intent.putExtra(CONSTANT.ADDRESS,address);
         intent.putExtra(CONSTANT.PLACE_NAME,placeName);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     // method to show toast during testing and then comment the toast code in the production code
-    public void updateLogAndToast(String s){
+    public void updateLog (String s){
         Log.i(TAG,s);
 //        Main.showToast(s);
     }
