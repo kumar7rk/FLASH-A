@@ -307,8 +307,7 @@ public class Design extends AppCompatActivity {
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
 //        if (b)
-        stopService(new Intent(this, LocationService2.class));
-        startService(new Intent(this, LocationService2.class));
+        startLocationService2();
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
@@ -377,6 +376,11 @@ public class Design extends AppCompatActivity {
 
     }
 
+    private void startLocationService2() {
+        stopService(new Intent(this, LocationService2.class));
+        startService(new Intent(this, LocationService2.class));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -403,8 +407,7 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-                    stopService(new Intent(this, LocationService2.class));
-                    startService(new Intent(this, LocationService2.class));
+                    startLocationService2();
                     // gps is on so build dialog
                     buildDialogCurrentLocation();
                 }
@@ -528,8 +531,7 @@ public class Design extends AppCompatActivity {
                     break;
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
-                    stopService(new Intent(this, LocationService2.class));
-                    startService(new Intent(this, LocationService2.class));
+                    startLocationService2();
                     try {
                         Thread.sleep(2000);
                         Thread.sleep(2000);
