@@ -250,6 +250,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                     etaCode();
                     sendBroadcast();
                 }
+                else
+                    Log.i(TAG,"Gps status has changed but something is wrong. find me at loc 253");
                 stopSelf();
 
                 // register a broadcast receiver - for whenever the gps is turned on/off
