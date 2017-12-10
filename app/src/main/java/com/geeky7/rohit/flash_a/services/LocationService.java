@@ -191,24 +191,22 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 // if location null, get last known location, updating the time so that we don't show quite old location
                 if (mCurrentLocation==null)
                     mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-                addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-
-//              initiates places code to fetch the name of the nearby place
-                placesCode();
-                etaCode();
-                sendBroadcast();
+                if (mCurrentLocation!=null){
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+    //              initiates places code to fetch the name of the nearby place
+                    placesCode();
+                    etaCode();
+                    sendBroadcast();
+                }
                 // stop itself after message is sent
                 stopSelf();
             }
             // when gps if off
             // registers a receiver when the status of the gps changes
             else{
-                String name = sender;
-                if (checkContactPermission()){
-                    name = getContactName(sender,getApplicationContext());
-                }
                 Log.i(TAG, "gps off");
+                String name = sender;
+                if (checkContactPermission()) name = getContactName(sender,getApplicationContext());
                 m.pugNotification("Location Request from "+name,"Turn GPS on","");
 
                 getApplicationContext().registerReceiver(gpsReceiver,
@@ -244,16 +242,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         Thread.sleep(2000);
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
-                    if (mCurrentLocation!=null)
+                    if (mCurrentLocation!=null){
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    placesCode();
-                    etaCode();
-                    sendBroadcast();
+                        placesCode();
+                        etaCode();
+                        sendBroadcast();
+                    }
                 }
                 else
                     Log.i(TAG,"Gps status has changed but something is wrong. find me at loc 253");
                 stopSelf();
-
                 // register a broadcast receiver - for whenever the gps is turned on/off
                 // we do some work when it's status is turned on
                 getApplicationContext().unregisterReceiver(gpsReceiver);
@@ -321,10 +319,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG+""+"contactPermission","false");
             return false;
         }
-        Log.i(TAG+""+"contactPermission","true");
         return true;
     }
 
@@ -349,9 +345,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // this method gets the address and lets you make selection what parameters of address to include
     private String getAddress() {
-        for (int i = 0; i< addresses.size();i++)
-            Log.i(TAG+""+"All addresses",addresses.get(i).getAddressLine(i));
-
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
@@ -359,6 +352,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String address = addresses.get(0).getAddressLine(0)
                 .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
+        Log.i(TAG+""+" Address",address);
 //        String street = addresses.get(0).getFeatureName();
 //        String city = addresses.get(0).getLocality();
 //        String number = addresses.get(0).getFeatureName();
