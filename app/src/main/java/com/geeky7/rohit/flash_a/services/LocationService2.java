@@ -181,10 +181,11 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 // if location null, get last known location, updating the time so that we don't show quite old location
                 if (mCurrentLocation==null)
                     mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                if (mCurrentLocation!=null){
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 //                initiates places code to fetch the name of the nearby place
-                mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                placesCode();
+                    placesCode();
+                }
                 stopSelf();
             }
             // when gps if off registers a receiver listening for status of the gps to change
@@ -227,7 +228,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     if (mCurrentLocation!=null){
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                         placesCode();
-
                     }
                 }
                 stopSelf();
