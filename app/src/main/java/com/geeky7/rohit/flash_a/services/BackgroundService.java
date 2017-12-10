@@ -38,8 +38,8 @@ public class BackgroundService extends Service {
 
     // calls the location service
     private void startService() {
-        Intent serviceIntent = new Intent(getApplicationContext(), LocationService.class);
-        startService(serviceIntent);
+        stopService(new Intent(this, LocationService.class));
+        startService(new Intent(getApplicationContext(), LocationService.class));
     }
     @Override
     public IBinder onBind(Intent intent) {
