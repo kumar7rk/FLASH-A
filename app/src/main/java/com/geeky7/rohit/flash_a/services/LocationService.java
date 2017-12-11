@@ -283,8 +283,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // sender contains the phone number
         String name = sender;
         // if the contact permission is granted get the name of the contact
-        // else name = phoneNumber use that in notification
-        // else would also run when the number is not saved in the contact list
+        // else name = phoneNumber; use that in notification
+        // 'else' would also run when the number is not saved in the contact list Yeah I could think of this scenario
         if (checkContactPermission())
             name = getContactName(sender,getApplicationContext());
 
