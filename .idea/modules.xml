@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FLASH-A.iml" filepath="$PROJECT_DIR$/FLASH-A.iml" />
-      <module fileurl="file://C:\Users\i\Documents\GitHub\FLASH-A\FLASH-A.iml" filepath="C:\Users\i\Documents\GitHub\FLASH-A\FLASH-A.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\i\Documents\GitHub\FLASH-A\app\app.iml" filepath="C:\Users\i\Documents\GitHub\FLASH-A\app\app.iml" />
     </modules>
   </component>
 </project>
