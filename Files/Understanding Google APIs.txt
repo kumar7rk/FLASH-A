@@ -1,0 +1,6 @@
+Google Places API for Android- place picker shuts down immediately
+Google Places API Web Service- fetches the place/landmark
+Google Maps Android API- unsure- disabled everything works fine
+
+None of the above- fetches the address only
+shows landmark as null
