@@ -385,7 +385,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
 
-        String key = getApplicationContext().getString(R.string.API_KEY);
+        String key = getApplicationContext().getString(R.string.API_KEY_GEO );
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
