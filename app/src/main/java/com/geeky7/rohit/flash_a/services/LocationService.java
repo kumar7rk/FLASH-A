@@ -615,7 +615,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String origin = getAddress();
 
 
-        if(dest.equals("")|dest.equals(R.string.home_address_text))
+        if(dest.equals("")||dest.equals(R.string.home_address_text))
             return "";
 
         String str_origin = "origin="+origin;
@@ -625,7 +625,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String output = "json";
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
-        Log.i(TAG,url);
+        Log.i(TAG+ " ETA URL",url);
         return url;
     }
 
