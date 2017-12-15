@@ -299,7 +299,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         double mLatitude = 0;
         double mLongitude = 0;
         int mRadius = 500;
-        String number1 = getApplicationContext().getString(R.string.API_KEY);
+        String number1 = getApplicationContext().getString(R.string.API_KEY_GEO;
 
         if (mCurrentLocation==null) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
