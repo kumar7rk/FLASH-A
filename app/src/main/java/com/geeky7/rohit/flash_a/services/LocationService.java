@@ -607,7 +607,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String origin = getAddress();
 
 
-        if(dest.equals(""))
+        if(dest.equals("")|dest.equals(R.string.home_address_text))
             return "";
 
         String str_origin = "origin="+origin;
