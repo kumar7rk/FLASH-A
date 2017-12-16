@@ -231,7 +231,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 mMap.getCameraPosition();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
             }
-            // if no internet is availabe shows a snackbar with a button to retry
+            // if no internet is available shows a Snackbar with a button to retry
             // it basically contains the same logic as above
             else{
                 showSnackbar(R.string.map_no_internet_home_address, R.string.retry, new View.OnClickListener() {
