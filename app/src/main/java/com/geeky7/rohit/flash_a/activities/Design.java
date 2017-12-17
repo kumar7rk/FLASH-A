@@ -445,7 +445,7 @@ public class Design extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
                     intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                     startActivityForResult(intent, CONTACT_REQUEST_CODE);
-                    Main.showToast("Sharing location. Select contact");
+                    Main.showToast("Select contact to Share location");
                 }
             })
             .setIcon(android.R.drawable.ic_menu_mylocation);
