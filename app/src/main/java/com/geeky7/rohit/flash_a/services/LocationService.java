@@ -189,19 +189,27 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             // if the location service and internet is on get that address and start places code
             if (gps/*&&internet*/){
                 // if location null, get last known location, updating the time so that we don't show quite old location
+                Log.i(TAG,"GPS on");
                 if (mCurrentLocation==null){
+                    Log.i(TAG,"location null");
                     Thread.sleep(2000);
                     Thread.sleep(2000);
                     Thread.sleep(2000);
+                    Log.i(TAG,"Slept for 6 seconds");
                     mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 }
 
                 if (mCurrentLocation!=null){
+                    Log.i(TAG,"Location is not null");
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    Log.i(TAG,"after address fetched. Calling code");
     //              initiates places code to fetch the name of the nearby place
                     placesCode();
+                    Log.i(TAG,"Places code called");
                     etaCode();
+                    Log.i(TAG,"ETA code called");
                     sendBroadcast();
+                    Log.i(TAG,"Broadcasted");
                 }
                 // stop itself after message is sent
                 stopSelf();
