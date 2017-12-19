@@ -44,7 +44,7 @@ public class Main {
                 .message(message)
                 .smallIcon(R.drawable.icon_notification)
                 .bigTextStyle(message+" "+bigText)
-                .largeIcon(R.drawable.cast_ic_notification_small_icon)
+                .largeIcon(R.drawable.icon_notification)
                 .flags(android.app.Notification.DEFAULT_ALL)
                 .simple()
                 .build();
