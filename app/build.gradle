@@ -6,9 +6,10 @@ android {
         applicationId "com.geeky7.rohit.flash_a"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -29,8 +30,14 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
     compile 'com.github.halysongoncalves:pugnotification:1.8.1'
-    compile 'com.google.android.gms:play-services:11.0.4'
+//    compile 'com.google.android.gms:play-services:11.0.4'
+    compile 'com.google.android.gms:play-services-location:11.0.4'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
+    compile 'com.google.android.gms:play-services-places:11.0.4'
+
     compile 'com.android.support:support-v4:25.3.1'
     compile 'agency.tango.android:material-intro-screen:0.0.5'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:multidex:1.0.0'
+
 }
