@@ -71,8 +71,15 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         homeAddress.setText(homeAddressS);
 
         // hides the delete button when there is no homeAddress set
-        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))) delete.setVisibility(View.INVISIBLE);
-
+        if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
+            delete.setVisibility(View.INVISIBLE);
+            homeAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openAutocompleteActivity();
+                }
+            });
+        }
         //updates the map with a marker on the home address
         refreshMap();
 
