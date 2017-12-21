@@ -18,8 +18,8 @@
             style="@style/basic">
             <ImageView
                 android:id="@+id/serviceEnabled_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@drawable/service_enabled"
                 style = "@style/basic_iv"/>
             <TextView
@@ -35,11 +35,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_shape_home_address"
+            android:tag="@string/home_address"
             style="@style/basic">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@drawable/home_address"
                 style="@style/basic_iv"/>
             <TextView
@@ -62,8 +63,8 @@
             android:background="@drawable/rounded_shape_keyword"
             style="@style/basic">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@drawable/keyword"
                 style = "@style/basic_iv"/>
             <TextView
@@ -80,8 +81,8 @@
             android:background="@drawable/rounded_shape_customise_message"
             style="@style/basic">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@drawable/customise_message"
                 style = "@style/basic_iv"/>
             <TextView
@@ -105,8 +106,8 @@
             android:background="@drawable/rounded_shape_history"
             style="@style/basic">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@drawable/history"
                 style = "@style/basic_iv"/>
             <TextView
@@ -123,8 +124,8 @@
             android:background="@drawable/rounded_shape_tutorial"
             style="@style/basic">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@drawable/tutorial"
                 style = "@style/basic_iv"/>
             <TextView
