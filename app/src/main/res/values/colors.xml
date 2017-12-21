@@ -22,8 +22,8 @@
     <color name="custom_slide_buttons">#1A237E</color>
 
     <!--Design-->
-    <color name="service_enabled_background">#ffff8800</color>
-    <color name="home_address_background">#ff00ddff</color>
+    <color name="service_enabled_background">#a090</color>
+    <color name="home_address_background">#123456</color>
     <color name="keyword_background">#90000000</color>
     <color name="customise_message_background">#cf4249</color>
     <color name="history_background">#787aa8</color>
