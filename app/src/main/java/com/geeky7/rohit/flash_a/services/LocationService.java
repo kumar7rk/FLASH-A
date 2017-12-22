@@ -36,6 +36,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.pddstudio.urlshortener.URLShortener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,6 +86,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     String placeName;
     String durationEta;
+    String URL;
 
     int counter = 0;
     public LocationService() {
@@ -322,7 +324,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             address = " ("+ address + ").";
         }
 
-        String message = placeS+ address+ etaS;
+        String message = placeS+ address+ etaS+ ". "+URL;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean notification = preferences.getBoolean(getResources().getString(R.string.settings_notification),false);
@@ -399,6 +401,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
+//      https://www.google.com/maps/search/?api=1&query=-34.9983536,138.0506817,17z
+        String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude+",17z";
+        URL = URLShortener.shortUrl(location);
         int mRadius = 500;
 
         String key = getApplicationContext().getString(R.string.API_KEY_GEO );
