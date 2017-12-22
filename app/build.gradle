@@ -39,5 +39,5 @@ dependencies {
     compile 'agency.tango.android:material-intro-screen:0.0.5'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.0'
-
+    compile 'com.pddstudio:urlshortener:1.0.2'
 }
