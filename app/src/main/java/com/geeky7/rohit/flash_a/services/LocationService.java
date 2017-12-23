@@ -396,14 +396,15 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             e.printStackTrace();
         }
     }
-
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
 //      https://www.google.com/maps/search/?api=1&query=-34.9983536,138.0506817,17z
         String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude+",17z";
-        URL = URLShortener.shortUrl(location);
+
+//        URL = URLShortener.shortUrl(location);
+        URL = location;
         int mRadius = 500;
 
         String key = getApplicationContext().getString(R.string.API_KEY_GEO );
