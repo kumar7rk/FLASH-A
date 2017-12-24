@@ -26,6 +26,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.DirectionsJSONParser;
@@ -36,18 +37,25 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.pddstudio.urlshortener.URLShortener;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.services.urlshortener.Urlshortener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -400,12 +408,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
-//      https://www.google.com/maps/search/?api=1&query=-34.9983536,138.0506817,17z
-        String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
-
-//        URL = URLShortener.shortUrl(location);
-        URL = location;
         int mRadius = 500;
+        String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
+        URL = location;
+
+//        URL = String.valueOf(new newShortAsync().execute(location));
+//        URL = urlShort(location);
 
         String key = getApplicationContext().getString(R.string.API_KEY_GEO );
 
@@ -760,7 +768,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
 
     // sends a broadcast
-    // called when the eta and palces code have been called
+    // called when the eta and places code have been called
     // purpose is to send address and place name to
     private void sendBroadcast (){
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
@@ -775,5 +783,101 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void updateLogAndToast(String s){
         Log.i(TAG,s);
 //        Main.showToast(s);
+    }
+
+    public String urlShort(String longUrl){
+        Urlshortener.Builder builder = new Urlshortener.Builder (AndroidHttp.newCompatibleTransport(),
+                AndroidJsonFactory.getDefaultInstance(), null);
+        Urlshortener urlshortener = builder.build();
+
+        com.google.api.services.urlshortener.model.Url url = new com.google.api.services.urlshortener.model.Url();
+        url.setLongUrl(longUrl);
+        try {
+            Urlshortener.Url.Insert insert=urlshortener.url().insert(url);
+            insert.setKey(getResources().getString(R.string.API_KEY_URL));
+            url = insert.execute();
+            return url.getId();
+        } catch (IOException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            return null;
+        }
+    }
+    public class newShortAsync extends AsyncTask<String,Void,String> {
+
+        String longUrl="http://stackoverflow.com/questions/18372672/how-do-i-use-the-google-url-shortener-api-on-android/20406915";
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+//            progressBar.setVisibility(View.GONE);
+            System.out.println("JSON RESP:" + s);
+            String response=s;
+            try {
+                JSONObject jsonObject=new JSONObject(response);
+              String id=jsonObject.getString("id");
+                System.out.println("ID:"+id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            BufferedReader reader;
+            StringBuffer buffer;
+            String res=null;
+            String json = "{\"longUrl\": \""+longUrl+"\"}";
+            try {
+                URL url = new URL("https://www.googleapis.com/urlshortener/v1/url?key=YOUR_API_KEY");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setReadTimeout(40000);
+                con.setConnectTimeout(40000);
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json");
+                OutputStream os = con.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+
+                writer.write(json);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int status=con.getResponseCode();
+                InputStream inputStream;
+                if(status==HttpURLConnection.HTTP_OK)
+                    inputStream=con.getInputStream();
+                else
+                    inputStream = con.getErrorStream();
+
+                reader= new BufferedReader(new InputStreamReader(inputStream));
+
+                buffer= new StringBuffer();
+
+                String line="";
+                while((line=reader.readLine())!=null)
+                {
+                    buffer.append(line);
+                }
+
+                res= buffer.toString();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            URL = res;
+            return res;
+        }
     }
 }
