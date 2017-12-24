@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.geeky7.rohit.flash_a.activities.Design;
+
 import br.com.goncalves.pugnotification.notification.PugNotification;
 
 /**
@@ -46,6 +48,7 @@ public class Main {
                 .bigTextStyle(message+" "+bigText)
                 .largeIcon(R.drawable.icon_notification)
                 .flags(android.app.Notification.DEFAULT_ALL)
+                .click(Design.class,null)
                 .simple()
                 .build();
     }
