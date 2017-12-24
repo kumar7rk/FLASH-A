@@ -401,7 +401,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
 //      https://www.google.com/maps/search/?api=1&query=-34.9983536,138.0506817,17z
-        String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude+",17z";
+        String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
 
 //        URL = URLShortener.shortUrl(location);
         URL = location;
