@@ -466,8 +466,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         bothAsync();
     }
 
-    //sets the caluclated eta to global variable and increments a counter which counts if both the async tasks are finshed - to sendSMS
-    // called from onPostExecute parsetTask for eta
+    //sets the calculated eta to global variable and increments a counter which counts if both the async tasks are finshed - to sendSMS
+    // called from onPostExecute parserTask for eta
     public void setDurationEta(String s){
         durationEta = s;
         counter++;
