@@ -26,7 +26,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.View;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.DirectionsJSONParser;
@@ -75,28 +74,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private LocationRequest mlocationRequest;
     private Location mCurrentLocation;
 
-
-//    private static final int GOOGLE_API_CLIENT_ID = 0;
-//    private boolean mRequestingLocationUpdates;
-//    private String mLastUpdateTime;
-
-//    private boolean googleApiClientConnected;
-    static Context context;
-
     Main m;
+    static Context context;
 
     Geocoder geocoder;
     List<Address> addresses;
-
     SharedPreferences preferences;
+
     String sender = "";
-
-
     String placeName;
     String durationEta;
     String URL;
-
     int counter = 0;
+
     public LocationService() {
 
     }
@@ -108,7 +98,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         m = new Main(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         sender = preferences.getString("sender","");
-
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -138,12 +127,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"onDestroy");
-
         stopSelf();
-
         if (mGoogleApiClient.isConnected())
             stopLocationupdates();
-
         mGoogleApiClient.disconnect();
     }
 
@@ -164,7 +150,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // fetched location every `UPDATE_INTERVAL_IN_MILLISECONDS` milliseconds
     // since the service destroys after fetching location once it is of little use; I mean the interval of fetching the location
-
     private void createLocationRequest() {
         mlocationRequest = new LocationRequest();
         mlocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -177,7 +162,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mlocationRequest, this);
     }
-    // stop location update; no longer needed
+    // stop location update when no longer needed
     protected void stopLocationupdates(){
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
@@ -248,7 +233,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         @Override
         public void onReceive(Context context, Intent intent) {
         if (intent.getAction().matches("android.location.PROVIDERS_CHANGED")) {
-
             final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean internet = m.isNetworkAvailable();
@@ -571,14 +555,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
             try {
                 // Extracting Place name, if available
-                if (!jPlace.isNull("name")) {
-                    placeName = jPlace.getString("name");
-                }
-
+                if (!jPlace.isNull("name")) placeName = jPlace.getString("name");
                 // Extracting Place Vicinity, if available
-                if (!jPlace.isNull("vicinity")) {
-                    vicinity = jPlace.getString("vicinity");
-                }
+                if (!jPlace.isNull("vicinity")) vicinity = jPlace.getString("vicinity");
 
                 latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
                 longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
@@ -592,7 +571,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 place.put("reference", reference);
                 place.put("types", placeType);
 
-//                Log.i(TAG+""+"PlaceType",placeType);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
