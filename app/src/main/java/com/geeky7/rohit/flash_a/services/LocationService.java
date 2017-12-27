@@ -363,18 +363,18 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
         Log.i(TAG+""+" Address",address);
+
 //        String street = addresses.get(0).getFeatureName();
 //        String city = addresses.get(0).getLocality();
 //        String number = addresses.get(0).getFeatureName();
 //        String council = addresses.get(0).getSubAdminArea();
-//         null- getSubLocality(),getPremises(),getThoroughfare()
+//        null- getSubLocality(),getPremises(),getThoroughfare()
 
 //        Log.i("address","City: "+city);
 //        Log.i("address","State: "+state);
 //        Log.i("address","Country: "+country);
 //        Log.i("address","street: "+street);
 //        return street+", "+ city;
-
         return address;
     }
 
@@ -443,7 +443,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
 
     // sets the name of the place found in a global variable and increments a counter which counts if both the async tasks are finished- to sendSMS
-    // called from onpostExecute of parser task
+    // called from onPostExecute of parser task
     public void setPlaceName(String s){
         placeName = s;
         counter++;
@@ -467,25 +467,20 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
-
         JSONObject jObject;
-
         Context mContext;
+
         public ParserTask(Context context){
             mContext = context;
         }
         // Invoked by execute() method of this object
         @Override
         protected List<HashMap<String, String>> doInBackground(String... jsonData) {
-
             List<HashMap<String, String>> places = null;
             Place_JSON placeJson = new Place_JSON();
-
             try {
                 jObject = new JSONObject(jsonData[0]);
-
                 places = placeJson.parse(jObject);
-
             } catch (Exception e) {
                 Log.d("Exception", e.toString());
             }
@@ -495,7 +490,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Executed after the complete execution of doInBackground() method
         @Override
         protected void onPostExecute(List<HashMap<String, String>> list) {
-
             if (!list.isEmpty()){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
@@ -503,12 +497,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 updateLogAndToast("Places "+name);
             }
         }
-    }// onPostExecute
-//}// end of the parserTask class
+    }
 
     // gets the details of the place to let you choose which parameters of place you want to show
    public class Place_JSON {
-
         /**
          * Receives a JSONObject and returns a list
          */
