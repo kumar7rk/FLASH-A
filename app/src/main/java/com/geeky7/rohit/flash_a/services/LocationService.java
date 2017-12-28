@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
@@ -393,12 +394,17 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
+
         String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
         URL = location;
 
 //        URL = String.valueOf(new newShortAsync().execute(location));
-//        URL = urlShort(location);
-
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        URL = urlShort(location);
         String key = getApplicationContext().getString(R.string.API_KEY_GEO );
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
