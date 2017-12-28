@@ -399,12 +399,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         URL = location;
 
 //        URL = String.valueOf(new newShortAsync().execute(location));
-        if (android.os.Build.VERSION.SDK_INT > 9)
-        {
+        // to avoid running shortner code on async task
+        if (android.os.Build.VERSION.SDK_INT > 9){
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        URL = urlShort(location);
+        //calling a direct method which runs urlShortner code
+        URL = urlShortner(location);
         String key = getApplicationContext().getString(R.string.API_KEY_GEO );
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
@@ -761,7 +762,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        Main.showToast(s);
     }
 
-    public String urlShort(String longUrl){
+    public String urlShortner(String longUrl){
         Urlshortener.Builder builder = new Urlshortener.Builder (AndroidHttp.newCompatibleTransport(),
                 AndroidJsonFactory.getDefaultInstance(), null);
         Urlshortener urlshortener = builder.build();
