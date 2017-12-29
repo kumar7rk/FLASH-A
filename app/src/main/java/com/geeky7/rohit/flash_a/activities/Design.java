@@ -287,7 +287,7 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
-    // same as above but only long length of
+    // same as above but only long length
     private void showSnackbar2(final int mainTextStringId, final int actionStringId,
                                View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -408,6 +408,13 @@ public class Design extends AppCompatActivity {
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
                     startLocationService2();
+                    try {
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     // gps is on so build dialog
                     buildDialogCurrentLocation();
                 }
