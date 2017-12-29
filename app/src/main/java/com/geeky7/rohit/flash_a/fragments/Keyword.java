@@ -27,6 +27,7 @@ public class Keyword extends DialogFragment {
     public Keyword() {
     }
 
+    //sets up the dialog; pretty much does everything this class is expected too
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -74,6 +75,8 @@ public class Keyword extends DialogFragment {
         return alertDialog.create();
     }
 
+    //gets the saved keyword from the sharedPreferences and also magically puts the caret at the end of the text
+    // yeah it's not like that by default
     @Override
     public void onResume() {
         super.onResume();
