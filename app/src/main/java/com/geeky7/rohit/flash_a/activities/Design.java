@@ -415,7 +415,7 @@ public class Design extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // gps is on so build dialog
+                    // gps is on and location is probably fetched so let's do it
                     buildDialogCurrentLocation();
                 }
                 break;
