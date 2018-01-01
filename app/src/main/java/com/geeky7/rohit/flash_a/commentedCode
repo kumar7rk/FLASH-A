@@ -35,6 +35,7 @@
                 mStreetViewPanoramaView.onSaveInstanceState(mStreetViewBundle);
             }*/
 **************************************************************************************
+// location service
 public class newShortAsync extends AsyncTask<String,Void,String> {
 
         String longUrl="http://stackoverflow.com/questions/18372672/how-do-i-use-the-google-url-shortener-api-on-android/20406915";
