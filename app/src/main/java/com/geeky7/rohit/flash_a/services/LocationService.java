@@ -408,6 +408,10 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         URL = urlShortner(location);
         String key = getApplicationContext().getString(R.string.API_KEY_GEO );
 
+        // url for certain place types
+        // https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-34.9238278,138.6046208&radius=500
+        // &types=cafe|amusement_park|university|stadium|shopping_mall|restaurant&sensor=true
+        // &key=AIzaSyArqUr-JRKvFsNn0Eop0ABDRCJW7PGhyu0
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius="+mRadius);
