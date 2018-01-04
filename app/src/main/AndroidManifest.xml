@@ -26,8 +26,7 @@
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".activities.Design"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
-
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity android:name=".activities.Design">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +37,7 @@
         <activity
             android:name=".activities.HomeAddress"
             android:label="@string/home_address"
-            android:parentActivityName=".activities.Design"/>
+            android:parentActivityName=".activities.Design" />
         <activity
             android:name=".activities.TutorialActivity"
             android:theme="@style/Theme.Intro" />
@@ -48,11 +47,10 @@
             android:name=".services.BackgroundService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".services.LocationService2"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <receiver android:name=".SMSReceiver">
             <intent-filter android:priority="1000">
@@ -62,6 +60,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activities.ContactsActivity"></activity>
     </application>
 
 </manifest>
