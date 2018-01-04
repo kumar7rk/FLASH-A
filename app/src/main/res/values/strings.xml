@@ -36,7 +36,7 @@
 
     <!--HomeAddress-->
     <string name="home_address_text">Home address not set!</string>
-    <string name="home_address_info">Home address is used for improved user experience such as sending Expected Time of Arrival!</string>
+    <string name="home_address_info">Home address is used for improved user experience such as sending Expected Travel Time!</string>
     <string name="home_address_last_edited">Not set</string>
 
     <!--Dialog-->
