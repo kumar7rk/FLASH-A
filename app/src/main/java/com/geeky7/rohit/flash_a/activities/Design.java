@@ -108,6 +108,7 @@ public class Design extends AppCompatActivity {
                     keyword.show(getFragmentManager(),"Keyword");
             }
         });
+
     }
 
     // find view by id of all the views
@@ -356,6 +357,7 @@ public class Design extends AppCompatActivity {
         customiseMessage_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ContactsActivity.class));
                 Main.showToast(getResources().getString(R.string.coming_soon));
             }
         });
