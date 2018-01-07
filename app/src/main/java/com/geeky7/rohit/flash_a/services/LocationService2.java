@@ -186,6 +186,12 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 //                initiates places code to fetch the name of the nearby place
                     placesCode();
                 }
+                try {
+                    Thread.sleep(2000);
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 stopSelf();
             }
             // when gps if off registers a receiver listening for status of the gps to change
@@ -230,6 +236,12 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                         placesCode();
                     }
                 }
+                try {
+                    Thread.sleep(2000);
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 stopSelf();
                 // register a broadcast receiver - for whenever the gos is turned on/off
                 // we do some work when it's status is turned on
@@ -258,10 +270,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     // this method gets the address and lets you make selection what parameters of address to include
     @SuppressLint("LongLogTag")
     private String getAddress() {
-//        for (int i = 0; i< addresses.size();i++)
-//            Log.i(TAG+""+" AllAddresses",addresses.get(i).getAddressLine(i));
-
-
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
@@ -505,7 +513,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     }
 
     // method to show toast during testing and then comment the toast code in the production code
-    public void updateLog (String s){
+    public void updateLog(String s){
         Log.i(TAG,s);
 //        Main.showToast(s);
     }
