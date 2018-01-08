@@ -358,7 +358,7 @@ public class Design extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), ContactsActivity.class));
-                Main.showToast(getResources().getString(R.string.coming_soon));
+//                Main.showToast(getResources().getString(R.string.coming_soon));
             }
         });
 
