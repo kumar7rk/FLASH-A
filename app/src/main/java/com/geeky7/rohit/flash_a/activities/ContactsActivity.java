@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.SparseBooleanArray;
@@ -13,8 +14,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.Toast;
+import android.widget.ListView;
 
+import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 
 import java.util.ArrayList;
@@ -31,18 +33,21 @@ public class ContactsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main2);
         contacts = new ArrayList<>();
-        this.contactAdapter = new ContactAdapter(this, R.layout.activity_contacts, contacts);
-        setListAdapter(this.contactAdapter);
+//        this.contactAdapter = new ContactAdapter(this, R.layout.activity_contacts, contacts);
+//        setListAdapter(this.contactAdapter);
+
+        ListView lv = getListView();
+        new LoadContacts().execute();
 
         viewContacts = new Runnable(){
             @Override
             public void run() {
-                getContacts();
+//                getContacts();
             }
         };
-        Thread thread =  new Thread(null, viewContacts, "ContactReadBackground");
-        thread.start();
-        progressDialog = ProgressDialog.show(ContactsActivity.this,"Please wait...", "Retrieving contacts ...", true);
+//        Thread thread =  new Thread(null, viewContacts, "ContactReadBackground");
+//        thread.start();
+//        progressDialog = ProgressDialog.show(ContactsActivity.this,"Please wait...", "Retrieving contacts ...", true);
     }
 
     private void getContacts(){
@@ -52,9 +57,7 @@ public class ContactsActivity extends ListActivity {
                     ContactsContract.Contacts.HAS_PHONE_NUMBER,
                     ContactsContract.Contacts._ID
             };
-
             Cursor cursor = managedQuery(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.Contacts.HAS_PHONE_NUMBER+"=?", new String[]{"1"}, ContactsContract.Contacts.DISPLAY_NAME);
-
             contacts = new ArrayList<Contact>();
             while(cursor.moveToNext()){
                 Contact contact = new Contact();
@@ -63,7 +66,7 @@ public class ContactsActivity extends ListActivity {
                 contacts.add(contact);
             }
             cursor.close();
-            runOnUiThread(returnRes);
+//            runOnUiThread(returnRes);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -119,7 +122,7 @@ public class ContactsActivity extends ListActivity {
         @Override
         public void onClick(View arg0) {
             selectedContacts.append(position, true);
-            Toast.makeText(getBaseContext(), "Clicked "+position +" and text "+text,Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getBaseContext(), "Clicked "+position +" and text "+text,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -132,6 +135,36 @@ public class ContactsActivity extends ListActivity {
         public void setContactName(String contactName) {
             this.contactName = contactName;
         }
+    }
+    class LoadContacts extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Do Dialog stuff here
+            progressDialog = ProgressDialog.show(ContactsActivity.this,"Please wait...", "Retrieving contacts ...", true);
+        }
+        protected String doInBackground(String... args) {
+            // Put your implementation to retrieve contacts here
+            getContacts();
+            return null;
+        }
+        protected void onPostExecute(String file_url) {
+            // Dismiss Dialog
+                    contactAdapter = new ContactAdapter(MyApplication.getAppContext(), R.layout.activity_contacts, contacts);
+                    setListAdapter(contactAdapter);
+
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+
+                    contactAdapter.notifyDataSetChanged();
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Create list adapter and notify it
+                }
+            });
+
+        }
 
     }
+
 }
