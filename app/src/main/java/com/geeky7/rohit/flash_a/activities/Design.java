@@ -426,14 +426,12 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-        /*stopService(new Intent(this, LocationService2.class));
-        startService(new Intent(this, LocationService2.class));*/
-        /*try {
+        try {
             Thread.sleep(2000);
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
 
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -459,7 +457,9 @@ public class Design extends AppCompatActivity {
             })
             .setIcon(android.R.drawable.ic_menu_mylocation);
 
-        if(!address.equals("")) builder.show();
+        if(!address.equals("")){
+            builder.show();
+        }
         else{
             showSnackbar2(R.string.error_fetching_location, R.string.retry,
                     new View.OnClickListener() {
@@ -469,6 +469,7 @@ public class Design extends AppCompatActivity {
                         }
                    });
         }
+        stopService(new Intent(this, LocationService2.class));
     }
     // onClick currentLocation button in actionBar and gps is off
     // opens a dialog which turns on gps without requiring to navigate to the location settings page
@@ -548,7 +549,7 @@ public class Design extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // gps dialog was shown and the user clicked ok build dialog
+                    // build dialog location possibly fetched
                     buildDialogCurrentLocation();
                     break;
             }
