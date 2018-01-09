@@ -3,8 +3,12 @@
         android:id="@+id/settings_send_eta"
         android:title="Send ETA"
         android:key="@string/settings_send_eta"
-        android:summary="When you location is shared also send expected time of arrival (ETA) to home"
-        />
+        android:summary="When your location is shared also send expected time of arrival (ETA) to home">
+        <intent
+            android:targetClass="com.geeky7.rohit.flash_a.activities.ContactsActivity"/>
+
+    </SwitchPreference>
+
     <CheckBoxPreference
         android:id="@+id/settings_notification"
         android:title="Notification when location shared"
