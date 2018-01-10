@@ -1,8 +1,12 @@
-package com.geeky7.rohit.flash_a.activities;
+package com.geeky7.rohit.flash_a.fragments;
 
-import android.app.ListActivity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,44 +14,61 @@ import android.provider.ContactsContract;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
-import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 
 import java.util.ArrayList;
 
-public class ContactsActivity extends ListActivity {
+public class ContactsFragment extends DialogFragment {
+    SharedPreferences preferences;
+    AlertDialog.Builder alertDialog;
+    private ListView listView;
     private ArrayList<Contact> contacts = null;
     private ProgressDialog progressDialog = null;
     private ContactAdapter contactAdapter = null;
     private Runnable viewContacts = null;
     private SparseBooleanArray selectedContacts =   new SparseBooleanArray()  ;
 
+    public ContactsFragment() {
+    }
+
+    //sets up the dialog; pretty much does everything this class is expected too
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main2);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.main2, null);
+        listView = (ListView)view.findViewById(android.R.id.list);
+
         contacts = new ArrayList<>();
-//        this.contactAdapter = new ContactAdapter(this, R.layout.activity_contacts, contacts);
-//        setListAdapter(this.contactAdapter);
+        getContacts();
+        contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
+        listView.setAdapter(contactAdapter);
 
-        ListView lv = getListView();
-        new LoadContacts().execute();
+        //on click save button save the keyword in the sharedPreferences
+        alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle("Select Contacts")
+                .setView(inflater.inflate(R.layout.main2, null))
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                // close button to close the dialog
+                .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        contactAdapter.notifyDataSetChanged();
+//        new LoadContacts().execute();
 
-        viewContacts = new Runnable(){
-            @Override
-            public void run() {
-//                getContacts();
-            }
-        };
-//        Thread thread =  new Thread(null, viewContacts, "ContactReadBackground");
-//        thread.start();
-//        progressDialog = ProgressDialog.show(ContactsActivity.this,"Please wait...", "Retrieving contacts ...", true);
+
+        return alertDialog.create();
     }
 
     private void getContacts(){
@@ -57,7 +78,7 @@ public class ContactsActivity extends ListActivity {
                     ContactsContract.Contacts.HAS_PHONE_NUMBER,
                     ContactsContract.Contacts._ID
             };
-            Cursor cursor = managedQuery(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.Contacts.HAS_PHONE_NUMBER+"=?", new String[]{"1"}, ContactsContract.Contacts.DISPLAY_NAME);
+            Cursor cursor = getActivity().managedQuery(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.Contacts.HAS_PHONE_NUMBER+"=?", new String[]{"1"}, ContactsContract.Contacts.DISPLAY_NAME);
             contacts = new ArrayList<Contact>();
             while(cursor.moveToNext()){
                 Contact contact = new Contact();
@@ -66,35 +87,22 @@ public class ContactsActivity extends ListActivity {
                 contacts.add(contact);
             }
             cursor.close();
-//            runOnUiThread(returnRes);
         }
         catch(Exception e){
             e.printStackTrace();
         }
     }
-
-    private Runnable returnRes = new Runnable() {
-        @Override
-        public void run() {
-            // close the progress dialog
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
-            contactAdapter.notifyDataSetChanged();
-        }
-    };
-
     public class ContactAdapter extends ArrayAdapter<Contact> {
         private ArrayList<Contact> items;
         public ContactAdapter(Context context, int textViewResourceId, ArrayList<Contact> items) {
             super(context, textViewResourceId, items);
             this.items = items;
         }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             if (view == null) {
-                LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater vi = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = vi.inflate(R.layout.activity_contacts, null);
             }
             Contact contact = items.get(position);
@@ -104,13 +112,13 @@ public class ContactsActivity extends ListActivity {
                 if (nameCheckBox != null) {
                     nameCheckBox.setText(contact.getContactName());
                 }
-                nameCheckBox.setOnClickListener(new OnItemClickListener(position,nameCheckBox.getText(),nameCheckBox));
+                nameCheckBox.setOnClickListener((View.OnClickListener) new OnItemClickListener(position,nameCheckBox.getText(),nameCheckBox));
             }
             return view;
         }
     }
 
-    class OnItemClickListener implements OnClickListener{
+    class OnItemClickListener implements DialogInterface.OnClickListener {
         private int position;
         private CharSequence text;
         private CheckBox checkBox;
@@ -120,7 +128,7 @@ public class ContactsActivity extends ListActivity {
             this.checkBox = checkBox;
         }
         @Override
-        public void onClick(View arg0) {
+        public void onClick(DialogInterface dialogInterface, int i) {
             selectedContacts.append(position, true);
 //            Toast.makeText(getBaseContext(), "Clicked "+position +" and text "+text,Toast.LENGTH_SHORT).show();
         }
@@ -141,7 +149,7 @@ public class ContactsActivity extends ListActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             // Do Dialog stuff here
-            progressDialog = ProgressDialog.show(ContactsActivity.this,"Please wait...", "Retrieving contacts ...", true);
+            progressDialog = ProgressDialog.show(getActivity(),"Please wait...", "Retrieving contacts ...", true);
         }
         protected String doInBackground(String... args) {
             // Put your implementation to retrieve contacts here
@@ -149,15 +157,15 @@ public class ContactsActivity extends ListActivity {
             return null;
         }
         protected void onPostExecute(String file_url) {
+            contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
+            listView.setAdapter(contactAdapter);
+
             // Dismiss Dialog
-                    contactAdapter = new ContactAdapter(MyApplication.getAppContext(), R.layout.activity_contacts, contacts);
-                    setListAdapter(contactAdapter);
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
 
-                    if (progressDialog.isShowing())
-                        progressDialog.dismiss();
-
-                    contactAdapter.notifyDataSetChanged();
-            runOnUiThread(new Runnable() {
+            contactAdapter.notifyDataSetChanged();
+            getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     // Create list adapter and notify it
                 }
@@ -166,5 +174,4 @@ public class ContactsActivity extends ListActivity {
         }
 
     }
-
 }
