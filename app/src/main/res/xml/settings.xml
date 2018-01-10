@@ -3,22 +3,17 @@
         android:id="@+id/settings_send_eta"
         android:title="Send ETA"
         android:key="@string/settings_send_eta"
-        android:summary="When your location is shared also send expected time of arrival (ETA) to home">
-        <intent
-            android:targetClass="com.geeky7.rohit.flash_a.activities.ContactsActivity"/>
-
-    </SwitchPreference>
+        android:summary="When your location is shared also send expected time of arrival (ETA) to home"/>
 
     <CheckBoxPreference
         android:id="@+id/settings_notification"
         android:title="Notification when location shared"
         android:key="@string/settings_notification"
-        android:summary="Get notified by a notification which shows with whom is your location shared."
-        />
+        android:summary="Get notified by a notification which shows with whom is your location shared." />
+
     <SwitchPreference
         android:id="@+id/settings_landmark"
         android:title="Include Landmark"
         android:key="@string/settings_landmark"
-        android:summary="Include a nearby landmark (up to 500 metres) in the sms"
-        />
+        android:summary="Include a nearby landmark (up to 500 metres) in the sms"/>
 </PreferenceScreen>
