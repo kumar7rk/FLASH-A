@@ -186,13 +186,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 //                initiates places code to fetch the name of the nearby place
                     placesCode();
                 }
-                try {
+                /*try {
                     Thread.sleep(2000);
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                stopSelf();
+                stopSelf();*/
             }
             // when gps if off registers a receiver listening for status of the gps to change
             else{
@@ -236,13 +236,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                         placesCode();
                     }
                 }
-                try {
+                /*try {
                     Thread.sleep(2000);
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                stopSelf();
+                stopSelf();*/
                 // register a broadcast receiver - for whenever the gos is turned on/off
                 // we do some work when it's status is turned on
                 getApplicationContext().unregisterReceiver(gpsReceiver);
