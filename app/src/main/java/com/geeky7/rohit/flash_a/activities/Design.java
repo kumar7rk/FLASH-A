@@ -37,6 +37,7 @@ import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.fragments.ContactsFragment;
 import com.geeky7.rohit.flash_a.fragments.Keyword;
 import com.geeky7.rohit.flash_a.services.LocationService2;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -72,6 +73,7 @@ public class Design extends AppCompatActivity {
 
 
     private Keyword keyword = new Keyword();
+    private ContactsFragment contact = new ContactsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -357,8 +359,8 @@ public class Design extends AppCompatActivity {
         customiseMessage_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ContactsActivity.class));
-//                Main.showToast(getResources().getString(R.string.coming_soon));
+                if (!contact.isAdded())
+                    contact.show(getFragmentManager(),"Contacts");
             }
         });
 
