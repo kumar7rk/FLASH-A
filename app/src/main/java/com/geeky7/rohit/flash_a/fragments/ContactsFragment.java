@@ -15,6 +15,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -37,22 +38,37 @@ public class ContactsFragment extends DialogFragment {
     }
 
     //sets up the dialog; pretty much does everything this class is expected too
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.main2, null);
-        listView = (ListView)view.findViewById(android.R.id.list);
+        View view = inflater.inflate(R.layout.list_view_contact, null);
+        listView = (ListView)view.findViewById(R.id.list_view);
+
 
         contacts = new ArrayList<>();
-        getContacts();
         contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
+        getContacts();
         listView.setAdapter(contactAdapter);
+
+        //contactAdapter.notifyDataSetChanged();
 
         //on click save button save the keyword in the sharedPreferences
         alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle("Select Contacts")
-                .setView(inflater.inflate(R.layout.main2, null))
+                .setView(view)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -64,10 +80,7 @@ public class ContactsFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-        contactAdapter.notifyDataSetChanged();
 //        new LoadContacts().execute();
-
-
         return alertDialog.create();
     }
 
@@ -84,6 +97,7 @@ public class ContactsFragment extends DialogFragment {
                 Contact contact = new Contact();
                 String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 contact.setContactName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+
                 contacts.add(contact);
             }
             cursor.close();
@@ -103,11 +117,11 @@ public class ContactsFragment extends DialogFragment {
             View view = convertView;
             if (view == null) {
                 LayoutInflater vi = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = vi.inflate(R.layout.activity_contacts, null);
+                view = vi.inflate(R.layout.main2, null);
             }
             Contact contact = items.get(position);
             if (contact != null) {
-                CheckBox nameCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
+                CheckBox nameCheckBox = (CheckBox) view.findViewById(R.id.cb_app);
                 nameCheckBox.setChecked(selectedContacts.get(position));
                 if (nameCheckBox != null) {
                     nameCheckBox.setText(contact.getContactName());
@@ -174,4 +188,5 @@ public class ContactsFragment extends DialogFragment {
         }
 
     }
+
 }
