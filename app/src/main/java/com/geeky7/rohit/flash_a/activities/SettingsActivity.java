@@ -2,14 +2,15 @@
 package com.geeky7.rohit.flash_a.activities;
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.fragments.ContactsFragment;
 
 public class SettingsActivity extends AppCompatPreferenceActivity{
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             super.onCreate(savedInstanceState);
             // getting the preference data from xml
             addPreferencesFromResource(R.xml.settings);
+
+            Preference eta = findPreference("Settings_Send_ETA");
+            eta.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+                @Override
+                public boolean onPreferenceClick(Preference preference){
+                    ContactsFragment contact = new ContactsFragment();
+                    if (!contact.isAdded())
+                        contact.show(getFragmentManager(),"Contacts");
+                    return true;
+                }
+            });
         }
     }
     @Override
