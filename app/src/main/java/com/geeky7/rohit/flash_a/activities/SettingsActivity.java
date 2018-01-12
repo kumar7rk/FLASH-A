@@ -31,9 +31,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             addPreferencesFromResource(R.xml.settings);
 
             Preference eta = findPreference("Settings_Send_ETA");
+            eta.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    return false;
+                }
+            });
             eta.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
                 @Override
                 public boolean onPreferenceClick(Preference preference){
+
                     ContactsFragment contact = new ContactsFragment();
                     if (!contact.isAdded())
                         contact.show(getFragmentManager(),"Contacts");
