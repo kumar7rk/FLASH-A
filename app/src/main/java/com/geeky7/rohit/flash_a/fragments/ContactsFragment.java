@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
+import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class ContactsFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -57,10 +60,9 @@ public class ContactsFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.list_view_contact, null);
         listView = (ListView)view.findViewById(R.id.list_view);
 
-
         contacts = new ArrayList<>();
-        contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
         getContacts();
+        contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
         listView.setAdapter(contactAdapter);
 
         //contactAdapter.notifyDataSetChanged();
@@ -126,7 +128,13 @@ public class ContactsFragment extends DialogFragment {
                 if (nameCheckBox != null) {
                     nameCheckBox.setText(contact.getContactName());
                 }
-                nameCheckBox.setOnClickListener((View.OnClickListener) new OnItemClickListener(position,nameCheckBox.getText(),nameCheckBox));
+                //nameCheckBox.setOnClickListener(new OnItemClickListener(position,nameCheckBox.getText(),nameCheckBox));
+                nameCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        Main.showToast(compoundButton.getText().toString()+ "selected");
+                    }
+                });
             }
             return view;
         }
