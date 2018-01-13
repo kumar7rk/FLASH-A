@@ -1,16 +1,18 @@
 // new written
 package com.geeky7.rohit.flash_a.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.geeky7.rohit.flash_a.fragments.ContactsFragment;
 
-public class SettingsActivity extends AppCompatPreferenceActivity{
+public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        Main.showToast("I'm called " + s);
+        boolean eta = sharedPreferences.getBoolean(getResources().getString(R.string.settings_send_eta),false);
+        if (eta) Main.showToast("eta on");
+        else Main.showToast("eta off");
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -34,19 +44,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             eta.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                    return false;
-                }
-            });
-            eta.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
-                @Override
-                public boolean onPreferenceClick(Preference preference){
-
+                    if (preference.getKey().equals(getResources().getString(R.string.settings_send_eta))){
+                        Main.showToast("Send Eta selected");
+                    }
                     ContactsFragment contact = new ContactsFragment();
                     if (!contact.isAdded())
                         contact.show(getFragmentManager(),"Contacts");
                     return true;
                 }
             });
+            /*eta.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    return false;
+                }
+            });*/
         }
     }
     @Override
