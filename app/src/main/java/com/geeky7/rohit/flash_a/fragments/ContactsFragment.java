@@ -87,7 +87,7 @@ public class ContactsFragment extends DialogFragment {
                     ContactsContract.Contacts.HAS_PHONE_NUMBER,
                     ContactsContract.Contacts._ID
             };
-            Cursor cursor = getActivity().managedQuery(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.Contacts.HAS_PHONE_NUMBER+"=?", new String[]{"1"}, ContactsContract.Contacts.DISPLAY_NAME);
+            Cursor cursor = getActivity().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.Contacts.HAS_PHONE_NUMBER+"=?", new String[]{"1"}, ContactsContract.Contacts.DISPLAY_NAME);
             contacts = new ArrayList<Contact>();
             while(cursor.moveToNext()){
                 Contact contact = new Contact();
