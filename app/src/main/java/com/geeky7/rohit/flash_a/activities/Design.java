@@ -359,8 +359,9 @@ public class Design extends AppCompatActivity {
         customiseMessage_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!contact.isAdded())
-                    contact.show(getFragmentManager(),"Contacts");
+                Main.showToast(getResources().getString(R.string.coming_soon));
+                /*if (!contact.isAdded())
+                    contact.show(getFragmentManager(),"Contacts");*/
             }
         });
 
