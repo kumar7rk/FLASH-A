@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
         android:id="@+id/settings_send_eta"
         android:title="Send ETA"
