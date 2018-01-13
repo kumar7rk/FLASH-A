@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.SparseBooleanArray;
@@ -62,12 +61,9 @@ public class ContactsFragment extends DialogFragment {
 
         contacts = new ArrayList<>();
         getContacts();
-        contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
+        contactAdapter = new ContactAdapter(getActivity(), R.layout.main2, contacts);
         listView.setAdapter(contactAdapter);
 
-        //contactAdapter.notifyDataSetChanged();
-
-        //on click save button save the keyword in the sharedPreferences
         alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle("Select Contacts")
                 .setView(view)
@@ -76,16 +72,14 @@ public class ContactsFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 })
-                // close button to close the dialog
                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-//        new LoadContacts().execute();
         return alertDialog.create();
     }
-
+    //interacts with android and steals all the contacts; I mean fetch
     private void getContacts(){
         try{
             String[] projection = new String[] {
@@ -99,7 +93,6 @@ public class ContactsFragment extends DialogFragment {
                 Contact contact = new Contact();
                 String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 contact.setContactName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-
                 contacts.add(contact);
             }
             cursor.close();
@@ -108,6 +101,8 @@ public class ContactsFragment extends DialogFragment {
             e.printStackTrace();
         }
     }
+    // Adapter!! Yeah!! Everything in the same class
+    // As long as it does it jobs you don't mind. Right?
     public class ContactAdapter extends ArrayAdapter<Contact> {
         private ArrayList<Contact> items;
         public ContactAdapter(Context context, int textViewResourceId, ArrayList<Contact> items) {
@@ -128,34 +123,17 @@ public class ContactsFragment extends DialogFragment {
                 if (nameCheckBox != null) {
                     nameCheckBox.setText(contact.getContactName());
                 }
-                //nameCheckBox.setOnClickListener(new OnItemClickListener(position,nameCheckBox.getText(),nameCheckBox));
                 nameCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        Main.showToast(compoundButton.getText().toString()+ "selected");
+                        Main.showToast(compoundButton.getText().toString()+ " selected");
                     }
                 });
             }
             return view;
         }
     }
-
-    class OnItemClickListener implements DialogInterface.OnClickListener {
-        private int position;
-        private CharSequence text;
-        private CheckBox checkBox;
-        OnItemClickListener(int position, CharSequence text,CheckBox checkBox){
-            this.position = position;
-            this.text = text;
-            this.checkBox = checkBox;
-        }
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            selectedContacts.append(position, true);
-//            Toast.makeText(getBaseContext(), "Clicked "+position +" and text "+text,Toast.LENGTH_SHORT).show();
-        }
-    }
-
+    // contact class just for fun. No it's the backbone of the whole idea. But I don't know how it works. But It does.
     public class Contact {
         private String contactName;
 
@@ -166,35 +144,4 @@ public class ContactsFragment extends DialogFragment {
             this.contactName = contactName;
         }
     }
-    class LoadContacts extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Do Dialog stuff here
-            progressDialog = ProgressDialog.show(getActivity(),"Please wait...", "Retrieving contacts ...", true);
-        }
-        protected String doInBackground(String... args) {
-            // Put your implementation to retrieve contacts here
-            getContacts();
-            return null;
-        }
-        protected void onPostExecute(String file_url) {
-            contactAdapter = new ContactAdapter(getActivity(), R.layout.activity_contacts, contacts);
-            listView.setAdapter(contactAdapter);
-
-            // Dismiss Dialog
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
-
-            contactAdapter.notifyDataSetChanged();
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    // Create list adapter and notify it
-                }
-            });
-
-        }
-
-    }
-
 }
