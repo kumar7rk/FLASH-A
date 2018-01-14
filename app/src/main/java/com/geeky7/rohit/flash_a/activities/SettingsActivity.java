@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
@@ -39,26 +40,34 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             super.onCreate(savedInstanceState);
             // getting the preference data from xml
             addPreferencesFromResource(R.xml.settings);
+            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            Preference eta = findPreference("Settings_Send_ETA");
+            final Preference eta = findPreference("Settings_Send_ETA");
+            final Preference contacts = findPreference("Settings_Select_Contacts");
+
+            boolean b = preferences.getBoolean("Settings_Send_ETA",false);
+            if (!b) contacts.setEnabled(false);
+            if (b) contacts.setEnabled(true);
+
             eta.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                    if (preference.getKey().equals(getResources().getString(R.string.settings_send_eta))){
-                        Main.showToast("Send Eta selected");
-                    }
-                    ContactsFragment contact = new ContactsFragment();
-                    if (!contact.isAdded())
-                        contact.show(getFragmentManager(),"Contacts");
+                boolean b = preferences.getBoolean("Settings_Send_ETA",false);
+                    if (b) contacts.setEnabled(false);
+                    if (!b) contacts.setEnabled(true);
                     return true;
                 }
             });
-            /*eta.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            contacts.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    ContactsFragment contact = new ContactsFragment();
+                    if (!contact.isAdded())
+                        contact.show(getFragmentManager(),"Contacts");
                     return false;
                 }
-            });*/
+            });
+
         }
     }
     @Override
