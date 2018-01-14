@@ -6,6 +6,12 @@
         android:key="@string/settings_send_eta"
         android:summary="When your location is shared also send expected time of arrival (ETA) to home"/>
 
+    <Preference
+        android:id="@+id/settings_select_contacts"
+        android:title="Select Contacts"
+        android:key="@string/settings_select_contacts"
+        android:summary="Would have a list of dynamic contacts (upto x(=4?)) and ending with more if more than x contacts"/>
+
     <CheckBoxPreference
         android:id="@+id/settings_notification"
         android:title="Notification when location shared"
