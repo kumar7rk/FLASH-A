@@ -49,6 +49,7 @@
 
     <!--Settings Preference keys-->
     <string name="settings_send_eta">Settings_Send_ETA</string>
+    <string name="settings_select_contacts">Settings_Select_Contacts</string>
     <string name="settings_notification">Settings_notification</string>
     <string name="settings_landmark">Settings_Landmark</string>
 
