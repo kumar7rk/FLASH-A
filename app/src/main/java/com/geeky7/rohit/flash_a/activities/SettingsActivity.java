@@ -9,9 +9,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.geeky7.rohit.flash_a.fragments.ContactsFragment;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -49,6 +53,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             if (!b) contacts.setEnabled(false);
             if (b) contacts.setEnabled(true);
 
+            setSummary(preferences, contacts);
+
             eta.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
@@ -64,10 +70,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
                     ContactsFragment contact = new ContactsFragment();
                     if (!contact.isAdded())
                         contact.show(getFragmentManager(),"Contacts");
+                    setSummary(preferences,contacts);
                     return false;
                 }
             });
 
+        }
+
+        private void setSummary(SharedPreferences preferences, Preference contacts) {
+            Set<String> set = new HashSet<>();
+            set = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,set);
+
+
+            String s1 = "";
+            for (String s : set)
+                s1 +=s+", ";
+            if (s1.endsWith(", ")){
+                s1 = s1.substring(0,s1.length()-2);
+            }
+            if (set.size()==0)
+                s1 = "None";
+            contacts.setSummary(s1);
         }
     }
     @Override
