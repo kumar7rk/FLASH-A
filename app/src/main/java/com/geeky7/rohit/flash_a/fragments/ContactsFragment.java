@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -20,10 +21,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContactsFragment extends DialogFragment {
     SharedPreferences preferences;
@@ -34,6 +38,8 @@ public class ContactsFragment extends DialogFragment {
     private ContactAdapter contactAdapter = null;
     private Runnable viewContacts = null;
     private SparseBooleanArray selectedContacts =   new SparseBooleanArray()  ;
+
+    Set<String> selectedContactsS = new HashSet<>();
 
     public ContactsFragment() {
     }
@@ -48,6 +54,10 @@ public class ContactsFragment extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+       selectedContactsS = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,selectedContactsS);
+
+
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -70,6 +80,10 @@ public class ContactsFragment extends DialogFragment {
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        final SharedPreferences.Editor editor = preferences.edit();
+                        editor.putStringSet(CONSTANT.SELECTED_CONTACTS,selectedContactsS);
+                        editor.apply();
                     }
                 })
                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
@@ -126,7 +140,16 @@ public class ContactsFragment extends DialogFragment {
                 nameCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        Main.showToast(compoundButton.getText().toString()+ " selected");
+                        String contact = compoundButton.getText().toString();
+                        if (b){
+                            Main.showToast(contact+ " selected");
+                            selectedContactsS.add(contact);
+                        }
+                        else{
+                            Main.showToast(compoundButton.getText().toString()+ " removed");
+                            selectedContactsS.remove(contact);
+
+                        }
                     }
                 });
             }
