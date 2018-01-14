@@ -21,6 +21,7 @@ public class CONSTANT {
     public static final String BACKGROUND_SERVICE = "BACKGROUND_SERVICE";
     public static final String APP_OPENED_FIRST_TIME = "APP_OPENED_FIRST_TIME";
     public static final String NO_INTERNET = "NO_INTERNET";
+    public static final String SELECTED_CONTACTS = "SELECTED_CONTACTS";
 
 
 
