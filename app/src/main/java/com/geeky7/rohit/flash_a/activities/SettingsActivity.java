@@ -80,16 +80,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         private void setSummary(SharedPreferences preferences, Preference contacts) {
             Set<String> set = new HashSet<>();
             set = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,set);
-
-
             String s1 = "";
+
             for (String s : set)
                 s1 +=s+", ";
-            if (s1.endsWith(", ")){
+
+            if (set.size()==0) s1 = "None";
+            else if (s1.endsWith(", "))
                 s1 = s1.substring(0,s1.length()-2);
-            }
-            if (set.size()==0)
-                s1 = "None";
+
             contacts.setSummary(s1);
         }
     }
