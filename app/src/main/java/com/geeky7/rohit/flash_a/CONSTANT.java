@@ -23,7 +23,7 @@ public class CONSTANT {
     public static final String NO_INTERNET = "NO_INTERNET";
     public static final String SELECTED_CONTACTS = "SELECTED_CONTACTS";
     public static final String SELECTED_CONTACTS_INDEX = "SELECTED_CONTACTS_INDEX";
-
+    public static final String CONTACTS_FRAGMENT = "ContactsFragment";
 
 
 }
