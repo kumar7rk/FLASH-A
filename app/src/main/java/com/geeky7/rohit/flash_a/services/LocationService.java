@@ -196,16 +196,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 }
 
                 if (mCurrentLocation!=null){
-                    Log.i(TAG,"Location is not null");
+                    Log.i(TAG," Location is not null");
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    Log.i(TAG,"after address fetched. Calling code");
+                    Log.i(TAG," after address fetched. Calling code");
     //              initiates places code to fetch the name of the nearby place
                     placesCode();
-                    Log.i(TAG,"Places code called");
+                    Log.i(TAG," Places code called");
                     etaCode();
-                    Log.i(TAG,"ETA code called");
+                    Log.i(TAG," ETA code called");
                     sendBroadcast();
-                    Log.i(TAG,"Broadcasted");
+                    Log.i(TAG," Broadcasted");
                 }
                 // stop itself after message is sent
                 stopSelf();
@@ -471,7 +471,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // checks if both async tasks are completed if so sendSMS
     public void bothAsync(){
-        updateLogAndToast("BothAsync"+counter);
+        updateLogAndToast("BothAsync "+counter);
         if(counter==2)
             sendSMS(placeName,durationEta);
     }
