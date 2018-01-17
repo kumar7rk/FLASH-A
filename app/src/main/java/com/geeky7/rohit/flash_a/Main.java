@@ -2,12 +2,22 @@ package com.geeky7.rohit.flash_a;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.geeky7.rohit.flash_a.activities.Design;
+import com.geeky7.rohit.flash_a.services.LocationService;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.services.urlshortener.Urlshortener;
+
+import java.io.IOException;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 
@@ -51,5 +61,40 @@ public class Main {
                 .click(Design.class,null)
                 .simple()
                 .build();
+    }
+
+    public String getContactName(final String phoneNumber) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName = "";
+        Cursor cursor = MyApplication.getAppContext().getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contactName = cursor.getString(0);
+                cursor.close();
+            }
+        }
+        return contactName;
+    }
+
+    public String urlShortner(String longUrl){
+        Urlshortener.Builder builder = new Urlshortener.Builder (AndroidHttp.newCompatibleTransport(),
+                AndroidJsonFactory.getDefaultInstance(), null);
+        Urlshortener urlshortener = builder.build();
+
+        com.google.api.services.urlshortener.model.Url url = new com.google.api.services.urlshortener.model.Url();
+        url.setLongUrl(longUrl);
+        try {
+            Urlshortener.Url.Insert insert=urlshortener.url().insert(url);
+            insert.setKey(MyApplication.getAppContext().getResources().getString(R.string.API_KEY_URL));
+            url = insert.execute();
+            return url.getId();
+        } catch (IOException e) {
+            Log.e(LocationService.TAG, Log.getStackTraceString(e));
+            return null;
+        }
     }
 }
