@@ -32,5 +32,5 @@ public class CONSTANT {
     public static final String SELECTED_CONTACTS_INDEX = "SELECTED_CONTACTS_INDEX";
 
 
-
+    public static final String SEND_ETA_IF_CONTACT_SELECTED = "SEND_ETA_IF_CONTACT_SELECTED";
 }
