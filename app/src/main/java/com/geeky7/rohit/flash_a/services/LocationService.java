@@ -37,25 +37,17 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.services.urlshortener.Urlshortener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -82,23 +74,21 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     List<Address> addresses;
     SharedPreferences preferences;
 
-    String sender = "";
+    String sender;
     String placeName;
     String durationEta;
     String URL;
     int counter = 0;
 
     public LocationService() {
-
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         m = new Main(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sender = preferences.getString(CONSTANT.SENDER,"");
+        sender = preferences.getString(CONSTANT.SENDER,CONSTANT.SENDER);
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -290,6 +280,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // Magic method to send the SMS to the sender
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String placeS, String etaS) {
+        SmsManager manager = SmsManager.getDefault();
+
         updateLogAndToast("sendSMS");
         // sender contains the phone number
         String name = sender;
@@ -300,14 +292,16 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             name = getContactName(sender,getApplicationContext());
 
         String address = getAddress();
-//        String eta = EtaMethodUnUsed();
-
-        SmsManager manager = SmsManager.getDefault();
 
         boolean sendEta = preferences.getBoolean(getResources().getString(R.string.settings_send_eta),false);
         boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
 
-        if (!etaS.equals("NA")&&sendEta) etaS = " ETA home "+etaS+".";
+        boolean send_eta_if_contact_selected = preferences.getBoolean(CONSTANT.SEND_ETA_IF_CONTACT_SELECTED,false);
+
+        Log.i(TAG,"sendSMS"+etaS+" "+ sendEta+" "+ send_eta_if_contact_selected);
+
+
+        if (!etaS.equals("NA")&&sendEta&&send_eta_if_contact_selected) etaS = " ETA home "+etaS+".";
         else etaS= "";
 
         if (!landmark)
@@ -317,7 +311,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             address = " ("+ address + ").";
         }
 
-        String message = placeS+ address+ etaS+ ". "+URL;
+        String message = placeS+ address+ etaS+" " +URL;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean notification = preferences.getBoolean(getResources().getString(R.string.settings_notification),false);
@@ -394,6 +388,9 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
+        String key = getApplicationContext().getString(R.string.API_KEY_GEO );
+        // certain place types
+        String types = "cafe|amusement_park|university|stadium|shopping_mall|restaurant";
 
         String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
         URL = location;
@@ -404,13 +401,11 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
         //calling a direct method which runs urlShortner code
-        URL = urlShortner(location);
-        String key = getApplicationContext().getString(R.string.API_KEY_GEO );
+        URL = m.urlShortner(location);
 
 
-        // certain place types
-        String types = "cafe|amusement_park|university|stadium|shopping_mall|restaurant";
 
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
@@ -602,7 +597,6 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     //this method calls the eta async task
     public void etaCode(){
-
         // Getting URL to the Google Directions API
         String url = buildEtaURL();
         // Start downloading json data from Google Directions API
@@ -628,7 +622,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String output = "json";
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
-        Log.i(TAG+ " ETA URL",url);
+        Log.i(TAG+ " ETAURL",url);
         return url;
     }
 
@@ -766,21 +760,4 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 //        Main.showToast(s);
     }
 
-    public String urlShortner(String longUrl){
-        Urlshortener.Builder builder = new Urlshortener.Builder (AndroidHttp.newCompatibleTransport(),
-                AndroidJsonFactory.getDefaultInstance(), null);
-        Urlshortener urlshortener = builder.build();
-
-        com.google.api.services.urlshortener.model.Url url = new com.google.api.services.urlshortener.model.Url();
-        url.setLongUrl(longUrl);
-        try {
-            Urlshortener.Url.Insert insert=urlshortener.url().insert(url);
-            insert.setKey(getResources().getString(R.string.API_KEY_URL));
-            url = insert.execute();
-            return url.getId();
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-            return null;
-        }
-    }
 }
