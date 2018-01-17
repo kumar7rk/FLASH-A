@@ -65,8 +65,8 @@ public class BackgroundService extends Service {
         // if the bundle is not null; lets get some data from it or maybe all of it :)
         if (extras != null) {
             message = extras.getString("Message");
-            sender = extras.getString("Sender");
-            editor.putString("sender",sender);
+            sender = extras.getString(CONSTANT.SENDER);
+            editor.putString(CONSTANT.SENDER,sender);
             editor.apply();
             Log.i(TAG,"Message is:"+ message);
 

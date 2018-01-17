@@ -98,7 +98,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         m = new Main(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sender = preferences.getString("sender","");
+        sender = preferences.getString(CONSTANT.SENDER,"");
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
