@@ -19,6 +19,9 @@ import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.MyApplication;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class BackgroundService extends Service {
     public static final String TAG = CONSTANT.BACKGROUND_SERVICE;
     String message = "No text";
@@ -26,6 +29,7 @@ public class BackgroundService extends Service {
     SharedPreferences preferences;
     Main m ;
 
+    Set<String> selectedContacts = new HashSet<>();
     public BackgroundService() {
     }
 
@@ -66,6 +70,22 @@ public class BackgroundService extends Service {
         if (extras != null) {
             message = extras.getString("Message");
             sender = extras.getString(CONSTANT.SENDER);
+            selectedContacts = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,selectedContacts);
+
+            String s1 = m.getContactName(sender);
+
+            boolean flag = false;
+            for (String s:selectedContacts){
+                Log.i(TAG, CONSTANT.SEND_ETA_IF_CONTACT_SELECTED + " All contacts "+ s);
+                if (s.equals(s1)){
+                    Log.i(TAG,CONSTANT.SEND_ETA_IF_CONTACT_SELECTED+" matched");
+                    editor.putBoolean(CONSTANT.SEND_ETA_IF_CONTACT_SELECTED,true);
+                    editor.apply();
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) editor.putBoolean(CONSTANT.SEND_ETA_IF_CONTACT_SELECTED,false);
             editor.putString(CONSTANT.SENDER,sender);
             editor.apply();
             Log.i(TAG,"Message is:"+ message);
