@@ -42,7 +42,7 @@ public class SMSReceiver extends BroadcastReceiver {
         // starting the background service with the message content and sender number
         Intent intent1 = new Intent(context,BackgroundService.class);
         intent1.putExtra("Message", message);
-        intent1.putExtra("Sender", senderNum);
+        intent1.putExtra(CONSTANT.SENDER, senderNum);
         context.startService(intent1);
     }
 }
