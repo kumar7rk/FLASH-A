@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -73,6 +74,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     String placeName;
     private String address;
 
+    String URL;
     public LocationService2() {
     }
 
@@ -302,12 +304,23 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         }
     }
     // builds the url for fetching the nearby places
-    @SuppressLint("LongLogTag")
+    @SuppressLint({"LongLogTag", "MissingPermission"})
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
-        double mLatitude = 0;
-        double mLongitude = 0;
+        double mLatitude = mCurrentLocation.getLatitude();
+        double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
-        String number1 = getApplicationContext().getString(R.string.API_KEY_GEO);
+
+        String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
+        URL = location;
+
+        if (android.os.Build.VERSION.SDK_INT > 9){
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        //calling a direct method which runs urlShortner code
+        URL = m.urlShortner(location);
+
+        String key = getApplicationContext().getString(R.string.API_KEY_GEO);
 
         if (mCurrentLocation==null) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -315,14 +328,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
         if(!m.isNetworkAvailable()) return new StringBuilder(CONSTANT.NO_INTERNET);
 
-        mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();
+
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius="+mRadius);
         sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
         sb.append("&sensor=true");
-        sb.append("&key=" + number1);
+        sb.append("&key=" + key);
         Log.i(TAG+""+" PlacesURL", sb.toString());
         return sb;
     }
@@ -508,6 +520,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,address);
         intent.putExtra(CONSTANT.PLACE_NAME,placeName);
+        intent.putExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION,URL);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
