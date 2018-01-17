@@ -37,7 +37,6 @@ import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
-import com.geeky7.rohit.flash_a.fragments.ContactsFragment;
 import com.geeky7.rohit.flash_a.fragments.Keyword;
 import com.geeky7.rohit.flash_a.services.LocationService2;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -66,14 +65,13 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String address = "";
-    String placeS = "";
-
+    String address;
+    String placeS;
+    String URL;
     Main m;
 
 
     private Keyword keyword = new Keyword();
-    private ContactsFragment contact = new ContactsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -567,6 +565,7 @@ public class Design extends AppCompatActivity {
     private void sendSMS(String sender,String name) {
         SmsManager manager = SmsManager.getDefault();
         boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
+
         if (!landmark){
             placeS = "";
         }
@@ -574,13 +573,14 @@ public class Design extends AppCompatActivity {
             placeS = "Near "+ placeS;
             address = " ("+ address + ").";
         }
-        String message = placeS+ address;
+        String message = placeS+ address+ " " + URL;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean notification = preferences.getBoolean(getResources().getString(R.string.settings_notification),false);
         if (notification)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
+
 
     // when the sendBroadcast method is called in locationService this code runs
     // gets the address and the place name
@@ -589,6 +589,7 @@ public class Design extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             address = intent.getStringExtra(CONSTANT.ADDRESS);
             placeS = intent.getStringExtra(CONSTANT.PLACE_NAME);
+            URL = intent.getStringExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION);
         }
     };
 
