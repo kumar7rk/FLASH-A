@@ -62,13 +62,13 @@ public class ContactsFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.list_view_contact, null);
 
         listView = (ListView)view.findViewById(R.id.list_view);
-        CheckBox nameCheckBox = (CheckBox) view.findViewById(R.id.cb_app);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
 
         selectedContactsS = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,selectedContactsS);
         selectedContactsIndex = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS_INDEX,selectedContactsIndex);
+
         contacts = new ArrayList<>();
         getContacts();
         contactAdapter = new ContactAdapter(getActivity(), R.layout.main2, contacts);
