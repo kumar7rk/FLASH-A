@@ -33,4 +33,5 @@ public class CONSTANT {
 
 
     public static final String SEND_ETA_IF_CONTACT_SELECTED = "SEND_ETA_IF_CONTACT_SELECTED";
+    public static final String URL_SHORTNER_SHARE_LOCATION = "URL";
 }
