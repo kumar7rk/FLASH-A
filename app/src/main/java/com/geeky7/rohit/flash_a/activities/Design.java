@@ -2,6 +2,7 @@ package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +15,10 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -69,17 +72,20 @@ public class Design extends AppCompatActivity {
     String placeS;
     String URL;
     Main m;
-
-
+    ProgressDialog progressDialog;
+    Handler messageHandler;
     private Keyword keyword = new Keyword();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
+        messageHandler = new Handler();
+
+        progressDialog = new ProgressDialog(this);
 
         m = new Main(getApplicationContext());
-        // checking if the permissions are not granted call request method which starts the procedure
 
+        // checking if the permissions are not granted call request method which starts the procedure
         if (!checkPermissions())
             requestPermissions();
 
@@ -279,7 +285,7 @@ public class Design extends AppCompatActivity {
         }
     }
 
-    // show a Snackbar indefinitely. IDK why
+    // shows a Snackbar indefinitely. IDK why--> For permissions only
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -288,7 +294,7 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
-    // same as above but only long length
+    // same as above but only long length - called once when no location to show in the currentLocation dialog
     private void showSnackbar2(final int mainTextStringId, final int actionStringId,
                                View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -307,7 +313,6 @@ public class Design extends AppCompatActivity {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-//        if (b)
         startLocationService2();
 
         final SharedPreferences.Editor editor = preferences.edit();
@@ -402,15 +407,23 @@ public class Design extends AppCompatActivity {
                 boolean internet = m.isNetworkAvailable();
 
                 //if no internet show a snackbar informing a user
-                if (!internet)
+                if (!internet){
                     showSnackbar("No internet Connectivity. Please connect to a network and retry");
+                }
                 // if the gps is off
                 else if (!b) {
-                    // calls this method which open the dialog which ask to enable location
+                    // calls this method which open the android location dialog which ask to enable location
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-                    startLocationService2();
+                    //showProgressDialog();//when gps is on and current location is clicked
+                    /*try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
+                    new YourAsyncTask(this).execute();
+                    /*startLocationService2();
                     try {
                         Thread.sleep(2000);
                         Thread.sleep(2000);
@@ -419,7 +432,14 @@ public class Design extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     // gps is on and location is probably fetched so let's do it
-                    buildDialogCurrentLocation();
+                    //buildDialogCurrentLocation();
+                    Thread mThread1 = new Thread() {
+                        @Override
+                        public void run() {
+                            buildDialogCurrentLocation();
+                        }
+                    };
+                    mThread1.start();*/
                 }
                 break;
         }
@@ -427,14 +447,15 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-        try {
+//        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
+        /*try {
             Thread.sleep(2000);
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        AlertDialog.Builder builder;
+        final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         } else {
@@ -458,20 +479,52 @@ public class Design extends AppCompatActivity {
             })
             .setIcon(android.R.drawable.ic_menu_mylocation);
 
-        if(!address.equals("")){
-            builder.show();
+//      if(!address.equals("")){
+        if (!("").equals(address)){
+            dismissProgressDialog();
+          Runnable doDisplayError = new Runnable() {
+              public void run() {
+                  builder.show();
+              }
+          };
+          messageHandler.post(doDisplayError);
         }
         else{
+            dismissProgressDialog();
+            Log.i(TAG,"address " + address);
             showSnackbar2(R.string.error_fetching_location, R.string.retry,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            buildDialogCurrentLocation();
-                        }
-                   });
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showProgressDialog();// when no address could be fetched from locationService2
+                        //buildDialogCurrentLocation();
+                        Thread mThread3 = new Thread() {
+                            @Override
+                            public void run() {
+                                buildDialogCurrentLocation();
+                            }
+                        };
+                        mThread3.start();
+                    }
+               });
         }
         stopService(new Intent(this, LocationService2.class));
     }
+
+    private void dismissProgressDialog() {
+        /*Log.i(TAG,"Someone doesn't like me anymore GoodBye. Yours ProgressDialog");
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();*/
+    }
+
+    private void showProgressDialog() {
+        /*Log.i(TAG,"Did someone call for me. Sincerely ProgressDialog");
+        progressDialog.setMessage("Fetching current location, hold on tight. Don't move");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();*/
+    }
+
     // onClick currentLocation button in actionBar and gps is off
     // opens a dialog which turns on gps without requiring to navigate to the location settings page
     private void displayLocationSettingsRequest(Context context) {
@@ -502,6 +555,9 @@ public class Design extends AppCompatActivity {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
                             status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
+
+                            showProgressDialog(); // when android location dialog was shown user selected ok
+
                         } catch (IntentSender.SendIntentException e) {
                             Log.i(TAG, "PendingIntent unable to execute request.");
                         }
@@ -542,7 +598,15 @@ public class Design extends AppCompatActivity {
                     break;
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
-                    startLocationService2();
+                    new YourAsyncTask(this).execute();
+                    /*startLocationService2();
+                    *//*Thread mThread2 = new Thread() {
+                        @Override
+                        public void run() {
+                            startLocationService2();
+                        }
+                    };
+                    mThread2.start();*//*
                     try {
                         Thread.sleep(2000);
                         Thread.sleep(2000);
@@ -550,8 +614,8 @@ public class Design extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // build dialog location possibly fetched
-                    buildDialogCurrentLocation();
+                    // build dialog; location possibly fetched
+                    buildDialogCurrentLocation();*/
                     break;
             }
         } else {
@@ -601,4 +665,31 @@ public class Design extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
     }
 
+    private class YourAsyncTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog dialog;
+
+        public YourAsyncTask(Design activity) {
+            dialog = new ProgressDialog(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Doing something, please wait.");
+//            dialog.setCancelable(false);
+//            dialog.setIndeterminate(false);
+            dialog.show();
+        }
+
+        protected Void doInBackground(Void... args) {
+            startLocationService2();
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            buildDialogCurrentLocation();
+            if (dialog.isShowing())
+                dialog.dismiss();
+
+        }
+    }
 }
