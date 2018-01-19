@@ -68,7 +68,7 @@ public class Design extends AppCompatActivity {
 
     SharedPreferences preferences;
 
-    String address;
+    String address ="NA";
     String placeS;
     String URL;
     Main m;
@@ -463,7 +463,7 @@ public class Design extends AppCompatActivity {
         }
 
         builder.setTitle("Your Current Location")
-            .setMessage(address +" (Near" + placeS +")")
+            .setMessage(address +" (Near " + placeS +")")
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -479,32 +479,33 @@ public class Design extends AppCompatActivity {
             })
             .setIcon(android.R.drawable.ic_menu_mylocation);
 
-//      if(!address.equals("")){
-        if (!("").equals(address)){
-            dismissProgressDialog();
-          Runnable doDisplayError = new Runnable() {
+        if (!("NA").equals(address)){
+            Log.i(TAG,"address is "+address);
+            //dismissProgressDialog();
+            builder.show();
+          /*Runnable doDisplayError = new Runnable() {
               public void run() {
                   builder.show();
               }
           };
-          messageHandler.post(doDisplayError);
+          messageHandler.post(doDisplayError);*/
         }
         else{
-            dismissProgressDialog();
-            Log.i(TAG,"address " + address);
+            //dismissProgressDialog();
+            Log.i(TAG,"address iss" + address);
             showSnackbar2(R.string.error_fetching_location, R.string.retry,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showProgressDialog();// when no address could be fetched from locationService2
-                        //buildDialogCurrentLocation();
-                        Thread mThread3 = new Thread() {
+//                        showProgressDialog();// when no address could be fetched from locationService2
+                        buildDialogCurrentLocation();
+                        /*Thread mThread3 = new Thread() {
                             @Override
                             public void run() {
                                 buildDialogCurrentLocation();
                             }
                         };
-                        mThread3.start();
+                        mThread3.start();*/
                     }
                });
         }
@@ -630,21 +631,21 @@ public class Design extends AppCompatActivity {
         SmsManager manager = SmsManager.getDefault();
         boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
 
-        if (!landmark){
-            placeS = "";
-        }
+        if (!landmark) placeS = "";
         else{
             placeS = "Near "+ placeS;
             address = " ("+ address + ").";
         }
+
         String message = placeS+ address+ " " + URL;
         manager.sendTextMessage(sender,null, message, null, null);
 
-        boolean notification = preferences.getBoolean(getResources().getString(R.string.settings_notification),false);
+        boolean notification = preferences.getBoolean(getResources()
+                .getString(R.string.settings_notification),false);
+
         if (notification)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
-
 
     // when the sendBroadcast method is called in locationService this code runs
     // gets the address and the place name
@@ -674,7 +675,7 @@ public class Design extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            dialog.setMessage("Doing something, please wait.");
+            dialog.setMessage("Fetching current location, hold on tight. Don't move!!");
 //            dialog.setCancelable(false);
 //            dialog.setIndeterminate(false);
             dialog.show();
@@ -687,6 +688,11 @@ public class Design extends AppCompatActivity {
 
         protected void onPostExecute(Void result) {
             buildDialogCurrentLocation();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (dialog.isShowing())
                 dialog.dismiss();
 
