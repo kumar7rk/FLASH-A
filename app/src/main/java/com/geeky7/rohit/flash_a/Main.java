@@ -97,4 +97,8 @@ public class Main {
             return null;
         }
     }
+
+    public void updateLog(String className, String text){
+        Log.i(className,text);
+    }
 }
