@@ -59,6 +59,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mlocationRequest;
+
     private Location mCurrentLocation;
     private Geocoder geocoder;
 
@@ -196,7 +197,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 }
                 stopSelf();*/
             }
-            // when gps if off registers a receiver listening for status of the gps to change
+            // when gps if off- register a receiver listening for status of the gps to change
             else{
                 getApplicationContext().registerReceiver(gpsReceiver,
                         new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
@@ -245,7 +246,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     e.printStackTrace();
                 }
                 stopSelf();*/
-                // register a broadcast receiver - for whenever the gos is turned on/off
+                // register a broadcast receiver - for whenever the gps is turned on/off
                 // we do some work when it's status is turned on
                 getApplicationContext().unregisterReceiver(gpsReceiver);
             }
@@ -313,10 +314,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
         URL = location;
 
-        if (android.os.Build.VERSION.SDK_INT > 9){
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         //calling a direct method which runs urlShortner code
         URL = m.urlShortner(location);
 
