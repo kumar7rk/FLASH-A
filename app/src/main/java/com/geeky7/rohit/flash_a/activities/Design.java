@@ -79,9 +79,9 @@ public class Design extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
-        messageHandler = new Handler();
+        //messageHandler = new Handler();
 
-        progressDialog = new ProgressDialog(this);
+        //progressDialog = new ProgressDialog(this);
 
         m = new Main(getApplicationContext());
 
@@ -313,6 +313,7 @@ public class Design extends AppCompatActivity {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+//        if (b)
         startLocationService2();
 
         final SharedPreferences.Editor editor = preferences.edit();
@@ -363,8 +364,6 @@ public class Design extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Main.showToast(getResources().getString(R.string.coming_soon));
-                /*if (!contact.isAdded())
-                    contact.show(getFragmentManager(),"Contacts");*/
             }
         });
 
@@ -464,6 +463,9 @@ public class Design extends AppCompatActivity {
 
         builder.setTitle("Your Current Location")
             .setMessage(address +" (Near " + placeS +")")
+            .setIcon(android.R.drawable.ic_menu_mylocation)
+
+                //setting up buttons
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -474,15 +476,14 @@ public class Design extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
                     intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                     startActivityForResult(intent, CONTACT_REQUEST_CODE);
-                    Main.showToast("Select contact to Share location");
+                    Main.showToast("Select contact to share your current location");
                 }
-            })
-            .setIcon(android.R.drawable.ic_menu_mylocation);
-
+            });
         if (!("NA").equals(address)){
-            Log.i(TAG,"address is "+address);
-            //dismissProgressDialog();
             builder.show();
+            Log.i(TAG,"address is "+address);
+
+            //dismissProgressDialog();
           /*Runnable doDisplayError = new Runnable() {
               public void run() {
                   builder.show();
@@ -492,13 +493,14 @@ public class Design extends AppCompatActivity {
         }
         else{
             //dismissProgressDialog();
-            Log.i(TAG,"address iss" + address);
+            Log.i(TAG,"address iss " + address);
             showSnackbar2(R.string.error_fetching_location, R.string.retry,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        new YourAsyncTask(Design.this).execute();
 //                        showProgressDialog();// when no address could be fetched from locationService2
-                        buildDialogCurrentLocation();
+                        //buildDialogCurrentLocation();
                         /*Thread mThread3 = new Thread() {
                             @Override
                             public void run() {
@@ -556,8 +558,9 @@ public class Design extends AppCompatActivity {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
                             status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
-
-                            showProgressDialog(); // when android location dialog was shown user selected ok
+                            m.updateLog(TAG,"starting resolution one.");
+//                            new YourAsyncTask(Design.this).execute();
+                            // showProgressDialog(); // when android location dialog was shown user selected ok
 
                         } catch (IntentSender.SendIntentException e) {
                             Log.i(TAG, "PendingIntent unable to execute request.");
@@ -599,6 +602,7 @@ public class Design extends AppCompatActivity {
                     break;
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
+                    m.updateLog(TAG,"I'm on onActivity result for gps request code. Say Hi to me :)");
                     new YourAsyncTask(this).execute();
                     /*startLocationService2();
                     *//*Thread mThread2 = new Thread() {
@@ -675,27 +679,43 @@ public class Design extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+
             dialog.setMessage("Fetching current location, hold on tight. Don't move!!");
 //            dialog.setCancelable(false);
 //            dialog.setIndeterminate(false);
+            m.updateLog(TAG,"YourAsync 1 :Showing Progress dialog now");
             dialog.show();
+            /*try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
         }
 
         protected Void doInBackground(Void... args) {
-            startLocationService2();
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            buildDialogCurrentLocation();
+            m.updateLog(TAG,"YourAsync 2 : calling startLocationService2");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            startLocationService2();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            m.updateLog(TAG,"YourAsync 3a :buildDialogCurrent..");
+            buildDialogCurrentLocation();
+            //m.updateLog(TAG,"YourAsync 3b :Sleeping for 2 sec. Does it?");
+
+            m.updateLog(TAG,"YourAsync 3c :dialog showing?. Dismissing");
             if (dialog.isShowing())
                 dialog.dismiss();
-
         }
     }
 }
