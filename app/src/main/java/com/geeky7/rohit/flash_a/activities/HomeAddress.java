@@ -227,7 +227,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             // would cause force close if activity is started with no internet access
             // bug founded by monkey yeaaahh!!! Been there done that (don't think about this too hard, alright, you gonna hurt yourself)
             if(m.isNetworkAvailable()){
-                Log.i(TAG,"Network is available");
+//                Log.i(TAG,"Network is available");
                 LatLng g = getLocationFromAddress(homeAddressS);
                 if (null==g){
                     Main.showToast("Error loading map.");

@@ -85,7 +85,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     @Override
     public void onCreate() {
-        super.onCreate();
+//        super.onCreate();
         m = new Main(getApplicationContext());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         sender = preferences.getString(CONSTANT.SENDER,CONSTANT.SENDER);
