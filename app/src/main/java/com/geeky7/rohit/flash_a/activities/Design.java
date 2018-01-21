@@ -80,8 +80,8 @@ public class Design extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
         //messageHandler = new Handler();
-
-        //progressDialog = new ProgressDialog(this);
+        //startLocationService2();
+        progressDialog = new ProgressDialog(this);
 
         m = new Main(getApplicationContext());
 
@@ -314,7 +314,7 @@ public class Design extends AppCompatActivity {
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
 //        if (b)
-        startLocationService2();
+        //startLocationService2();
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
@@ -405,6 +405,8 @@ public class Design extends AppCompatActivity {
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean internet = m.isNetworkAvailable();
 
+                //stopService(new Intent(this,LocationService2.class));
+
                 //if no internet show a snackbar informing a user
                 if (!internet){
                     showSnackbar("No internet Connectivity. Please connect to a network and retry");
@@ -494,22 +496,23 @@ public class Design extends AppCompatActivity {
         else{
             //dismissProgressDialog();
             Log.i(TAG,"address iss " + address);
-            showSnackbar2(R.string.error_fetching_location, R.string.retry,
+            new YourAsyncTask(Design.this).execute();
+            /*showSnackbar2(R.string.error_fetching_location, R.string.retry,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         new YourAsyncTask(Design.this).execute();
 //                        showProgressDialog();// when no address could be fetched from locationService2
                         //buildDialogCurrentLocation();
-                        /*Thread mThread3 = new Thread() {
+                        *//*Thread mThread3 = new Thread() {
                             @Override
                             public void run() {
                                 buildDialogCurrentLocation();
                             }
                         };
-                        mThread3.start();*/
+                        mThread3.start();*//*
                     }
-               });
+               });*/
         }
         stopService(new Intent(this, LocationService2.class));
     }
@@ -559,6 +562,16 @@ public class Design extends AppCompatActivity {
                             // in onActivityResult().
                             status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
                             m.updateLog(TAG,"starting resolution one.");
+                            progressDialog.setMessage("Turning on GPS");
+                            progressDialog.show();
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    progressDialog.dismiss();
+                                }
+                            }, 5000); // 5 seconds delay
+
 //                            new YourAsyncTask(Design.this).execute();
                             // showProgressDialog(); // when android location dialog was shown user selected ok
 
@@ -576,7 +589,7 @@ public class Design extends AppCompatActivity {
     // checks for the name of the contact, calls sendSMS and also buildCurrentLocationDialog
     // yeah a lot of works looks like never had problems with this part of the code
     @Override
-    protected void onActivityResult ( int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
         // check if the gps is enabled and a contact is selected
         // if either of them is true this if runs
@@ -681,8 +694,9 @@ public class Design extends AppCompatActivity {
         protected void onPreExecute() {
 
             dialog.setMessage("Fetching current location, hold on tight. Don't move!!");
-//            dialog.setCancelable(false);
-//            dialog.setIndeterminate(false);
+            dialog.setCancelable(false);
+            dialog.setIndeterminate(true);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             m.updateLog(TAG,"YourAsync 1 :Showing Progress dialog now");
             dialog.show();
             /*try {
@@ -709,6 +723,8 @@ public class Design extends AppCompatActivity {
         }
 
         protected void onPostExecute(Void result) {
+            m.updateLog(TAG + " YourAsync 3", " result" +result);
+
             m.updateLog(TAG,"YourAsync 3a :buildDialogCurrent..");
             buildDialogCurrentLocation();
             //m.updateLog(TAG,"YourAsync 3b :Sleeping for 2 sec. Does it?");
