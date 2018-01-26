@@ -73,35 +73,28 @@ public class Design extends AppCompatActivity {
     String URL;
     Main m;
     ProgressDialog progressDialog;
-    Handler messageHandler;
     private Keyword keyword = new Keyword();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
-        //messageHandler = new Handler();
-        //startLocationService2();
-        progressDialog = new ProgressDialog(this);
-
-        m = new Main(getApplicationContext());
-
-        // checking if the permissions are not granted call request method which starts the procedure
-        if (!checkPermissions())
-            requestPermissions();
-
-        // finding view by id for all the associated views
-        findViewById();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
-        final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
-        boolean firstTime = preferences.getBoolean(CONSTANT.APP_OPENED_FIRST_TIME,true);
 
+        boolean firstTime = preferences.getBoolean(CONSTANT.APP_OPENED_FIRST_TIME,true);
         if (firstTime){
             startActivity(new Intent(this,TutorialActivity.class));
             editor.putBoolean(CONSTANT.APP_OPENED_FIRST_TIME,false).apply();
         }
 
+        progressDialog = new ProgressDialog(this);
+        m = new Main(getApplicationContext());
+
+        // finding view by id for all the associated views
+        findViewById();
+
+        final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
         if (service) enableService();
@@ -114,7 +107,8 @@ public class Design extends AppCompatActivity {
                     keyword.show(getFragmentManager(),"Keyword");
             }
         });
-
+        // checking if the permissions are not granted call request method which starts the procedure
+        if (!checkPermissions()) requestPermissions();
     }
 
     // find view by id of all the views
@@ -226,7 +220,7 @@ public class Design extends AppCompatActivity {
     }
 
     // This method is called the first time the app is installed
-    // request all the permissions stated here
+    // requests all the permissions stated here
     private void startPermissionRequest() {
         ActivityCompat.requestPermissions(Design.this,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -294,16 +288,9 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
-    // same as above but only long length - called once when no location to show in the currentLocation dialog
-    private void showSnackbar2(final int mainTextStringId, final int actionStringId,
-                               View.OnClickListener listener) {
-        Snackbar.make(findViewById(android.R.id.content),
-                getString(mainTextStringId),
-                Snackbar.LENGTH_LONG)
-                .setAction(getString(actionStringId), listener).show();
-    }
-
     // would respond to the onClick listeners on layout
+
+
     @Override
     protected void onResume() {
         super.onResume();
