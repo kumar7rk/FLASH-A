@@ -6,7 +6,7 @@ android {
         applicationId "com.geeky7.rohit.flash_a"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 3
+        versionCode 4
         versionName "2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
