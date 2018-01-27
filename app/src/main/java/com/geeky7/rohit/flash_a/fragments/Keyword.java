@@ -1,5 +1,7 @@
-// Let's you update the keyword; save it in sharePreferences; share with your family friends via SMS
-
+/*
+* Let's you update the keyword; save it in sharePreferences; share with your family friends via SMS
+*
+* */
 package com.geeky7.rohit.flash_a.fragments;
 
 import android.app.AlertDialog;
@@ -31,6 +33,7 @@ public class Keyword extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        //setting up Shared Preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
 
@@ -38,8 +41,12 @@ public class Keyword extends DialogFragment {
         View view = inflater.inflate(R.layout.activity_keyword, null);
 
         keyword= (EditText) view.findViewById(R.id.keyword_et);
+
+
+        //putting the caret on the last of the keyword for convenience
         keyword.setSelection(keyword.getText().length());
 
+        // creating dialog with buttons
         //on click save button save the keyword in the sharedPreferences
         alertDialog = new AlertDialog.Builder(getActivity())
         .setTitle("Edit Keyword")
