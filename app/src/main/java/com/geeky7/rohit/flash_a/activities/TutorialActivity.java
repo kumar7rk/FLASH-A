@@ -1,6 +1,6 @@
 /*
 Shows a tutorial
-
+on back press closed the activity
 */
 
 package com.geeky7.rohit.flash_a.activities;
@@ -16,7 +16,6 @@ import agency.tango.materialintroscreen.SlideFragmentBuilder;
 import agency.tango.materialintroscreen.animations.IViewTranslation;
 
 public class TutorialActivity extends MaterialIntroActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +34,7 @@ public class TutorialActivity extends MaterialIntroActivity {
         "ASHA sends your location, including address and landmark, on receiving your customised keyword in an SMS.*/
                 //  Html.fromHtml("<b>" + myText + "</b>"
 
+        // first fragment
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.first_slide_background)
                         .buttonsColor(R.color.first_slide_buttons)
@@ -42,8 +42,8 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .title("Stay close to your dear ones!")
                         .description("Whether you're driving or could not reach your your phone, you'll always be closer to them with ASHA app.")
                         .build()
-                );
-
+        );
+        // second fragment
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.second_slide_background)
                 .buttonsColor(R.color.second_slide_buttons)
@@ -53,8 +53,9 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .description("\n Whenever you receive an SMS with your chosen keyword. Your current location will be shared with them. " +
                         "\n\n"+
                         "You'll be notified when your location is shared.")
-                .build());
-
+                .build()
+        );
+        // third fragment
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.third_slide_background)
                         .buttonsColor(R.color.third_slide_buttons)
@@ -64,8 +65,8 @@ public class TutorialActivity extends MaterialIntroActivity {
                                 "\n\n"+
                                 "You're in complete control when the app runs. You can enable or disable the app with one click when you want privacy.")
                         .build()
-                );
-
+        );
+        // fourth fragment
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.fourth_slide_background)
                 .buttonsColor(R.color.fourth_slide_buttons)
@@ -81,7 +82,7 @@ public class TutorialActivity extends MaterialIntroActivity {
                 }, "Stay Connected!")*/
                 );
     }
-
+    // back button press closes the tutorial activity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
