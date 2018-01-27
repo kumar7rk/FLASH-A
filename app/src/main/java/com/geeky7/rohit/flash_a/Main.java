@@ -1,5 +1,6 @@
 package com.geeky7.rohit.flash_a;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,7 +9,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.geeky7.rohit.flash_a.activities.Design;
@@ -28,8 +31,13 @@ public class Main {
 
     Context mContext;
 
+    public Activity activity;
     public Main(Context mContext) {
         this.mContext = mContext;
+    }
+
+    public Main(Activity _activity){
+        this.activity = _activity;
     }
 
 
@@ -100,5 +108,14 @@ public class Main {
 
     public void updateLog(String className, String text){
         Log.i(className,text);
+    }
+
+    // indefinite with a button
+    public void showSnackbar(final int mainTextStringId, final int actionStringId,
+                              View.OnClickListener listener) {
+        Snackbar.make(activity.findViewById(android.R.id.content),
+                activity.getString(mainTextStringId),
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(activity.getString(actionStringId), listener).show();
     }
 }
