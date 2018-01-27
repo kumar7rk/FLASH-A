@@ -50,27 +50,27 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     private TextView homeAddress;
     NestedScrollView scrollView;
     private ImageView delete;
-
-    SharedPreferences preferences;
-
     private GoogleMap mMap;
 
+    public Main m;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_address_new);
+        setContentView(R.layout.activity_home_address);
 
-        // find the views of all the elements in the xml
+        m = new Main(this);
+        // find the views ;of all the elements in the xml
         findViewByIds();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
-
-        //Setting the homeAddress in the textView
+        //fetching saved homeAddress from sharedPreferences
         final String homeAddressS = preferences.getString(CONSTANT.HOME_ADDRESS,getResources().getString(R.string.home_address_text));
+        // Setting the homeAddress in the textView
         homeAddress.setText(homeAddressS);
 
-        // hides the delete button when there is no homeAddress set
+        // hides the delete button when there is no homeAddress
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))){
             delete.setVisibility(View.INVISIBLE);
             homeAddress.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +114,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-    //a method for finding view by ids
+    //Find view by ids
     private void findViewByIds() {
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
@@ -219,15 +219,17 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         if (homeAddressS.equals(getResources().getString(R.string.home_address_text))||homeAddressS.equals("")){
         }
 
-        // We've a homeAddress. Let's go to place and say hello!!!!!
+        // We've a homeAddress. Let's go to person's place and say hello!!!!!
         else{
             Main m = new Main(getApplicationContext());
             Log.i(CONSTANT.HOME_ADDRESS,homeAddressS);
-            //checking if internet is available because showing marker required internet
-            // would cause force close if activity is started with no internet access
-            // bug founded by monkey yeaaahh!!! Been there done that (don't think about this too hard, alright, you gonna hurt yourself)
+
+            //checking if internet is available because showing marker requires internet
+
+            //Bug--> causes force close if activity is started with no internet access
+            // founded by monkey yeaaahh!!! Been there done that (don't think about this too hard, alright, you gonna hurt yourself)
+
             if(m.isNetworkAvailable()){
-//                Log.i(TAG,"Network is available");
                 LatLng g = getLocationFromAddress(homeAddressS);
                 if (null==g){
                     Main.showToast("Error loading map.");
