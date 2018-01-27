@@ -1,3 +1,9 @@
+/*
+* This is the main activity of the app
+ * Shows 6 layouts-sets onClicks
+ * 2 action bar buttons- shares currentLocations- send sms, build dialog...
+ * registers a broadcastReceiver which fetched address landmark and url from locationService2
+* */
 package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
@@ -54,26 +60,26 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 public class Design extends AppCompatActivity {
 
-    //    private static final String TAG = Design.class.getSimpleName();
     private static final String TAG = CONSTANT.DESIGN;
-
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final int GPS_REQUEST_CODE = 42; // the answer to universe
     private static final int CONTACT_REQUEST_CODE = 50;
-
 
     LinearLayout serviceEnabled_lay, homeAddress_lay, keyword_lay, customiseMessage_lay, history_lay, tutorial_lay;
     TextView serviceEnabled_tv;
     ImageView serviceEnabled_iv;
 
     SharedPreferences preferences;
+    ProgressDialog progressDialog;
+
+    Main m;
 
     String address ="NA";
     String placeS;
     String URL;
-    Main m;
-    ProgressDialog progressDialog;
+
     private Keyword keyword = new Keyword();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +88,7 @@ public class Design extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
 
+        //if app opened for the first time show tutorial activity
         boolean firstTime = preferences.getBoolean(CONSTANT.APP_OPENED_FIRST_TIME,true);
         if (firstTime){
             startActivity(new Intent(this,TutorialActivity.class));
@@ -94,12 +101,13 @@ public class Design extends AppCompatActivity {
         // finding view by id for all the associated views
         findViewById();
 
-        final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
         // fetching the service status from the sharedPreference and checking if its enabled or not
         // calling respective methods
+        final boolean service = preferences.getBoolean(CONSTANT.SERVICE, true);
         if (service) enableService();
         else disableService();
 
+        //open keyword fragment onClick Keyword layout
         keyword_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +123,6 @@ public class Design extends AppCompatActivity {
     private void findViewById() {
         serviceEnabled_tv = (TextView) findViewById(R.id.serviceEnabled_tv);
         serviceEnabled_iv = (ImageView) findViewById(R.id.serviceEnabled_iv);
-
         serviceEnabled_lay = (LinearLayout) findViewById(R.id.serviceEnabled_lay);
         homeAddress_lay = (LinearLayout) findViewById(R.id.homeAddress_lay);
         keyword_lay = (LinearLayout) findViewById(R.id.keyword_lay);
@@ -193,7 +200,6 @@ public class Design extends AppCompatActivity {
         // if either location or SMS permission is not granted; request
         if (shouldProvideRationaleLocation || shouldProvideRationaleSMS) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
-
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
                     new View.OnClickListener() {
                         @Override
@@ -209,14 +215,6 @@ public class Design extends AppCompatActivity {
             // previously and checked "Never ask again".
             startPermissionRequest();
         }
-    }
-
-    // just to show to user why this permission is required
-    // no button snackbar
-    private void showSnackbar(final String text) {
-        Snackbar.make(findViewById(android.R.id.content),text,
-                Snackbar.LENGTH_LONG)
-                .show();
     }
 
     // This method is called the first time the app is installed
@@ -249,8 +247,8 @@ public class Design extends AppCompatActivity {
                 // Permission granted.
             }
             if (grantResults[0] == PackageManager.PERMISSION_DENIED ||
-                    grantResults[1] == PackageManager.PERMISSION_DENIED ||
-                    grantResults[2] == PackageManager.PERMISSION_DENIED) {
+                grantResults[1] == PackageManager.PERMISSION_DENIED ||
+                grantResults[2] == PackageManager.PERMISSION_DENIED) {
                 // Notify the user via a SnackBar that they have rejected a core permission for the
                 // app, which makes the Activity useless. In a real app, core permissions would
                 // typically be best requested during a welcome-screen flow.
@@ -261,25 +259,32 @@ public class Design extends AppCompatActivity {
                 // when permissions are denied. Otherwise, your app could appear unresponsive to
                 // touches or interactions which have required permissions.
                 showSnackbar(R.string.permission_denied_explanation, R.string.settings,
-                        new View.OnClickListener() {
+                    new View.OnClickListener() {
                             @Override
-                            public void onClick(View view) {
-                                // Build intent that displays the App settings screen.
-                                Intent intent = new Intent();
-                                intent.setAction(
-                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package",
-                                        BuildConfig.APPLICATION_ID, null);
-                                intent.setData(uri);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        });
+                        public void onClick(View view) {
+                            // Build intent that displays the App settings screen.
+                            Intent intent = new Intent();
+                            intent.setAction(
+                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    BuildConfig.APPLICATION_ID, null);
+                            intent.setData(uri);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                );
             }
         }
     }
-
-    // shows a Snackbar indefinitely. IDK why--> For permissions only
+    // Show why a not granted permission is required
+    // no button snackbar
+    private void showSnackbar(final String text) {
+        Snackbar.make(findViewById(android.R.id.content),text,
+                Snackbar.LENGTH_LONG)
+                .show();
+    }
+    // shows a Snackbar indefinitely (for permissions)
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
@@ -288,20 +293,18 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
-    // would respond to the onClick listeners on layout
-
-
+    // registers receiver to receive address, place name and url
+    // sets onClick layout listeners
     @Override
     protected void onResume() {
         super.onResume();
-
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
-
+/*
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (b) startLocationService2();
+*/
 
-//        if (b)
-        //startLocationService2();
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
@@ -370,6 +373,7 @@ public class Design extends AppCompatActivity {
 
     }
 
+    // method to start locationService2
     private void startLocationService2() {
         stopService(new Intent(this, LocationService2.class));
         startService(new Intent(this, LocationService2.class));
@@ -381,6 +385,7 @@ public class Design extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    // shows settings and currentLocation buttons
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -392,8 +397,6 @@ public class Design extends AppCompatActivity {
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean internet = m.isNetworkAvailable();
 
-                //stopService(new Intent(this,LocationService2.class));
-
                 //if no internet show a snackbar informing a user
                 if (!internet){
                     showSnackbar("No internet Connectivity. Please connect to a network and retry");
@@ -404,30 +407,7 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     displayLocationSettingsRequest(getApplicationContext());
                 } else {
-                    //showProgressDialog();//when gps is on and current location is clicked
-                    /*try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
                     new YourAsyncTask(this).execute();
-                    /*startLocationService2();
-                    try {
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    // gps is on and location is probably fetched so let's do it
-                    //buildDialogCurrentLocation();
-                    Thread mThread1 = new Thread() {
-                        @Override
-                        public void run() {
-                            buildDialogCurrentLocation();
-                        }
-                    };
-                    mThread1.start();*/
                 }
                 break;
         }
@@ -435,26 +415,16 @@ public class Design extends AppCompatActivity {
     }
 
     private void buildDialogCurrentLocation() {
-//        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
-        /*try {
-            Thread.sleep(2000);
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         } else {
             builder = new AlertDialog.Builder(this);
         }
-
         builder.setTitle("Your Current Location")
             .setMessage(address +" (Near " + placeS +")")
             .setIcon(android.R.drawable.ic_menu_mylocation)
-
-                //setting up buttons
+            //setting up buttons
             .setPositiveButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -462,60 +432,21 @@ public class Design extends AppCompatActivity {
             })
             .setNegativeButton(getResources().getString(R.string.share), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
-                    intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                    startActivityForResult(intent, CONTACT_REQUEST_CODE);
-                    Main.showToast("Select contact to share your current location");
-                }
+                Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(intent, CONTACT_REQUEST_CODE);
+                Main.showToast("Select contact to share your current location");
+        }
             });
         if (!("NA").equals(address)){
             builder.show();
             Log.i(TAG,"address is "+address);
-
-            //dismissProgressDialog();
-          /*Runnable doDisplayError = new Runnable() {
-              public void run() {
-                  builder.show();
-              }
-          };
-          messageHandler.post(doDisplayError);*/
         }
         else{
-            //dismissProgressDialog();
             Log.i(TAG,"address iss " + address);
             new YourAsyncTask(Design.this).execute();
-            /*showSnackbar2(R.string.error_fetching_location, R.string.retry,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        new YourAsyncTask(Design.this).execute();
-//                        showProgressDialog();// when no address could be fetched from locationService2
-                        //buildDialogCurrentLocation();
-                        *//*Thread mThread3 = new Thread() {
-                            @Override
-                            public void run() {
-                                buildDialogCurrentLocation();
-                            }
-                        };
-                        mThread3.start();*//*
-                    }
-               });*/
         }
         stopService(new Intent(this, LocationService2.class));
-    }
-
-    private void dismissProgressDialog() {
-        /*Log.i(TAG,"Someone doesn't like me anymore GoodBye. Yours ProgressDialog");
-        if (progressDialog.isShowing())
-            progressDialog.dismiss();*/
-    }
-
-    private void showProgressDialog() {
-        /*Log.i(TAG,"Did someone call for me. Sincerely ProgressDialog");
-        progressDialog.setMessage("Fetching current location, hold on tight. Don't move");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.show();*/
     }
 
     // onClick currentLocation button in actionBar and gps is off
@@ -559,9 +490,6 @@ public class Design extends AppCompatActivity {
                                 }
                             }, 5000); // 5 seconds delay
 
-//                            new YourAsyncTask(Design.this).execute();
-                            // showProgressDialog(); // when android location dialog was shown user selected ok
-
                         } catch (IntentSender.SendIntentException e) {
                             Log.i(TAG, "PendingIntent unable to execute request.");
                         }
@@ -577,7 +505,6 @@ public class Design extends AppCompatActivity {
     // yeah a lot of works looks like never had problems with this part of the code
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-
         // check if the gps is enabled and a contact is selected
         // if either of them is true this if runs
         if (resultCode == RESULT_OK) {
@@ -604,27 +531,8 @@ public class Design extends AppCompatActivity {
                 case GPS_REQUEST_CODE:
                     m.updateLog(TAG,"I'm on onActivity result for gps request code. Say Hi to me :)");
                     new YourAsyncTask(this).execute();
-                    /*startLocationService2();
-                    *//*Thread mThread2 = new Thread() {
-                        @Override
-                        public void run() {
-                            startLocationService2();
-                        }
-                    };
-                    mThread2.start();*//*
-                    try {
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    // build dialog; location possibly fetched
-                    buildDialogCurrentLocation();*/
                     break;
             }
-        } else {
-//            Main.showToast("Cancelled");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -634,19 +542,16 @@ public class Design extends AppCompatActivity {
     private void sendSMS(String sender,String name) {
         SmsManager manager = SmsManager.getDefault();
         boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
-
         if (!landmark) placeS = "";
         else{
             placeS = "Near "+ placeS;
             address = " ("+ address + ").";
         }
-
         String message = placeS+ address+ " " + URL;
         manager.sendTextMessage(sender,null, message, null, null);
 
         boolean notification = preferences.getBoolean(getResources()
                 .getString(R.string.settings_notification),false);
-
         if (notification)
             m.pugNotification("Location shared","Your current location shared with",name);
     }
@@ -661,9 +566,7 @@ public class Design extends AppCompatActivity {
             URL = intent.getStringExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION);
         }
     };
-
-    // not interested in any updated when app is closed
-    // unregister the above receiver
+    // unregister the Broadcast receiver
     protected void onPause (){
         super.onPause();
         stopService(new Intent(this, LocationService2.class));
@@ -672,29 +575,18 @@ public class Design extends AppCompatActivity {
 
     private class YourAsyncTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog dialog;
-
         public YourAsyncTask(Design activity) {
             dialog = new ProgressDialog(activity);
         }
-
         @Override
         protected void onPreExecute() {
-
             dialog.setMessage("Fetching current location, hold on tight. Don't move!!");
             dialog.setCancelable(false);
             dialog.setIndeterminate(true);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            m.updateLog(TAG,"YourAsync 1 :Showing Progress dialog now");
             dialog.show();
-            /*try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
         }
-
         protected Void doInBackground(Void... args) {
-            m.updateLog(TAG,"YourAsync 2 : calling startLocationService2");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -708,17 +600,9 @@ public class Design extends AppCompatActivity {
             }
             return null;
         }
-
         protected void onPostExecute(Void result) {
-            m.updateLog(TAG + " YourAsync 3", " result" +result);
-
-            m.updateLog(TAG,"YourAsync 3a :buildDialogCurrent..");
             buildDialogCurrentLocation();
-            //m.updateLog(TAG,"YourAsync 3b :Sleeping for 2 sec. Does it?");
-
-            m.updateLog(TAG,"YourAsync 3c :dialog showing?. Dismissing");
-            if (dialog.isShowing())
-                dialog.dismiss();
+            if (dialog.isShowing()) dialog.dismiss();
         }
     }
 }
