@@ -1,3 +1,7 @@
+/*
+Shows all the contacts in a dialog which doesn't beautiful at all
+inspired from manualDialogFragment class in A-SUM
+*/
 package com.geeky7.rohit.flash_a.fragments;
 
 import android.app.AlertDialog;
@@ -31,11 +35,13 @@ public class ContactsFragment extends DialogFragment {
     public static final String TAG = CONSTANT.CONTACTS_FRAGMENT;
     SharedPreferences preferences;
     AlertDialog.Builder alertDialog;
+
     private ListView listView;
     private ArrayList<Contact> contacts = null;
-    private ProgressDialog progressDialog = null;
     private ContactAdapter contactAdapter = null;
     private SparseBooleanArray selectedContacts =   new SparseBooleanArray()  ;
+
+    private ProgressDialog progressDialog = null;
 
     Set<String> selectedContactsS = new HashSet<>();
     Set<String> selectedContactsIndex = new HashSet<>();
@@ -48,6 +54,7 @@ public class ContactsFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
     @Override
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -56,6 +63,10 @@ public class ContactsFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
+    /* doing most of the work
+    *
+    * */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -63,20 +74,26 @@ public class ContactsFragment extends DialogFragment {
 
         listView = (ListView)view.findViewById(R.id.list_view);
 
+        // setup shared preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
 
+        //fetching saved contacts from shared preferences
         selectedContactsS = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,selectedContactsS);
         selectedContactsIndex = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS_INDEX,selectedContactsIndex);
 
+
+        //setting up adapter
         contacts = new ArrayList<>();
         getContacts();
         contactAdapter = new ContactAdapter(getActivity(), R.layout.main2, contacts);
         listView.setAdapter(contactAdapter);
 
+        //putting selected contact's index in SparseBooleanArray
         for (String s: selectedContactsIndex)
             selectedContacts.append(Integer.parseInt(s),true);
 
+        //setting up the dialog to show with buttons
         alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle("Select Contacts")
                 .setView(view)
@@ -126,6 +143,8 @@ public class ContactsFragment extends DialogFragment {
             super(context, textViewResourceId, items);
             this.items = items;
         }
+        // adding the layouts files and setting the contacts name to the dialog
+        // setting up onClick listener as well
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -134,34 +153,17 @@ public class ContactsFragment extends DialogFragment {
                 view = vi.inflate(R.layout.main2, null);
             }
             Contact contact = items.get(position);
+            // set onClickListener, select any selected contacts and also set the text of the contacts
             if (contact != null) {
                 CheckBox nameCheckBox = (CheckBox) view.findViewById(R.id.cb_app);
+                nameCheckBox.setText(contact.getContactName());
                 nameCheckBox.setChecked(selectedContacts.get(position));
-                if (nameCheckBox != null) {
-                    nameCheckBox.setText(contact.getContactName());
-                }
                 nameCheckBox.setOnClickListener(new OnItemClickListener(position,nameCheckBox.getText(),nameCheckBox));
-
-                /*nameCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        String contact = compoundButton.getText().toString();
-                        if (b){
-                            Main.showToast(contact+ " selected");
-                            selectedContactsIndex.add(position+"");
-                            selectedContactsS.add(contact);
-                        }
-                        else{
-                            Main.showToast(contact+ " removed");
-                            selectedContactsIndex.remove(position+"");
-                            selectedContactsS.remove(contact);
-                        }
-                    }
-                });*/
             }
             return view;
         }
     }
+    // handles the onClickListener added above
     class OnItemClickListener implements View.OnClickListener {
         private int position;
         private CharSequence text;
@@ -177,13 +179,11 @@ public class ContactsFragment extends DialogFragment {
             boolean b = checkBox.isChecked();
             if (b){
                 selectedContacts.append(position, true);
-                //Main.showToast(contact+ " selected");
                 selectedContactsIndex.add(position+"");
                 selectedContactsS.add(contact);
             }
             else{
                 selectedContacts.append(position, false);
-                //Main.showToast(contact+ " removed");
                 selectedContactsIndex.remove(position+"");
                 selectedContactsS.remove(contact);
             }
