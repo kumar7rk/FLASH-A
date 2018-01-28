@@ -1,6 +1,10 @@
-// this service runs when a SMS is received; called by SMSReceiver BroadcastReceiver
-// Checks for the keywords and then starts the locationService
-
+/*
+* BackgroundService runs when a SMS is received
+* called by SMSReceiver BroadcastReceiver
+* Checks for the keyword and if the service is enabled and then starts the locationService
+* also adds in shared preferences if the sender is selected to send eta to
+* also shows a notification if the internet is off when the location is requested i.e message is received
+* */
 package com.geeky7.rohit.flash_a.services;
 
 import android.app.Service;
@@ -33,6 +37,7 @@ public class BackgroundService extends Service {
     public BackgroundService() {
     }
 
+    //sets up sharedPreferences
     @Override
     public void onCreate() {
         super.onCreate();
@@ -52,43 +57,47 @@ public class BackgroundService extends Service {
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
+
         boolean service = preferences.getBoolean(CONSTANT.SERVICE,true);
         String keyword = preferences.getString(CONSTANT.KEYWORD,"Asha");
-//        Log.i(TAG,service+"");
+
         if(intent!=null)
             extras = intent.getExtras();
 
         // if the bundle is not null; lets get some data from it or maybe all of it :)
         if (extras != null) {
+            //getting message and sender# from the bundle received from SMSReceiver
             message = extras.getString("Message");
+            // sender is sender#
             sender = extras.getString(CONSTANT.SENDER);
+
             selectedContacts = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,selectedContacts);
 
-            String s1 = m.getContactName(sender);
+            //get the name of the sender from the number
+            String senderName = m.getContactName(sender);
 
             boolean flag = false;
-            for (String s:selectedContacts){
-                Log.i(TAG, CONSTANT.SEND_ETA_IF_CONTACT_SELECTED + " All contacts "+ s);
-                if (s.equals(s1)){
-                    Log.i(TAG,CONSTANT.SEND_ETA_IF_CONTACT_SELECTED+" matched");
+            // check if message received is from the selected contacts for sending eta
+            // if found one just add it to shared preferences
+            for (String selectedContact:selectedContacts){
+                //m.updateLog(TAG, CONSTANT.SEND_ETA_IF_CONTACT_SELECTED + " All contacts "+ s);
+                if (selectedContact.equals(senderName)){
+                    //m.updateLog(TAG,CONSTANT.SEND_ETA_IF_CONTACT_SELECTED+" matched");
                     editor.putBoolean(CONSTANT.SEND_ETA_IF_CONTACT_SELECTED,true);
                     editor.apply();
                     flag = true;
                     break;
                 }
             }
+            // if the message is not from a person in the selected contacts list add the value in shared preference as false
             if (!flag) editor.putBoolean(CONSTANT.SEND_ETA_IF_CONTACT_SELECTED,false);
             editor.putString(CONSTANT.SENDER,sender);
             editor.apply();
-            Log.i(TAG,"Message is:"+ message);
+
+            m.updateLog(TAG,"Message is:"+ message);
 
             //removing trailing spaces- when selected text from suggested words, a space at the last is automatically added
             keyword = keyword.trim();
@@ -103,8 +112,7 @@ public class BackgroundService extends Service {
                     getApplicationContext().registerReceiver(internetReceiver,
                             new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
                 }
-                // if internet is available then start locationService
-                // and stop background service
+                // if internet is available then start locationService and stop background service
                 else if (internet){
                     startService();
                     stopSelf();
@@ -115,16 +123,15 @@ public class BackgroundService extends Service {
     }
 
     // runs when internet status is changed- that is turned on if it was off and vice versa
-    // we are only interested if the internet is turned on but was off when the location was requested
+    // we are only interested if the internet is turned on now but was off when the location was requested
     private BroadcastReceiver internetReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().matches("android.net.conn.CONNECTIVITY_CHANGE")) {
-
                 // if internet is available start locationService
                 // and stop backgroundService
                 if (m.isNetworkAvailable()){
-                    Main.showToast("Internet status seems to be changed? Is it correct? Yes! Crazy");
+                    //Main.showToast("Internet status seems to be changed? Is it correct? Yes! Crazy");
                     startService();
                     stopSelf();
                 }
