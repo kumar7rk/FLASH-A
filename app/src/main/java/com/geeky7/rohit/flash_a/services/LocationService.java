@@ -273,7 +273,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     private void sendSMS(String placeS, String etaS) {
         SmsManager manager = SmsManager.getDefault();
 
-        m.updateLog("sendSMS");
+        m.updateLog(TAG,"sendSMS");
         // sender contains the phone number
         String name = sender;
         // if the contact permission is granted get the name of the contact
@@ -446,7 +446,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // checks if both async tasks are completed if so sendSMS
     public void bothAsync(){
-        m.updateLog("BothAsync "+counter);
+        m.updateLog(TAG,"BothAsync "+counter);
         if(counter==2)
             sendSMS(placeName,durationEta);
     }
@@ -480,7 +480,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
                 setPlaceName(name);
-                m.updateLog("Places "+name);
+                m.updateLog(TAG,"Places "+name);
             }
         }
     }
@@ -714,13 +714,12 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
                         duration = point.get("duration");
 
                         setDurationEta(duration);
-                        m.updateLog("ETA "+duration);
+                        m.updateLog(TAG,"ETA "+duration);
                     }
                 }//end for - ith route
             }// end for- al routes
             setDurationEta("NA");
         }// end onPostExecute
-
     }
     // sends a broadcast
     // called when the eta and places code have been called
