@@ -10,6 +10,7 @@ public class CONSTANT {
     public static final String LOCATION_SERVICE2 = "LOCATION_SERVICE2";
     public static final String CONTACTS_FRAGMENT = "CONTACTS_FRAGMENT";
     public static final String BACKGROUND_SERVICE = "BACKGROUND_SERVICE";
+    public static final String SETTINGS_ACTIVITY = "SETTINGS_ACTIVITY";
 
     public static final String DESIGN= "DESIGN";
     public static final String SERVICE = "SERVICE";
