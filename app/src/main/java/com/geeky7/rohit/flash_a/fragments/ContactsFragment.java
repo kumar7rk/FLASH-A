@@ -25,6 +25,8 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
+import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 
 import java.util.ArrayList;
@@ -52,6 +54,8 @@ public class ContactsFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Main m = new Main(MyApplication.getAppContext());
+        m.updateLog(TAG,"onCreate");
     }
     @Override
 
@@ -184,6 +188,7 @@ public class ContactsFragment extends DialogFragment {
             }
             else{
                 selectedContacts.append(position, false);
+                //Main.showToast(contact+ " removed");
                 selectedContactsIndex.remove(position+"");
                 selectedContactsS.remove(contact);
             }
