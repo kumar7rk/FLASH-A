@@ -11,9 +11,8 @@
     <string name="error_fetching_location">Error fetching your location</string>
     <string name="map_no_internet_home_address">Connect to internet to load map</string>
     <!--Permissions-->
-    <string name="permission_rationale">Location, SMS permissions are needed for core functionality</string>
-    <string name="permission_rationale_contact">Contact permission improves notification system</string>
-    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
+    <string name="permission_rationale">Location, SMS and Contact permissions required for core functionality.</string>
+    <string name="permission_denied_explanation">Permission(s) denied, but required for core functionality.</string>
 
     <!--ActionBar-->
     <string name="action_settings" translatable="false">Settings</string>
