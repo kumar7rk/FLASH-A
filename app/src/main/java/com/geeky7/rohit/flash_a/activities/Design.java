@@ -156,16 +156,16 @@ public class Design extends AppCompatActivity {
     // this method checks if all the required permission are granted
     // returns a boolean
     private boolean checkPermissions() {
-        int permissionState = ActivityCompat.checkSelfPermission(this,
+        int locationPermission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
-        int permissionState1 = ActivityCompat.checkSelfPermission(this,
+        int SMSPermission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS);
-        int permissionState2 = ActivityCompat.checkSelfPermission(this,
+        int ContactsPermission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS);
 
-        return permissionState == PackageManager.PERMISSION_GRANTED &&
-                permissionState1 == PackageManager.PERMISSION_GRANTED &&
-                permissionState2 == PackageManager.PERMISSION_GRANTED;
+        return locationPermission == PackageManager.PERMISSION_GRANTED &&
+                SMSPermission == PackageManager.PERMISSION_GRANTED &&
+                ContactsPermission == PackageManager.PERMISSION_GRANTED;
     }
 
     // this method starts the location request
@@ -184,21 +184,8 @@ public class Design extends AppCompatActivity {
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
 
-        // if contact permission is not granted/ denied last time
-        if (shouldProvideRationaleContact) {
-            Log.i(TAG, "Displaying permission rationale to provide additional context.");
-
-            showSnackbar(R.string.permission_rationale_contact, android.R.string.ok,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Request permission
-                            startPermissionRequest();
-                        }
-                    });
-        }
-        // if either location or SMS permission is not granted; request
-        if (shouldProvideRationaleLocation || shouldProvideRationaleSMS) {
+        // if either location or SMS or contacts permission is not granted; request
+        if (shouldProvideRationaleLocation || shouldProvideRationaleSMS || shouldProvideRationaleContact) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
                     new View.OnClickListener() {
