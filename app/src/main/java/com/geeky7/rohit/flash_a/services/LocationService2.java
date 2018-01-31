@@ -1,6 +1,9 @@
-// This class gets the location convert it into address and find a landmark
-// code only used by the action bar button- current location
-// class is called when the gps and internet is on and the app is opened
+/*
+* This class gets the location convert it into address and find a landmark
+* code only used by the action bar button- current location
+* class is called when the gps and internet is on and the app is opened
+* is adpated from locationService class
+* */
 
 package com.geeky7.rohit.flash_a.services;
 
@@ -21,7 +24,6 @@ import android.os.IBinder;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
@@ -98,7 +100,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         // get address from the lat lng
         geocoder = new Geocoder(this, Locale.getDefault());
 
-        Log.i(TAG,"LocationService2 Created");
+        m.updateLog(TAG,"LocationService2 Created");
     }
     @Override
     public IBinder onBind(Intent intent) {
@@ -108,20 +110,16 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(TAG, "Google Places API connection failed with error code: "
+        m.updateLog(TAG, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG,"onDestroy");
-
+        m.updateLog(TAG,"onDestroy");
         stopSelf();
-
-        if (mGoogleApiClient.isConnected())
-            stopLocationupdates();
-
+        if (mGoogleApiClient.isConnected()) stopLocationupdates();
         mGoogleApiClient.disconnect();
     }
 
@@ -171,7 +169,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
-        m.updateLog(TAG+ " onConnected","Let's do it.");
+        m.updateLog(TAG+ " onConnected 1 ","Let's do it.");
 //        boolean internet = m.isNetworkAvailable();
 //        Main.showToast(internet+"");
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -182,48 +180,42 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             // but still we have internet in comment- next time you find this comment and there has been no crash because of this
             // delete this comment and relevant code too
             if (gps/*&&internet*/){
-                m.updateLog(TAG+ " onConnected","Gps is available");
+                m.updateLog(TAG+ " onConnected 2 ","GPS is available");
                 // if location null, get last known location, updating the time so that we don't show quite old location
                 if (mCurrentLocation==null){
-                    m.updateLog(TAG+ " onConnected","Apparently location was null");
+                    m.updateLog(TAG+ " onConnected 3 ","Apparently location was null");
                     mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    m.updateLog(TAG+ " onConnected","Fetched lastlocation");
+                    m.updateLog(TAG+ " onConnected 4 ","Fetched lastlocation");
                 }
                 if (mCurrentLocation!=null){
-                    m.updateLog(TAG+ " onConnected","This says location is not null.");
+                    m.updateLog(TAG+ " onConnected 5 ","This says location is not null.");
                     addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    m.updateLog(TAG+ " onConnected","addresses is fetched as well");
+                    m.updateLog(TAG+ " onConnected 6 ","addresses is fetched as well");
 //                initiates places code to fetch the name of the nearby place
-                    m.updateLog(TAG+ " onConnected","calling places code now");
+                    m.updateLog(TAG+ " onConnected 7 ","calling places code now");
                     placesCode();
                 }
-                /*m.updateLog(TAG+ " onConnected","Outside location not null. Sleeping for 4 seconds");
-                try {
-                    Thread.sleep(2000);
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                stopSelf();*/
-                m.updateLog(TAG+ " onConnected","This is the end of gps if statement.");
+                m.updateLog(TAG+ " onConnected 8 ","This is the end of gps if statement.");
             }
             // when gps if off- register a receiver listening for status of the gps to change
             else{
-                m.updateLog(TAG+ " onConnected","If you're here it means that the gps is off. You shouldn't be here.");
+                m.updateLog(TAG+ " onConnected 9 ","If you're here it means that the gps is off. You shouldn't be here.");
                 getApplicationContext().registerReceiver(gpsReceiver,
                         new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            m.updateLog(TAG + " onConnected"," Some exception "+ e.getMessage());
+            m.updateLog(TAG + " onConnected 10 "," Some exception "+ e.getMessage());
         }
-        m.updateLog(TAG+ " onConnected","End of me.");
+        m.updateLog(TAG+ " onConnected 11 ","End of me.");
     }
-    // whenever the gps status changes this code would run
-    // however we are only concerned when it is turned on
-    // this method contains similar code to if statement so maybe one day I'll put the common code in a method
-    // and just call that method
-    // Updated: Don't worry already done it :D
+    // Whenever the gps status changes this code would run. We're only interested when it's turned on
+    /* This method contains similar code to if statement so maybe one day I'll put the common code in a method
+        and just call that method
+        Updated: Don't worry already done it :D
+     */
+    // The above comment is legacy so I must keep it. And one day I'll become legacy too and there would be comments about me being kept. #OneDay
+
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -242,7 +234,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 m.updateLog(TAG+" gps BroadcastReceiver ","Tired! Sleeping for two seconds. I'm not sure why I'm sleeping but experiment with me");
                 Thread.sleep(2000);
 
-                // only call the code when the gps and internet is turned on
+                // only call the code (getLastLocation, address and placesCode) when the gps and internet is turned on
+                // I sleep a lot
                 if(gps&&internet){
                     m.updateLog(TAG+" gps BroadcastReceiver ","Got some gps and internet");
                     if (mCurrentLocation==null){
@@ -291,7 +284,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         String address = addresses.get(0).getAddressLine(0)
                 .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
-        Log.i(TAG+" Address",address);
+        m.updateLog(TAG+" Address",address);
 //        String street = addresses.get(0).getFeatureName();
 //        String city = addresses.get(0).getLocality();
 //        String number = addresses.get(0).getFeatureName();
@@ -302,18 +295,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
-//        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
         m.updateLog(TAG+"Places code "," Yeah! I'm the coolest method you've been looking for all this time. I'm a revolution!");
-        String sb = null;
+        String sb;
         try {
-//            if(b){
-            m.updateLog(TAG+" "+" places code","Building placed url. Wait.");
+            m.updateLog(TAG+" places code","Building placed url. Wait.");
             sb = buildPlacesURL().toString();
-            m.updateLog(TAG+" "+" places code"," Done. Now calling placesTask code");
+            m.updateLog(TAG+" places code"," Done. Now calling placesTask code");
             new PlacesTask().execute(sb);
-//            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             m.updateLog(TAG + " places code"," Some Exceptions"+e.getMessage());
@@ -337,9 +325,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
         String key = getApplicationContext().getString(R.string.API_KEY_GEO);
 
-        if (mCurrentLocation==null) {
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
+        if (mCurrentLocation==null) mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if(!m.isNetworkAvailable()) return new StringBuilder(CONSTANT.NO_INTERNET);
 
@@ -349,7 +335,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
         sb.append("&sensor=true");
         sb.append("&key=" + key);
-        Log.i(TAG+""+" PlacesURL", sb.toString());
+        m.updateLog(TAG+""+" PlacesURL", sb.toString());
         return sb;
     }
 
@@ -365,22 +351,15 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             iStream = urlConnection.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
             StringBuffer sb = new StringBuffer();
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
             data = sb.toString();
             br.close();
-
         } catch (Exception e) {
             m.updateLog(TAG + " download url"," Some exception"+e.getMessage());
         } finally {
-            if (iStream != null) {
-                iStream.close();
-            }
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
+            if (iStream != null) iStream.close();
+            if (urlConnection != null) urlConnection.disconnect();
         }
         return data;
     }
@@ -392,17 +371,15 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
-
         JSONObject jObject;
-
         Context mContext;
+
         public ParserTask(Context context){
             mContext = context;
         }
         // Invoked by execute() method of this object
         @Override
         protected List<HashMap<String, String>> doInBackground(String... jsonData) {
-//            List<HashMap<String, String>> places = null;
             List<HashMap<String, String>> places = new ArrayList<>();
             Place_JSON placeJson = new Place_JSON();
             try {
@@ -417,7 +394,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         // Executed after the complete execution of doInBackground() method
         @Override
         protected void onPostExecute(List<HashMap<String, String>> list) {
-
             if (!list.isEmpty()){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
@@ -430,16 +406,11 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 sendBroadcast();
             }
         }
-    }// onPostExecute
-//}// end of the parserTask class
-
+    }
     // gets the details of the place to let you choose which parameters of place you want to show
     public class Place_JSON {
-        /**
-         * Receives a JSONObject and returns a list
-         */
+         //Receives a JSONObject and returns a list
         public List<HashMap<String, String>> parse(JSONObject jObject) {
-
             JSONArray jPlaces = null;
             try {
                 jPlaces = jObject.getJSONArray("results");
@@ -447,21 +418,17 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 e.printStackTrace();
                 m.updateLog(TAG + " Places JSON parse"," Some exception" +e.getMessage());
             }
-            /** Invoking getPlaces with the array of json object
-             * where each json object represent a place
-             */
+            //Invoking getPlaces with the array of json object where each json object represent a place
             return getPlaces(jPlaces);
         }
-
         private List<HashMap<String, String>> getPlaces(JSONArray jPlaces) {
             int placesCount = jPlaces.length();
             List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> place = null;
-
-            /** Taking each place, parses and adds to list object */
+            //Taking each place, parses and adds to list object
             for (int i = 0; i < placesCount; i++) {
                 try {
-                    /** Call getPlace with place JSON object to parse the place */
+                    //Call getPlace with place JSON object to parse the place
                     place = getPlace((JSONObject) jPlaces.get(i));
                     placesList.add(place);
                 } catch (JSONException e) {
@@ -472,7 +439,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             return placesList;
         }
         private HashMap<String, String> getPlace(JSONObject jPlace){
-
             HashMap<String, String> place = new HashMap<String, String>();
             String placeName = "-NA-";
             String vicinity = "-NA-";
@@ -480,17 +446,11 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             String longitude;
             String reference;
             String placeType;
-
             try {
                 // Extracting Place name, if available
-                if (!jPlace.isNull("name")) {
-                    placeName = jPlace.getString("name");
-                }
-
+                if (!jPlace.isNull("name")) placeName = jPlace.getString("name");
                 // Extracting Place Vicinity, if available
-                if (!jPlace.isNull("vicinity")) {
-                    vicinity = jPlace.getString("vicinity");
-                }
+                if (!jPlace.isNull("vicinity")) vicinity = jPlace.getString("vicinity");
 
                 latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
                 longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
@@ -503,11 +463,9 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 place.put("lng", longitude);
                 place.put("reference", reference);
                 place.put("types", placeType);
-
             } catch (JSONException e) {
                 e.printStackTrace();
                 m.updateLog(TAG + " Parser task getPlaces"," Some exception" +e.getMessage());
-
             }
             return place;
         }
@@ -520,7 +478,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             try {
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
-
+                m.updateLog(TAG,e.getMessage());
             }
             return data;
         }
@@ -531,24 +489,15 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             m.updateLog(TAG+" "+" PlacesTask ","Hey! I'm places task. I've just called parsertask.");
         }
     }
-
     //sends the broadcast when the place name is fetched
     // the broadcast is registered in the class where the data is required
     private void sendBroadcast (){
-        m.updateLog(TAG,"Hey! This is sendBroadcast./* A bit tired going to sleep.*/");
-       /* try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
-//        m.updateLog(TAG,"Ohoo! Did you wait long! It felt like I slept for almost 2 seconds.");
+        m.updateLog(TAG,"Hey! This is sendBroadcast");
 
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,address);
         intent.putExtra(CONSTANT.PLACE_NAME,placeName);
         intent.putExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION,URL);
-
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }
