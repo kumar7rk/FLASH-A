@@ -1,5 +1,5 @@
 // This class receives an incoming message, put the content in a intent and sends it to the backgroundService
-// Along with that on 2q12 the receiver was would also start when a device completes boot
+// Along with that from 2q12 the receiver would also start when a device completes boot--> that's dope
 package com.geeky7.rohit.flash_a;
 
 import android.content.BroadcastReceiver;
@@ -21,16 +21,13 @@ public class SMSReceiver extends BroadcastReceiver {
         String senderNum = "";
         // receives the message content in an intent
         final Bundle bundle = intent.getExtras();
-
         try {
         // check if the bundle has some data and extract the message and the sender number magically
             if (bundle != null) {
-
                 final Object[] pdusObj = (Object[]) bundle.get("pdus");
                 for (int i = 0; i < pdusObj.length; i++) {
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
-                    String phoneNumber = currentMessage.getDisplayOriginatingAddress();
-                    senderNum = phoneNumber;
+                    senderNum = currentMessage.getDisplayOriginatingAddress();
                     message = currentMessage.getDisplayMessageBody();
                     Log.i("SmsReceiver", "Sender: " + senderNum + "; Message: " + message);
                 }
