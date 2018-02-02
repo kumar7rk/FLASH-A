@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
+import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
 import com.geeky7.rohit.flash_a.fragments.ContactsFragment;
 
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+    public static final String TAG = CONSTANT.SETTINGS_ACTIVITY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +46,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     // a new fragment inner class which contains the layout
     public static class SettingsFragment extends PreferenceFragment {
         // toggles and changes summary Select Contacts preference
-        //
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
+            Main m = new Main(MyApplication.getAppContext());
+            m.updateLog(TAG, "onCreate");
             final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             // getting the preference data from xml
@@ -57,17 +59,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             final Preference eta = findPreference("Settings_Send_ETA");
             final Preference contacts = findPreference("Settings_Select_Contacts");
 
-            boolean b = preferences.getBoolean("Settings_Send_ETA",false);
+            setSelectContactsSummary(preferences, contacts);//onCreate
+
+            boolean b = preferences.getBoolean("Settings_Send_ETA", false);
             if (!b) contacts.setEnabled(false);
             if (b) contacts.setEnabled(true);
-
-            setSelectContactsSummary(preferences, contacts);
 
             // eta toggles- enable/disable select contacts
             eta.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                boolean b = preferences.getBoolean("Settings_Send_ETA",false);
+                    boolean b = preferences.getBoolean("Settings_Send_ETA",false);
                     if (b) contacts.setEnabled(false);
                     if (!b) contacts.setEnabled(true);
                     return true;
@@ -78,10 +80,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             contacts.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    ContactsFragment contact = new ContactsFragment();
+                    ContactsFragment dialogFrag = ContactsFragment.newInstance(R.string.startService);
+                    dialogFrag.show(getActivity().getFragmentManager(), null);
+                    /*ContactsFragment contact = new ContactsFragment();
                     if (!contact.isAdded())
                         contact.show(getFragmentManager(),"Contacts");
-                    setSelectContactsSummary(preferences,contacts);
+                    setSelectContactsSummary(preferences,contacts);//onCreate bottom*/
                     return true;
                 }
             });
