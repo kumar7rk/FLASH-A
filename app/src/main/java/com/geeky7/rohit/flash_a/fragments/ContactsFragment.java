@@ -28,6 +28,7 @@ import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.MyApplication;
 import com.geeky7.rohit.flash_a.R;
+import com.geeky7.rohit.flash_a.activities.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -58,7 +59,6 @@ public class ContactsFragment extends DialogFragment {
         m.updateLog(TAG,"onCreate");
     }
     @Override
-
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -107,7 +107,8 @@ public class ContactsFragment extends DialogFragment {
                         editor.putStringSet(CONSTANT.SELECTED_CONTACTS,selectedContactsS);
                         editor.putStringSet(CONSTANT.SELECTED_CONTACTS_INDEX,selectedContactsIndex);
                         editor.apply();
-
+                        getFragmentManager().beginTransaction().replace(android.R.id.content,new SettingsActivity.SettingsFragment())
+                                .commit();
                     }
                 })
                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
@@ -116,6 +117,14 @@ public class ContactsFragment extends DialogFragment {
                     }
                 });
         return alertDialog.create();
+    }
+
+    public static ContactsFragment newInstance(int title) {
+        ContactsFragment dialog = new ContactsFragment();
+        Bundle args = new Bundle();
+        args.putInt("title", title);
+        dialog.setArguments(args);
+        return dialog;
     }
     //interacts with android and steals all the contacts; I mean fetch
     private void getContacts(){
