@@ -82,10 +82,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
                 public boolean onPreferenceClick(Preference preference) {
                     ContactsFragment dialogFrag = ContactsFragment.newInstance(R.string.startService);
                     dialogFrag.show(getActivity().getFragmentManager(), null);
-                    /*ContactsFragment contact = new ContactsFragment();
-                    if (!contact.isAdded())
-                        contact.show(getFragmentManager(),"Contacts");
-                    setSelectContactsSummary(preferences,contacts);//onCreate bottom*/
                     return true;
                 }
             });
