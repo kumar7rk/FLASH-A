@@ -184,7 +184,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
             if (resultCode == RESULT_OK) {
                 // Get the user's selected place from the Intent.
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.i(TAG, "Place Selected: " + place.getName());
+                m.updateLog(TAG, "Place Selected: " + place.getName());
 
                 // set the current address in the textView
                 homeAddress.setText(place.getAddress());
@@ -222,7 +222,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
         // We've a homeAddress. Let's go to person's place and say hello!!!!!
         else{
             Main m = new Main(getApplicationContext());
-            Log.i(CONSTANT.HOME_ADDRESS,homeAddressS);
+            m.updateLog(CONSTANT.HOME_ADDRESS,homeAddressS);
 
             //checking if internet is available because showing marker requires internet
 
@@ -233,7 +233,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                 LatLng g = getLocationFromAddress(homeAddressS);
                 if (null==g){
                     Main.showToast("Error loading map.");
-                    Log.i(TAG,"Error loading map.");
+                    m.updateLog(TAG,"Error loading map.");
                     return;
                 }
                 mMap.addMarker(new MarkerOptions().position(g));
@@ -250,10 +250,10 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                         Main m = new Main(getApplicationContext());
                         LatLng g = null;
                         if(m.isNetworkAvailable()) g = getLocationFromAddress(homeAddressS);
-                        Log.i(TAG,g+ " value");
+                        m.updateLog(TAG,g+ " value");
                         if (null==g){
                             Main.showToast("Error loading map.");
-                            Log.i(TAG,"Error loading map.");
+                            m.updateLog(TAG,"Error loading map.");
                             return;
                         }
                         mMap.addMarker(new MarkerOptions().position(g));
