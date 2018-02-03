@@ -282,6 +282,14 @@ public class Design extends AppCompatActivity {
                 .setAction(getString(actionStringId), listener).show();
     }
 
+    private void showSnackbar2(final int mainTextStringId, final int actionStringId,
+                              View.OnClickListener listener) {
+        Snackbar.make(findViewById(android.R.id.content),
+                getString(mainTextStringId),
+                Snackbar.LENGTH_LONG)
+                .setAction(getString(actionStringId), listener).show();
+    }
+
     // registers receiver to receive address, place name and url
     // sets onClick layout listeners
     @Override
@@ -438,8 +446,13 @@ public class Design extends AppCompatActivity {
             Log.i(TAG,"address iss " + address);
             m.updateLog(TAG,"Retry number: "+counter_retry_fetching_location);
             if (counter_retry_fetching_location++==5){
-                showSnackbar("Error fetching location");
                 counter_retry_fetching_location=0;
+                showSnackbar2(R.string.error_fetching_location, R.string.retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new YourAsyncTask(Design.this).execute();
+                    }
+                });
             }
             else
                 new YourAsyncTask(Design.this).execute();
