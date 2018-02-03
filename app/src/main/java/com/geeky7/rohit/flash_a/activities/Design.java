@@ -433,7 +433,7 @@ public class Design extends AppCompatActivity {
             builder.show();
             Log.i(TAG,"address is "+address);
         }
-        // else retry like 6 times after that show an error snackbar
+        // else retry like 6 times after that show an error snackbar and reset the counter
         else{
             Log.i(TAG,"address iss " + address);
             m.updateLog(TAG,"Retry number: "+counter_retry_fetching_location);
