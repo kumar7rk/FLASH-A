@@ -78,6 +78,8 @@ public class Design extends AppCompatActivity {
     String placeS;
     String URL;
 
+
+    static int counter_retry_fetching_location;
     private Keyword keyword = new Keyword();
 
     @Override
@@ -401,6 +403,7 @@ public class Design extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void buildDialogCurrentLocation() {
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -431,7 +434,13 @@ public class Design extends AppCompatActivity {
         }
         else{
             Log.i(TAG,"address iss " + address);
-            new YourAsyncTask(Design.this).execute();
+            m.updateLog(TAG,"Retry number: "+counter_retry_fetching_location);
+            if (counter_retry_fetching_location++==5){
+                showSnackbar("Error fetching location");
+                counter_retry_fetching_location=0;
+            }
+            else
+                new YourAsyncTask(Design.this).execute();
         }
         stopService(new Intent(this, LocationService2.class));
     }
