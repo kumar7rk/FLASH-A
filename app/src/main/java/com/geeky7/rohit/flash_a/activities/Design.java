@@ -428,10 +428,12 @@ public class Design extends AppCompatActivity {
                 Main.showToast("Select contact to share your current location");
         }
             });
+        // if address is fetched show dialog
         if (!("NA").equals(address)){
             builder.show();
             Log.i(TAG,"address is "+address);
         }
+        // else retry like 6 times after that show an error snackbar
         else{
             Log.i(TAG,"address iss " + address);
             m.updateLog(TAG,"Retry number: "+counter_retry_fetching_location);
