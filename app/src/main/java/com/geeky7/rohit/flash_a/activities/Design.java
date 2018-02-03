@@ -34,7 +34,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -296,12 +295,7 @@ public class Design extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
-/*
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (b) startLocationService2();
-*/
-
+        startLocationService2();
 
         final SharedPreferences.Editor editor = preferences.edit();
         serviceEnabled_lay.setOnClickListener(new View.OnClickListener() {
