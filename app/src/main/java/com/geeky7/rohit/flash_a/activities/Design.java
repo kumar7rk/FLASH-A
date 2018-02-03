@@ -188,7 +188,7 @@ public class Design extends AppCompatActivity {
 
         // if either location or SMS or contacts permission is not granted; request
         if (shouldProvideRationaleLocation || shouldProvideRationaleSMS || shouldProvideRationaleContact) {
-            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+            m.updateLog(TAG, "Displaying permission rationale to provide additional context.");
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
                     new View.OnClickListener() {
                         @Override
@@ -198,7 +198,7 @@ public class Design extends AppCompatActivity {
                         }
                     });
         } else {
-            Log.i(TAG, "Requesting permission");
+            m.updateLog(TAG, "Requesting permission");
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
@@ -224,12 +224,12 @@ public class Design extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        Log.i(TAG, "onRequestPermissionResult");
+        m.updateLog(TAG, "onRequestPermissionResult");
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length <= 0) {
                 // If user interaction was interrupted, the permission request is cancelled and you
                 // receive empty arrays.
-                Log.i(TAG, "User interaction was cancelled.");
+                m.updateLog(TAG, "User interaction was cancelled.");
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[2] == PackageManager.PERMISSION_GRANTED) {
@@ -439,11 +439,11 @@ public class Design extends AppCompatActivity {
         // if address is fetched show dialog
         if (!("NA").equals(address)){
             builder.show();
-            Log.i(TAG,"address is "+address);
+            m.updateLog(TAG,"address is "+address);
         }
         // else retry like 6 times after that show an error snackbar and reset the counter
         else{
-            Log.i(TAG,"address iss " + address);
+            m.updateLog(TAG,"address iss " + address);
             m.updateLog(TAG,"Retry number: "+counter_retry_fetching_location);
             if (counter_retry_fetching_location++==5){
                 counter_retry_fetching_location=0;
@@ -482,10 +482,10 @@ public class Design extends AppCompatActivity {
                 final Status status = result.getStatus();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
-                        Log.i(TAG, "All location settings are satisfied.");
+                        m.updateLog(TAG, "All location settings are satisfied.");
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+                        m.updateLog(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
                         try {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
@@ -502,11 +502,11 @@ public class Design extends AppCompatActivity {
                             }, 5000); // 5 seconds delay
 
                         } catch (IntentSender.SendIntentException e) {
-                            Log.i(TAG, "PendingIntent unable to execute request.");
+                            m.updateLog(TAG, "PendingIntent unable to execute request.");
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+                        m.updateLog(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
                         break;
                 }
             }
