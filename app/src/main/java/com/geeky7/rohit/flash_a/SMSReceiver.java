@@ -16,9 +16,11 @@ import com.geeky7.rohit.flash_a.services.BackgroundService;
  */
 public class SMSReceiver extends BroadcastReceiver {
 
+    Main m;
     public void onReceive(Context context, Intent intent) {
         String message = "";
         String senderNum = "";
+        m = new Main(MyApplication.getAppContext());
         // receives the message content in an intent
         final Bundle bundle = intent.getExtras();
         try {
@@ -29,7 +31,7 @@ public class SMSReceiver extends BroadcastReceiver {
                     SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
                     senderNum = currentMessage.getDisplayOriginatingAddress();
                     message = currentMessage.getDisplayMessageBody();
-                    Log.i("SmsReceiver", "Sender: " + senderNum + "; Message: " + message);
+                    m.updateLog("SmsReceiver", "Sender: " + senderNum + "; Message: " + message);
                 }
             }
         } catch (Exception e) {
