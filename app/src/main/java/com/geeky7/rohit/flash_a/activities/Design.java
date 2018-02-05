@@ -92,9 +92,11 @@ public class Design extends AppCompatActivity {
         //if app opened for the first time show tutorial activity
         boolean firstTime = preferences.getBoolean(CONSTANT.APP_OPENED_FIRST_TIME,true);
         if (firstTime){
-            startActivity(new Intent(this,TutorialActivity.class));
+            startActivity(new Intent(this,TutorialActivityFirstTime.class));
             editor.putBoolean(CONSTANT.APP_OPENED_FIRST_TIME,false).apply();
         }
+        // checking if the permissions are not granted call request method which starts the procedure
+        else if (!checkPermissions()) requestPermissions();
 
         progressDialog = new ProgressDialog(this);
         m = new Main(getApplicationContext());
@@ -116,8 +118,6 @@ public class Design extends AppCompatActivity {
                     keyword.show(getFragmentManager(),"Keyword");
             }
         });
-        // checking if the permissions are not granted call request method which starts the procedure
-        if (!checkPermissions()) requestPermissions();
     }
 
     // find view by id of all the views
