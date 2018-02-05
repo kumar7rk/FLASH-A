@@ -41,6 +41,9 @@
         <activity
             android:name=".activities.TutorialActivity"
             android:theme="@style/Theme.Intro" />
+        <activity
+            android:name=".activities.TutorialActivityFirstTime"
+            android:theme="@style/Theme.Intro" />
 
         <service android:name=".services.LocationService" />
         <service
