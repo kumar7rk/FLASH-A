@@ -85,6 +85,7 @@ public class Design extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
+        m = new Main(getApplicationContext());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
@@ -99,7 +100,6 @@ public class Design extends AppCompatActivity {
         else if (!checkPermissions()) requestPermissions();
 
         progressDialog = new ProgressDialog(this);
-        m = new Main(getApplicationContext());
 
         // finding view by id for all the associated views
         findViewById();
@@ -181,6 +181,7 @@ public class Design extends AppCompatActivity {
         boolean shouldProvideRationaleContact =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.READ_CONTACTS);
+        m = new Main(getApplicationContext());
 
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
