@@ -389,6 +389,8 @@ public class Design extends AppCompatActivity {
                 boolean b = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean internet = m.isNetworkAvailable();
 
+                if(!checkPermissions()) requestPermissions();
+
                 //if no internet show a snackbar informing a user
                 if (!internet){
                     showSnackbar("No internet Connectivity. Please connect to a network and retry");
