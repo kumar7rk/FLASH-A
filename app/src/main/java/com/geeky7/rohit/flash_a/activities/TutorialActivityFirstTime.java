@@ -6,18 +6,13 @@ on back press closed the activity
 package com.geeky7.rohit.flash_a.activities;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
-import com.geeky7.rohit.flash_a.BuildConfig;
 import com.geeky7.rohit.flash_a.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
@@ -138,14 +133,14 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
         // if either location or SMS or contacts permission is not granted; request
         if (shouldProvideRationaleLocation || shouldProvideRationaleSMS || shouldProvideRationaleContact) {
             //m.updateLog(TAG, "Displaying permission rationale to provide additional context.");
-            showSnackbar(R.string.permission_rationale, android.R.string.ok,
+            /*showSnackbar(R.string.permission_rationale, android.R.string.ok,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             // Request permission
                             startPermissionRequest();
                         }
-                    });
+                    });*/
         } else {
             //m.updateLog(TAG, "Requesting permission");
             // Request permission. It's possible this can be auto answered if device policy
@@ -196,7 +191,7 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
                 // again" prompts). Therefore, a user interface affordance is typically implemented
                 // when permissions are denied. Otherwise, your app could appear unresponsive to
                 // touches or interactions which have required permissions.
-                showSnackbar(R.string.permission_denied_explanation, R.string.settings,
+                /*showSnackbar(R.string.permission_denied_explanation, R.string.settings,
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -211,23 +206,16 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
                                 startActivity(intent);
                             }
                         }
-                );
+                );*/
             }
         }
     }
-    // Show why a not granted permission is required
-    // no button snackbar
-    private void showSnackbar(final String text) {
-        Snackbar.make(findViewById(android.R.id.content),text,
-                Snackbar.LENGTH_LONG)
-                .show();
-    }
-    // shows a Snackbar indefinitely (for permissions)
+    /*// shows a Snackbar indefinitely (for permissions)
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
                 getString(mainTextStringId),
-                Snackbar.LENGTH_INDEFINITE)
+                Snackbar.LENGTH_SHORT)
                 .setAction(getString(actionStringId), listener).show();
-    }
+    }*/
 }
