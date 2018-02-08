@@ -76,7 +76,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     String sender = "";
     String placeName;
     private String address;
-
     String URL;
     public LocationService2() {
     }
@@ -84,11 +83,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     @Override
     public void onCreate() {
 //        super.onCreate();
+        m = new Main(getApplicationContext());
+
+        m.calledMethodLog(TAG,"onCreate");
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         sender = preferences.getString(CONSTANT.SENDER,"");
 
-        m = new Main(getApplicationContext());
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
@@ -105,11 +106,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
+        m.calledMethodLog(TAG,"onBind");
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        m.calledMethodLog(TAG,"onConnectionFailed");
         m.updateLog(TAG, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
     }
@@ -117,7 +120,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     @Override
     public void onDestroy() {
         super.onDestroy();
-        m.updateLog(TAG,"onDestroy");
+        m.calledMethodLog(TAG,"onDestroy");
         stopSelf();
         if (mGoogleApiClient.isConnected()) stopLocationupdates();
         mGoogleApiClient.disconnect();
@@ -125,11 +128,13 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        m.calledMethodLog(TAG,"onStartCommand");
         return START_NOT_STICKY;
     }
 
     // add the API and builds a client
     private void buildGoogleApiClient() {
+        m.calledMethodLog(TAG,"buildGoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(LocationService2.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -142,6 +147,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     // since the service destroys after fetching location once it is of little use; I mean the interval of fetching the location
 
     private void createLocationRequest() {
+        m.calledMethodLog(TAG,"createLocationRequest");
         mlocationRequest = new LocationRequest();
         mlocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         mlocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -150,17 +156,19 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // requests a location
     protected void startLocationupdates() throws SecurityException {
+        m.calledMethodLog(TAG,"startLocationupdates");
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mlocationRequest, this);
     }
     // stop location update; no longer needed
     protected void stopLocationupdates(){
+        m.calledMethodLog(TAG,"stopLocationupdates");
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
-
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+        m.calledMethodLog(TAG,"onStart");
         mGoogleApiClient.connect();
     }
     // when the googleApiClient and set to go this method is called
@@ -169,6 +177,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
+        m.calledMethodLog(TAG,"onConnected");
         m.updateLog(TAG+ " onConnected 1 ","Let's do it.");
 //        boolean internet = m.isNetworkAvailable();
 //        Main.showToast(internet+"");
@@ -266,17 +275,19 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     };
 
     public void onConnectionSuspended(int i) {
+        m.calledMethodLog(TAG,"onConnectionSuspended");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        m.calledMethodLog(TAG,"onLocationChanged");
     }
 
     // this method gets the address and lets you make selection what parameters of address to include
     @SuppressLint("LongLogTag")
     private String getAddress() {
-        m.updateLog(TAG," GetAddress");
+        m.calledMethodLog(TAG," GetAddress");
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
@@ -295,6 +306,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
+        m.calledMethodLog(TAG,"placesCode");
+
         m.updateLog(TAG+"Places code "," Yeah! I'm the coolest method you've been looking for all this time. I'm a revolution!");
         String sb;
         try {
@@ -310,6 +323,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     // builds the url for fetching the nearby places
     @SuppressLint({"LongLogTag", "MissingPermission"})
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
+        m.calledMethodLog(TAG,"buildPlacesURL");
+
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
@@ -341,6 +356,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     // download the data from the URL
     private String downloadUrl(String strUrl) throws IOException{
+        m.calledMethodLog(TAG,"downloadURL");
+
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
@@ -366,6 +383,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
     //set the place name to the global variable
     public void setPlaceName(String s){
+        m.calledMethodLog(TAG,"setPlaceName");
         placeName = s;
     }
 
@@ -492,6 +510,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     //sends the broadcast when the place name is fetched
     // the broadcast is registered in the class where the data is required
     private void sendBroadcast (){
+        m.calledMethodLog(TAG,"sendBroadcast");
+
         m.updateLog(TAG,"Hey! This is sendBroadcast");
 
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
@@ -499,5 +519,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         intent.putExtra(CONSTANT.PLACE_NAME,placeName);
         intent.putExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION,URL);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+        m.updateLog(TAG,"I'm done. Yours sincerely SendBroadcast. P.S Don't miss me!");
     }
 }
