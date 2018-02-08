@@ -106,7 +106,12 @@ public class Main {
         }
     }
 
+    // inner stuff for debugging
     public void updateLog(String className, String text){
+        Log.i(className,text);
+    }
+    // for called method name
+    public void calledMethodLog(String className, String text){
         Log.i(className,text);
     }
 
