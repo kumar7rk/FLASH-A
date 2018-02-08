@@ -202,7 +202,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     m.updateLog(TAG+ " onConnected 6 ","addresses is fetched as well");
 //                initiates places code to fetch the name of the nearby place
                     m.updateLog(TAG+ " onConnected 7 ","calling places code now");
-                    placesCode();
+                    String sb = placesCode();
+                    new PlacesTask().execute(sb);
                 }
                 m.updateLog(TAG+ " onConnected 8 ","This is the end of gps if statement.");
             }
@@ -216,7 +217,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             e.printStackTrace();
             m.updateLog(TAG + " onConnected 10 "," Some exception "+ e.getMessage());
         }
-        m.updateLog(TAG+ " onConnected 11 ","End of me.");
+        m.updateLog(TAG+ " onConnected 11 ","Bye-Bye");
     }
     // Whenever the gps status changes this code would run. We're only interested when it's turned on
     /* This method contains similar code to if statement so maybe one day I'll put the common code in a method
@@ -259,7 +260,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                         m.updateLog(TAG+" gps BroadcastReceiver ","location not null anymore. getting addresses");
                         addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                         m.updateLog(TAG+" gps BroadcastReceiver ","calling places code");
-                        placesCode();
+                        String sb = placesCode();
+                        new PlacesTask().execute(sb);
                     }
                 }
                 // register a broadcast receiver - for whenever the gps is turned on/off
@@ -305,20 +307,21 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     }
 
     // this code starts with building the places URL and then call the actual places code
-    private void placesCode() {
+    private String placesCode() {
         m.calledMethodLog(TAG,"placesCode");
 
         m.updateLog(TAG+"Places code "," Yeah! I'm the coolest method you've been looking for all this time. I'm a revolution!");
-        String sb;
+        String sb = "";
         try {
             m.updateLog(TAG+" places code","Building placed url. Wait.");
             sb = buildPlacesURL().toString();
             m.updateLog(TAG+" places code"," Done. Now calling placesTask code");
-            new PlacesTask().execute(sb);
+            //new PlacesTask().execute(sb);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             m.updateLog(TAG + " places code"," Some Exceptions"+e.getMessage());
         }
+        return sb;
     }
     // builds the url for fetching the nearby places
     @SuppressLint({"LongLogTag", "MissingPermission"})
