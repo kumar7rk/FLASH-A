@@ -56,6 +56,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     SharedPreferences preferences;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        m.calledMethodLog(TAG,"onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_address);
 
@@ -116,6 +117,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
 
     //Find view by ids
     private void findViewByIds() {
+        m.calledMethodLog(TAG,"findViewByIds");
         scrollView = (NestedScrollView)findViewById(R.id.nested);
         homeAddress = (TextView) findViewById(R.id.homeAddress_tv);
         floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
@@ -126,6 +128,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     // called onCreate and when the homeAddress is updated
     // this method calls onMapReady method- an overridden method
     private void refreshMap() {
+        m.calledMethodLog(TAG,"refreshMap");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -134,7 +137,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     // getting lat long from the home address
     // returns lat long which are used to put the marker on the map
     public LatLng getLocationFromAddress(String strAddress){
-
+        m.calledMethodLog(TAG,"getLocationFromAddress");
         Geocoder coder = new Geocoder(this);
         List<Address> address;
         LatLng p1 = null;
@@ -155,6 +158,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     // this is more like an intermediate activity which closes once the address is selected
     // sample code Google
     private void openAutocompleteActivity() {
+        m.calledMethodLog(TAG,"openAutocompleteActivity");
         try {
             // The autocomplete activity requires Google Play Services to be available. The intent
             // builder checks this and throws an exception if it is not the case.
@@ -176,6 +180,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     // this returns the selected address from the activity and set the textView with the same
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        m.calledMethodLog(TAG,"onActivityResult");
         final SharedPreferences.Editor editor = preferences.edit();
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -211,6 +216,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     // this is the overridden method which sets the marker and shoes the mapView along with the above method refreshMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        m.calledMethodLog(TAG,"onMapReady");
         mMap = googleMap;
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -266,6 +272,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     }
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
+        m.calledMethodLog(TAG,"showSnackbar");
         Snackbar.make(findViewById(android.R.id.content),
                 getString(mainTextStringId),
                 Snackbar.LENGTH_INDEFINITE)
@@ -273,6 +280,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     }
     @Override
     public void onBackPressed() {
+        m.calledMethodLog(TAG,"onBackpressed");
         super.onBackPressed();
     }
 }
