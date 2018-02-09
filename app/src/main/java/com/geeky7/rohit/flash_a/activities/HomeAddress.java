@@ -56,11 +56,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     SharedPreferences preferences;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        m = new Main(this);
         m.calledMethodLog(TAG,"onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_address);
 
-        m = new Main(this);
         // find the views ;of all the elements in the xml
         findViewByIds();
 

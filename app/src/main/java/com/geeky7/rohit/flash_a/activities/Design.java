@@ -83,10 +83,11 @@ public class Design extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        m = new Main(getApplicationContext());
         m.calledMethodLog(TAG,"onCreate");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
-        m = new Main(getApplicationContext());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
