@@ -83,6 +83,7 @@ public class Design extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        m.calledMethodLog(TAG,"onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
         m = new Main(getApplicationContext());
@@ -122,6 +123,7 @@ public class Design extends AppCompatActivity {
 
     // find view by id of all the views
     private void findViewById() {
+        m.calledMethodLog(TAG,"findViewById");
         serviceEnabled_tv = (TextView) findViewById(R.id.serviceEnabled_tv);
         serviceEnabled_iv = (ImageView) findViewById(R.id.serviceEnabled_iv);
         serviceEnabled_lay = (LinearLayout) findViewById(R.id.serviceEnabled_lay);
@@ -135,6 +137,7 @@ public class Design extends AppCompatActivity {
     // if the service is running and user hits the layout
     // this method runs and it changes the disables the service and changes the color of the layout to red
     public void disableService() {
+        m.calledMethodLog(TAG,"disableService");
         serviceEnabled_lay.setBackgroundColor(Color.RED);
         serviceEnabled_tv.setText(R.string.service_disabled);
         serviceEnabled_iv.setImageBitmap(null);
@@ -146,6 +149,8 @@ public class Design extends AppCompatActivity {
     // if the service is not running this method is called
     // changes the color to orange or something for some reasons--> not now it's funny
     public void enableService() {
+        m.calledMethodLog(TAG,"EnableService");
+
         serviceEnabled_lay.setBackgroundColor(Color.parseColor("#27e833"));
         serviceEnabled_tv.setText(R.string.service_enabled);
         serviceEnabled_iv.setImageBitmap(null);
@@ -157,6 +162,8 @@ public class Design extends AppCompatActivity {
     // this method checks if all the required permission are granted
     // returns a boolean
     private boolean checkPermissions() {
+        m.calledMethodLog(TAG,"checkPermission");
+
         int locationPermission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         int SMSPermission = ActivityCompat.checkSelfPermission(this,
@@ -172,6 +179,8 @@ public class Design extends AppCompatActivity {
     // this method starts the location request
     // this method is called when the user has denied the permission once but has not checked Never ask againg checkbox
     private void requestPermissions() {
+        m.calledMethodLog(TAG,"requestPermission");
+
         boolean shouldProvideRationaleLocation =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -209,6 +218,7 @@ public class Design extends AppCompatActivity {
     // This method is called the first time the app is installed
     // requests all the permissions stated here
     private void startPermissionRequest() {
+        m.calledMethodLog(TAG,"StartPermissionRequest");
         ActivityCompat.requestPermissions(Design.this,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.SEND_SMS,
@@ -224,7 +234,7 @@ public class Design extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        m.updateLog(TAG, "onRequestPermissionResult");
+        m.calledMethodLog(TAG, "onRequestPermissionResult");
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length <= 0) {
                 // If user interaction was interrupted, the permission request is cancelled and you
@@ -269,6 +279,7 @@ public class Design extends AppCompatActivity {
     // Show why a not granted permission is required
     // no button snackbar
     private void showSnackbar(final String text) {
+        m.calledMethodLog(TAG,"showSnackbar");
         Snackbar.make(findViewById(android.R.id.content),text,
                 Snackbar.LENGTH_LONG)
                 .show();
@@ -276,6 +287,7 @@ public class Design extends AppCompatActivity {
     // shows a Snackbar indefinitely (for permissions)
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
+        m.calledMethodLog(TAG,"showSnackbar");
         Snackbar.make(findViewById(android.R.id.content),
                 getString(mainTextStringId),
                 Snackbar.LENGTH_INDEFINITE)
@@ -284,6 +296,7 @@ public class Design extends AppCompatActivity {
 
     private void showSnackbar2(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
+        m.calledMethodLog(TAG,"showSnackbar2");
         Snackbar.make(findViewById(android.R.id.content),
                 getString(mainTextStringId),
                 Snackbar.LENGTH_LONG)
@@ -295,6 +308,7 @@ public class Design extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        m.calledMethodLog(TAG,"onResume");
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("message"));
         startLocationService2();
 
@@ -367,12 +381,15 @@ public class Design extends AppCompatActivity {
 
     // method to start locationService2
     private void startLocationService2() {
+        m.calledMethodLog(TAG,"startLocationService2");
+
         stopService(new Intent(this, LocationService2.class));
         startService(new Intent(this, LocationService2.class));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        m.calledMethodLog(TAG,"onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -380,6 +397,7 @@ public class Design extends AppCompatActivity {
     // shows settings and currentLocation buttons
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        m.calledMethodLog(TAG,"onOptionsItemSelected");
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -410,6 +428,7 @@ public class Design extends AppCompatActivity {
 
 
     private void buildDialogCurrentLocation() {
+        m.calledMethodLog(TAG,"buildDialogCurrentLocation");
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
@@ -460,6 +479,7 @@ public class Design extends AppCompatActivity {
     // onClick currentLocation button in actionBar and gps is off
     // opens a dialog which turns on gps without requiring to navigate to the location settings page
     private void displayLocationSettingsRequest(Context context) {
+        m.calledMethodLog(TAG,"displayLocationSettingsRequest");
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
@@ -513,6 +533,7 @@ public class Design extends AppCompatActivity {
     // yeah a lot of works looks like never had problems with this part of the code
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        m.calledMethodLog(TAG,"onActivityResult");
         // check if the gps is enabled and a contact is selected
         // if either of them is true this if runs
         if (resultCode == RESULT_OK) {
@@ -548,6 +569,7 @@ public class Design extends AppCompatActivity {
     // sends an SMS. Enough said
     // no eta just address and landmark
     private void sendSMS(String sender,String name) {
+        m.calledMethodLog(TAG,"sendSMS");
         SmsManager manager = SmsManager.getDefault();
         boolean landmark = preferences.getBoolean(getResources().getString(R.string.settings_landmark),false);
         if (!landmark) placeS = "";
@@ -569,6 +591,7 @@ public class Design extends AppCompatActivity {
     private BroadcastReceiver bReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
+            m.calledMethodLog(TAG,"bReceiver");
             address = intent.getStringExtra(CONSTANT.ADDRESS);
             placeS = intent.getStringExtra(CONSTANT.PLACE_NAME);
             URL = intent.getStringExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION);
@@ -576,6 +599,7 @@ public class Design extends AppCompatActivity {
     };
     // unregister the Broadcast receiver
     protected void onPause (){
+        m.calledMethodLog(TAG,"onPause");
         super.onPause();
         stopService(new Intent(this, LocationService2.class));
         LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
