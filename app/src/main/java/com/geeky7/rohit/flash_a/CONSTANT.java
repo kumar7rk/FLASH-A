@@ -12,12 +12,14 @@ public class CONSTANT {
     public static final String BACKGROUND_SERVICE = "BACKGROUND_SERVICE";
     public static final String SETTINGS_ACTIVITY = "SETTINGS_ACTIVITY";
     public static final String SETTINGS_FRAGMENT = "SETTINGS_FRAGMENT";
-    public static final String TUTORIAL_ACTIVITY = CONSTANT.TUTORIAL_ACTIVITY;
-    public static final String TUTORIAL_ACTIVITY_FIRST_TIME = CONSTANT.TUTORIAL_ACTIVITY_FIRST_TIME;
+    public static final String TUTORIAL_ACTIVITY = "TUTORIAL_ACTIVITY";
+    public static final String TUTORIAL_ACTIVITY_FIRST_TIME = "TUTORIAL_ACTIVITY_FIRST_TIME";
     public static final String DESIGN= "DESIGN";
     public static final String SERVICE = "SERVICE";
     public static final String HOME_ADDRESS = "HOME_ADDRESS";
     public static final String KEYWORD = "KEYWORD";
+    public static final String CONTACT_ADAPTER = "CONTACT_ADAPTER";
+    public static final String CONTACT = "CONTACT";
 
     public static final String ADDRESS = "ADDRESS";
     public static final String PLACE_NAME = "PLACE_NAME";
