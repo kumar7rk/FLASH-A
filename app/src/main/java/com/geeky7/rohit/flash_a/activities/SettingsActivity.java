@@ -22,8 +22,11 @@ import java.util.Set;
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     public static final String TAG = CONSTANT.SETTINGS_ACTIVITY;
 
+    Main m;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        m = new Main(getApplicationContext());
+        m.calledMethodLog(TAG,"onCreate");
         super.onCreate(savedInstanceState);
 
         // adds a fragment which extract a preference screen
@@ -37,20 +40,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     // apparently this method is not being called
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        m.calledMethodLog(TAG,"onSharedPreferenceChanged");
+/*
         Main.showToast("I'm called " + s);
         boolean eta = sharedPreferences.getBoolean(getResources().getString(R.string.settings_send_eta),false);
         if (eta) Main.showToast("eta on");
         else Main.showToast("eta off");
+*/
     }
 
     // a new fragment inner class which contains the layout
     public static class SettingsFragment extends PreferenceFragment {
         // toggles and changes summary Select Contacts preference
+        public static final String TAG = CONSTANT.SETTINGS_FRAGMENT;
+        Main m;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
+            m = new Main(MyApplication.getAppContext());
+            m.calledMethodLog(TAG,"OnCreate");
+
             super.onCreate(savedInstanceState);
-            Main m = new Main(MyApplication.getAppContext());
-            m.updateLog(TAG, "onCreate");
             final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             // getting the preference data from xml
@@ -89,6 +99,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
 
         // change the summary for select contacts when the chosen contacts are updated
         private void setSelectContactsSummary(SharedPreferences preferences, Preference contacts) {
+            m.calledMethodLog(TAG,"setSelectContactsSummary");
             Set<String> set = new HashSet<>();
             set = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,set);
             String s1 = "";
@@ -108,6 +119,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     // Beam me back, Scotty to Design activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        m.calledMethodLog(TAG,"onOptionsItemSelected");
         switch (item.getItemId())
         {
             // going back to design activity when the back arrow is clicked
