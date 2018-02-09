@@ -49,22 +49,29 @@ public class ContactsFragment extends DialogFragment {
     Set<String> selectedContactsS = new HashSet<>();
     Set<String> selectedContactsIndex = new HashSet<>();
 
+    Main m;
+
     public ContactsFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        m = new Main(MyApplication.getAppContext());
+        m.calledMethodLog(TAG,"onCreate");
+
         super.onCreate(savedInstanceState);
-        Main m = new Main(MyApplication.getAppContext());
-        m.updateLog(TAG,"onCreate");
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        m.calledMethodLog(TAG,"onViewCreated");
+
         super.onViewCreated(view, savedInstanceState);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        m.calledMethodLog(TAG,"onActivityCreated");
+
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -73,6 +80,8 @@ public class ContactsFragment extends DialogFragment {
     * */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        m.calledMethodLog(TAG,"onCreateDialog");
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.list_view_contact, null);
 
@@ -85,7 +94,6 @@ public class ContactsFragment extends DialogFragment {
         //fetching saved contacts from shared preferences
         selectedContactsS = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS,selectedContactsS);
         selectedContactsIndex = preferences.getStringSet(CONSTANT.SELECTED_CONTACTS_INDEX,selectedContactsIndex);
-
 
         //setting up adapter
         contacts = new ArrayList<>();
@@ -120,6 +128,8 @@ public class ContactsFragment extends DialogFragment {
     }
 
     public static ContactsFragment newInstance(int title) {
+        //m.calledMethodLog(TAG,"newInstance");
+
         ContactsFragment dialog = new ContactsFragment();
         Bundle args = new Bundle();
         args.putInt("title", title);
@@ -128,6 +138,8 @@ public class ContactsFragment extends DialogFragment {
     }
     //interacts with android and steals all the contacts; I mean fetch
     private void getContacts(){
+        m.calledMethodLog(TAG,"getContacts");
+
         try{
             String[] projection = new String[] {
                     ContactsContract.Contacts.DISPLAY_NAME,
@@ -152,14 +164,18 @@ public class ContactsFragment extends DialogFragment {
     // As long as it does it jobs you don't mind. Right?
     public class ContactAdapter extends ArrayAdapter<Contact> {
         private ArrayList<Contact> items;
+        public static final String TAG = CONSTANT.CONTACT_ADAPTER;
+
         public ContactAdapter(Context context, int textViewResourceId, ArrayList<Contact> items) {
             super(context, textViewResourceId, items);
+            m.calledMethodLog(TAG,"ContactAdapter");
             this.items = items;
         }
         // adding the layouts files and setting the contacts name to the dialog
         // setting up onClick listener as well
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            m.calledMethodLog(TAG,"getView");
             View view = convertView;
             if (view == null) {
                 LayoutInflater vi = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -182,12 +198,16 @@ public class ContactsFragment extends DialogFragment {
         private CharSequence text;
         private CheckBox checkBox;
         OnItemClickListener(int position, CharSequence text,CheckBox checkBox){
+
+            m.calledMethodLog(TAG,"onItemClickListener");
             this.position = position;
             this.text = text;
             this.checkBox = checkBox;
         }
         @Override
         public void onClick(View arg0) {
+            m.calledMethodLog(TAG,"onClick");
+
             String contact = checkBox.getText().toString();
             boolean b = checkBox.isChecked();
             if (b){
@@ -205,12 +225,16 @@ public class ContactsFragment extends DialogFragment {
     }
     // contact class just for fun. No it's the backbone of the whole idea. But I don't know how it works. But It does.
     public class Contact {
+        public static final String TAG = CONSTANT.CONTACT;
+
         private String contactName;
 
-        public String getContactName() {
+        public String getContactName(){
+            m.calledMethodLog(TAG,"getContactName");
             return contactName;
         }
         public void setContactName(String contactName) {
+            m.calledMethodLog(TAG,"setContactName");
             this.contactName = contactName;
         }
     }
