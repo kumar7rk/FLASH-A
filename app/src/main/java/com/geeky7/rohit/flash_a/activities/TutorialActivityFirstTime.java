@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
+import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
@@ -23,9 +25,13 @@ import agency.tango.materialintroscreen.animations.IViewTranslation;
 public class TutorialActivityFirstTime extends MaterialIntroActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private static final String TAG = CONSTANT.TUTORIAL_ACTIVITY_FIRST_TIME;
 
+    Main m;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        m = new Main(getApplicationContext());
+        m.calledMethodLog(TAG,"onCreate");
         super.onCreate(savedInstanceState);
         enableLastSlideAlphaExitTransition(true);
 
@@ -94,6 +100,8 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
     // back button press closes the tutorial activity
     @Override
     public void onBackPressed() {
+        m.calledMethodLog(TAG,"onBackPressed");
+
         super.onBackPressed();
         finish();
     }
@@ -102,6 +110,8 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
     // this method checks if all the required permission are granted
     // returns a boolean
     private boolean checkPermissions() {
+        m.calledMethodLog(TAG,"checkPermission");
+
         int locationPermission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         int SMSPermission = ActivityCompat.checkSelfPermission(this,
@@ -117,6 +127,7 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
     // this method starts the location request
     // this method is called when the user has denied the permission once but has not checked Never ask againg checkbox
     private void requestPermissions() {
+        m.calledMethodLog(TAG,"requestPermission");
         boolean shouldProvideRationaleLocation =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -153,6 +164,8 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
     // This method is called the first time the app is installed
     // requests all the permissions stated here
     private void startPermissionRequest() {
+        m.calledMethodLog(TAG,"startPermissionRequest");
+
         ActivityCompat.requestPermissions(TutorialActivityFirstTime.this,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.SEND_SMS,
@@ -168,7 +181,7 @@ public class TutorialActivityFirstTime extends MaterialIntroActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        //m.updateLog(TAG, "onRequestPermissionResult");
+        m.calledMethodLog(TAG, "onRequestPermissionResult");
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length <= 0) {
                 // If user interaction was interrupted, the permission request is cancelled and you
