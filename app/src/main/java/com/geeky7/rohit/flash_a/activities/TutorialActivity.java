@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.FloatRange;
 import android.view.View;
 
+import com.geeky7.rohit.flash_a.CONSTANT;
+import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
@@ -16,8 +18,14 @@ import agency.tango.materialintroscreen.SlideFragmentBuilder;
 import agency.tango.materialintroscreen.animations.IViewTranslation;
 
 public class TutorialActivity extends MaterialIntroActivity {
+    private static final String TAG = CONSTANT.TUTORIAL_ACTIVITY;
+    Main m;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        m = new Main(getApplicationContext());
+        m.calledMethodLog(TAG, "onCreate");
+
         super.onCreate(savedInstanceState);
         enableLastSlideAlphaExitTransition(true);
 
@@ -85,6 +93,7 @@ public class TutorialActivity extends MaterialIntroActivity {
     // back button press closes the tutorial activity
     @Override
     public void onBackPressed() {
+        m.calledMethodLog(TAG, "onBackPressed");
         super.onBackPressed();
         finish();
     }
