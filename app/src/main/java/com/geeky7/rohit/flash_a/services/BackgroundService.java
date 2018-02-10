@@ -41,22 +41,26 @@ public class BackgroundService extends Service {
     public void onCreate() {
         super.onCreate();
         m = new Main(MyApplication.getAppContext());
+        m.calledMethodLog(TAG,"onCreate");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     // calls the location service
     private void startService() {
+        m.calledMethodLog(TAG,"startService");
         stopService(new Intent(this, LocationService.class));
         startService(new Intent(getApplicationContext(), LocationService.class));
     }
     @Override
     public IBinder onBind(Intent intent) {
+        m.calledMethodLog(TAG,"onBind");
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        m.calledMethodLog(TAG,"onStartCommand");
         Bundle extras = null;
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -140,7 +144,7 @@ public class BackgroundService extends Service {
     };
     @Override
     public void onDestroy() {
+        m.calledMethodLog(TAG,"onDestroy");
         super.onDestroy();
-        m.updateLog(TAG,"onDestroy");
     }
 }

@@ -27,7 +27,7 @@ public class Keyword extends DialogFragment {
     AlertDialog.Builder alertDialog;
     Main m;
 
-    public final String TAG = CONSTANT.KEYWORD;
+    public static final String TAG = CONSTANT.KEYWORD;
     public Keyword() {
     }
 
