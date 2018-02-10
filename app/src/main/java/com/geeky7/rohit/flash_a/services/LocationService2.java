@@ -2,7 +2,7 @@
 * This class gets the location convert it into address and find a landmark
 * code only used by the action bar button- current location
 * class is called when the gps and internet is on and the app is opened
-* is adpated from locationService class
+* is adapted from locationService class
 * */
 
 package com.geeky7.rohit.flash_a.services;
@@ -390,7 +390,25 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         m.calledMethodLog(TAG,"setPlaceName");
         placeName = s;
     }
-
+    // calls download url method above and later starts parser class
+    public class PlacesTask extends AsyncTask<String, Integer, String> {
+        String data = null;
+        @Override
+        protected String doInBackground(String... url) {
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                m.updateLog(TAG,e.getMessage());
+            }
+            return data;
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            ParserTask parserTask = new ParserTask(context);
+            parserTask.execute(result);
+            m.updateLog(TAG+" "+" PlacesTask ","Hey! I'm places task. I've just called parsertask.");
+        }
+    }
     // Parsing the data received
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
         JSONObject jObject;
@@ -448,7 +466,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> place = null;
             //Taking each place, parses and adds to list object
-            for (int i = 0; i < placesCount; i++) {
+            for (int i = 0; i < 1; i++) {
                 try {
                     //Call getPlace with place JSON object to parse the place
                     place = getPlace((JSONObject) jPlaces.get(i));
@@ -472,19 +490,19 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 // Extracting Place name, if available
                 if (!jPlace.isNull("name")) placeName = jPlace.getString("name");
                 // Extracting Place Vicinity, if available
-                if (!jPlace.isNull("vicinity")) vicinity = jPlace.getString("vicinity");
+                //if (!jPlace.isNull("vicinity")) vicinity = jPlace.getString("vicinity");
 
-                latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
-                longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
-                reference = jPlace.getString("reference");
-                placeType = jPlace.getString("types");
+                //latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
+                //longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
+                //reference = jPlace.getString("reference");
+                //placeType = jPlace.getString("types");
 
                 place.put("place_name", placeName);
-                place.put("vicinity", vicinity);
-                place.put("lat", latitude);
-                place.put("lng", longitude);
-                place.put("reference", reference);
-                place.put("types", placeType);
+                //place.put("vicinity", vicinity);
+                //place.put("lat", latitude);
+                //place.put("lng", longitude);
+                //place.put("reference", reference);
+                //place.put("types", placeType);
             } catch (JSONException e) {
                 e.printStackTrace();
                 m.updateLog(TAG + " Parser task getPlaces"," Some exception" +e.getMessage());
@@ -492,25 +510,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             return place;
         }
     }
-    // calls download url method above and later starts parser class
-    public class PlacesTask extends AsyncTask<String, Integer, String> {
-        String data = null;
-        @Override
-        protected String doInBackground(String... url) {
-            try {
-                data = downloadUrl(url[0]);
-            } catch (Exception e) {
-                m.updateLog(TAG,e.getMessage());
-            }
-            return data;
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            ParserTask parserTask = new ParserTask(context);
-            parserTask.execute(result);
-            m.updateLog(TAG+" "+" PlacesTask ","Hey! I'm places task. I've just called parsertask.");
-        }
-    }
+
     //sends the broadcast when the place name is fetched
     // the broadcast is registered in the class where the data is required
     private void sendBroadcast (){
