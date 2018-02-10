@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -456,12 +455,14 @@ public class Design extends AppCompatActivity {
         // if address is fetched show dialog
         if (!("NA").equals(address)){
             builder.show();
+            counter_retry_fetching_location = 0;
             m.updateLog(TAG,"address is "+address);
+
         }
         // else retry like 6 times after that show an error snackbar and reset the counter
         else{
             m.updateLog(TAG,"address iss " + address);
-            m.updateLog(TAG,"Retry number: "+counter_retry_fetching_location);
+            m.calledMethodLog(TAG,"Retry number: "+counter_retry_fetching_location);
             if (counter_retry_fetching_location++==5){
                 counter_retry_fetching_location=0;
                 showSnackbar2(R.string.error_fetching_location, R.string.retry, new View.OnClickListener() {
@@ -510,14 +511,14 @@ public class Design extends AppCompatActivity {
                             status.startResolutionForResult(Design.this, GPS_REQUEST_CODE);
                             m.updateLog(TAG,"starting resolution one.");
                             progressDialog.setMessage("Turning on GPS");
-                            progressDialog.show();
+                            //progressDialog.show();
 
-                            Handler handler = new Handler();
+                            /*Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
                                     progressDialog.dismiss();
                                 }
-                            }, 5000); // 5 seconds delay
+                            }, 5000); // 5 seconds delay*/
 
                         } catch (IntentSender.SendIntentException e) {
                             m.updateLog(TAG, "PendingIntent unable to execute request.");
@@ -560,6 +561,7 @@ public class Design extends AppCompatActivity {
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
                     m.updateLog(TAG,"I'm on onActivity result for gps request code. Say Hi to me :)");
+                    progressDialog.dismiss();
                     new YourAsyncTask(this).execute();
                     break;
             }
@@ -613,7 +615,10 @@ public class Design extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            dialog.setMessage("Fetching current location, hold on tight. Don't move!!");
+            String message = "Fetching your location, Please wait!!";
+            if (counter_retry_fetching_location>=1) message = "Retrying, Please wait!!";
+
+            dialog.setMessage(message);
             dialog.setCancelable(false);
             dialog.setIndeterminate(true);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -621,21 +626,19 @@ public class Design extends AppCompatActivity {
         }
         protected Void doInBackground(Void... args) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(6000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             startLocationService2();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            // sleep here removed was causing - skipping frames
+
             return null;
         }
         protected void onPostExecute(Void result) {
-            buildDialogCurrentLocation();
             if (dialog.isShowing()) dialog.dismiss();
+
+            buildDialogCurrentLocation();
         }
     }
 }
