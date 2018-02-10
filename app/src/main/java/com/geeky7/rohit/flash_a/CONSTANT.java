@@ -20,6 +20,7 @@ public class CONSTANT {
     public static final String KEYWORD = "KEYWORD";
     public static final String CONTACT_ADAPTER = "CONTACT_ADAPTER";
     public static final String CONTACT = "CONTACT";
+    public static final String SMS_RECEIVER = "SMS_RECEIVER";
 
     public static final String ADDRESS = "ADDRESS";
     public static final String PLACE_NAME = "PLACE_NAME";
