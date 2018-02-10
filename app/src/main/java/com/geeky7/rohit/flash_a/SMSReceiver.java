@@ -16,8 +16,10 @@ import com.geeky7.rohit.flash_a.services.BackgroundService;
  */
 public class SMSReceiver extends BroadcastReceiver {
 
+    public static final String TAG = CONSTANT.SMS_RECEIVER;
     Main m;
     public void onReceive(Context context, Intent intent) {
+        m.calledMethodLog(TAG,"onReceive");
         String message = "";
         String senderNum = "";
         m = new Main(MyApplication.getAppContext());
