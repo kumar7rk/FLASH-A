@@ -417,9 +417,9 @@ public class Design extends AppCompatActivity {
                 else if (!b) {
                     // calls this method which open the android location dialog which ask to enable location
                     // and enables the location when the user clicks ok
-                    displayLocationSettingsRequest(getApplicationContext());
+                    new buildLocationDialog(this).execute();
                 } else {
-                    new YourAsyncTask(this).execute();
+                    new YourAsyncTask(this).execute();// gps in on
                 }
                 break;
         }
@@ -457,9 +457,8 @@ public class Design extends AppCompatActivity {
             builder.show();
             counter_retry_fetching_location = 0;
             m.updateLog(TAG,"address is "+address);
-
         }
-        // else retry like 6 times after that show an error snackbar and reset the counter
+        // else retry like 6 times before showing an error snackbar and reset the counter
         else{
             m.updateLog(TAG,"address iss " + address);
             m.calledMethodLog(TAG,"Retry number: "+counter_retry_fetching_location);
@@ -468,12 +467,12 @@ public class Design extends AppCompatActivity {
                 showSnackbar2(R.string.error_fetching_location, R.string.retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        new YourAsyncTask(Design.this).execute();
+                        new YourAsyncTask(Design.this).execute();// snackbar- error
                     }
                 });
             }
             else
-                new YourAsyncTask(Design.this).execute();
+                new YourAsyncTask(Design.this).execute(); // if no address and counter < 5
         }
         stopService(new Intent(this, LocationService2.class));
     }
@@ -482,6 +481,7 @@ public class Design extends AppCompatActivity {
     // opens a dialog which turns on gps without requiring to navigate to the location settings page
     private void displayLocationSettingsRequest(Context context) {
         m.calledMethodLog(TAG,"displayLocationSettingsRequest");
+
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
@@ -489,7 +489,7 @@ public class Design extends AppCompatActivity {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(10000 / 2);
+        locationRequest.setFastestInterval(10000/2);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
@@ -536,6 +536,7 @@ public class Design extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         m.calledMethodLog(TAG,"onActivityResult");
+        //progressDialog.dismiss();
         // check if the gps is enabled and a contact is selected
         // if either of them is true this if runs
         if (resultCode == RESULT_OK) {
@@ -561,8 +562,7 @@ public class Design extends AppCompatActivity {
                 // locationDialog- if gps is turned on build the current location dialog
                 case GPS_REQUEST_CODE:
                     m.updateLog(TAG,"I'm on onActivity result for gps request code. Say Hi to me :)");
-                    progressDialog.dismiss();
-                    new YourAsyncTask(this).execute();
+                    new YourAsyncTask(this).execute(); // when gps was off and now is on after dialog
                     break;
             }
         }
@@ -639,6 +639,30 @@ public class Design extends AppCompatActivity {
             if (dialog.isShowing()) dialog.dismiss();
 
             buildDialogCurrentLocation();
+        }
+    }
+
+    private class buildLocationDialog extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog dialog;
+        public buildLocationDialog(Design activity) {
+            dialog = new ProgressDialog(activity);
+        }
+        @Override
+        protected void onPreExecute() {
+            String message = "Turning on GPS";
+
+            dialog.setMessage(message);
+            dialog.setCancelable(false);
+            dialog.setIndeterminate(true);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+ //           dialog.show();
+        }
+        protected Void doInBackground(Void... args) {
+            displayLocationSettingsRequest(getApplicationContext());
+            return null;
+        }
+        protected void onPostExecute(Void result) {
+            if (dialog.isShowing()) dialog.dismiss();
         }
     }
 }
