@@ -90,7 +90,6 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         sender = preferences.getString(CONSTANT.SENDER,"");
 
-
         buildGoogleApiClient();
         mGoogleApiClient.connect();
 
@@ -103,6 +102,55 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
         m.updateLog(TAG,"LocationService2 Created");
     }
+
+    // when the googleApiClient and set to go this method is called
+    // it fetches the location and then builds the places url
+    // and finally initiate the code for actually finding the nearby place
+
+    @Override
+    public void onConnected(Bundle bundle)throws SecurityException {
+        m.calledMethodLog(TAG,"onConnected");
+        m.updateLog(TAG+ " onConnected 1 ","Let's do it.");
+//        boolean internet = m.isNetworkAvailable();
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        try {
+            // if the location service is on get that address and start places code
+            // not checking for internet because to connect to playServices the internet is required anyway. Simple logic.
+            // but still we have internet in comment- next time you find this comment and there has been no crash because of this
+            // delete this comment and relevant code too
+            if (gps/*&&internet*/){
+                m.updateLog(TAG+ " onConnected 2 ","GPS is available");
+                // if location null, get last known location, updating the time so that we don't show quite old location
+                if (mCurrentLocation==null){
+                    m.updateLog(TAG+ " onConnected 3 ","Apparently location was null");
+                    mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    m.updateLog(TAG+ " onConnected 4 ","Fetched lastlocation");
+                }
+                if (mCurrentLocation!=null){
+                    m.updateLog(TAG+ " onConnected 5 ","This says location is not null.");
+                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    m.updateLog(TAG+ " onConnected 6 ","addresses is fetched as well");
+//                initiates places code to fetch the name of the nearby place
+                    m.updateLog(TAG+ " onConnected 7 ","calling places code now");
+                    String sb = placesCode();
+                    String someresult = new PlacesTask().execute(sb).get();
+                }
+                m.updateLog(TAG+ " onConnected 8 ","This is the end of gps if statement.");
+            }
+            // when gps if off- register a receiver listening for status of the gps to change
+            else{
+                m.updateLog(TAG+ " onConnected 9 ","If you're here it means that the gps is off. You shouldn't be here.");
+                getApplicationContext().registerReceiver(gpsReceiver,
+                        new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            m.updateLog(TAG + " onConnected 10 "," Some exception "+ e.getMessage());
+        }
+        m.updateLog(TAG+ " onConnected 11 ","Bye-Bye");
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -171,54 +219,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         m.calledMethodLog(TAG,"onStart");
         mGoogleApiClient.connect();
     }
-    // when the googleApiClient and set to go this method is called
-    // it fetches the location and then builds the places url
-    // and finally initiate the code for actually finding the nearby place
 
-    @Override
-    public void onConnected(Bundle bundle)throws SecurityException {
-        m.calledMethodLog(TAG,"onConnected");
-        m.updateLog(TAG+ " onConnected 1 ","Let's do it.");
-//        boolean internet = m.isNetworkAvailable();
-//        Main.showToast(internet+"");
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        try {
-            // if the location service is on get that address and start places code
-            // not checking for internet because to connect to playServices the internet is required anyway. Simple logic.
-            // but still we have internet in comment- next time you find this comment and there has been no crash because of this
-            // delete this comment and relevant code too
-            if (gps/*&&internet*/){
-                m.updateLog(TAG+ " onConnected 2 ","GPS is available");
-                // if location null, get last known location, updating the time so that we don't show quite old location
-                if (mCurrentLocation==null){
-                    m.updateLog(TAG+ " onConnected 3 ","Apparently location was null");
-                    mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    m.updateLog(TAG+ " onConnected 4 ","Fetched lastlocation");
-                }
-                if (mCurrentLocation!=null){
-                    m.updateLog(TAG+ " onConnected 5 ","This says location is not null.");
-                    addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                    m.updateLog(TAG+ " onConnected 6 ","addresses is fetched as well");
-//                initiates places code to fetch the name of the nearby place
-                    m.updateLog(TAG+ " onConnected 7 ","calling places code now");
-                    String sb = placesCode();
-                    new PlacesTask().execute(sb);
-                }
-                m.updateLog(TAG+ " onConnected 8 ","This is the end of gps if statement.");
-            }
-            // when gps if off- register a receiver listening for status of the gps to change
-            else{
-                m.updateLog(TAG+ " onConnected 9 ","If you're here it means that the gps is off. You shouldn't be here.");
-                getApplicationContext().registerReceiver(gpsReceiver,
-                        new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            m.updateLog(TAG + " onConnected 10 "," Some exception "+ e.getMessage());
-        }
-        m.updateLog(TAG+ " onConnected 11 ","Bye-Bye");
-    }
     // Whenever the gps status changes this code would run. We're only interested when it's turned on
     /* This method contains similar code to if statement so maybe one day I'll put the common code in a method
         and just call that method
