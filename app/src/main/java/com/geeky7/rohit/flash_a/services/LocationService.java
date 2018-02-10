@@ -87,6 +87,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     public void onCreate() {
 //        super.onCreate();
         m = new Main(getApplicationContext());
+        m.calledMethodLog(TAG,"onCreate");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         sender = preferences.getString(CONSTANT.SENDER,CONSTANT.SENDER);
 
@@ -104,12 +105,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     @Override
     public IBinder onBind(Intent intent) {
+        m.calledMethodLog(TAG,"onBind");
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        m.calledMethodLog(TAG,"onConnectionFailed");
         m.updateLog(TAG, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
     }
@@ -118,7 +121,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     @Override
     public void onDestroy() {
         super.onDestroy();
-        m.updateLog(TAG,"onDestroy");
+        m.calledMethodLog(TAG,"onDestroy");
         stopSelf();
         if (mGoogleApiClient.isConnected())
             stopLocationupdates();
@@ -126,12 +129,14 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId){
+        m.calledMethodLog(TAG,"onStartCommand");
         return START_NOT_STICKY;
     }
 
     // add the API and builds a client
     private void buildGoogleApiClient() {
+        m.calledMethodLog(TAG,"buildGoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(LocationService.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -143,6 +148,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // fetched location every `UPDATE_INTERVAL_IN_MILLISECONDS` milliseconds
     // since the service destroys after fetching location once it is of little use; I mean the interval of fetching the location
     private void createLocationRequest() {
+        m.calledMethodLog(TAG,"createLocationRequest");
         mlocationRequest = new LocationRequest();
         mlocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         mlocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -151,16 +157,19 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // requests location updates
     protected void startLocationupdates() throws SecurityException {
+        m.calledMethodLog(TAG,"startLocationUpdates");
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mlocationRequest, this);
     }
     // stop location updates when no longer needed
     protected void stopLocationupdates(){
+        m.calledMethodLog(TAG,"stopLocationUpdates");
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
+        m.calledMethodLog(TAG,"onStart");
         super.onStart(intent, startId);
         mGoogleApiClient.connect();
     }
@@ -170,6 +179,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     @Override
     public void onConnected(Bundle bundle)throws SecurityException {
+        m.calledMethodLog(TAG,"onConnected");
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gps = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         try {
@@ -261,19 +271,21 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     };
 
     public void onConnectionSuspended(int i) {
+        m.calledMethodLog(TAG,"onConnectionSuspended");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        m.calledMethodLog(TAG,"onLocatinoChanged");
     }
 
     // Magic method to send the SMS to the sender
 	// called from ParserTask class.onPostExecute when the name of the place is fetched
     private void sendSMS(String placeS, String etaS) {
-        SmsManager manager = SmsManager.getDefault();
+        m.calledMethodLog(TAG,"sendSMS");
 
-        m.updateLog(TAG,"sendSMS");
+        SmsManager manager = SmsManager.getDefault();
         // sender contains the phone number
         String name = sender;
         // if the contact permission is granted get the name of the contact
@@ -310,6 +322,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // checks if the contact permission is granted or not
     public boolean checkContactPermission(){
+        m.calledMethodLog(TAG,"checkContactPermission");
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -321,6 +334,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // gets the contact name if the permission is granted
     // else the method in not called
     public String getContactName(final String phoneNumber,Context context) {
+        m.calledMethodLog(TAG,"getContactName");
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
@@ -339,6 +353,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // this method gets the address and lets you make selection what parameters of address to include
     private String getAddress() {
+        m.calledMethodLog(TAG,"getAddress");
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
@@ -359,6 +374,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // this code starts with building the places URL and then call the actual places code
     private void placesCode() {
+        m.calledMethodLog(TAG,"placesCode");
         String sb = null;
         try {
             sb = buildPlacesURL().toString();
@@ -369,6 +385,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     // builds the url for fetching the nearby places
     public StringBuilder buildPlacesURL() throws UnsupportedEncodingException {
+        m.calledMethodLog(TAG,"buildPlacesURL");
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
@@ -399,6 +416,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // download the data from the URL
     private String downloadUrl(String strUrl) throws IOException{
+        m.calledMethodLog(TAG,"downloadUrl");
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
@@ -431,6 +449,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // sets the name of the place found in a global variable and increments a counter which counts if both the async tasks are finished- to sendSMS
     // called from onPostExecute of parser task
     public void setPlaceName(String s){
+        m.calledMethodLog(TAG,"setPlaceName");
         placeName = s;
         counter++;
         bothAsync();
@@ -439,6 +458,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     //sets the calculated eta to global variable and increments a counter which counts if both the async tasks are finshed - to sendSMS
     // called from onPostExecute parserTask for eta
     public void setDurationEta(String s){
+        m.calledMethodLog(TAG,"sendDurationEta");
         durationEta = s;
         counter++;
         bothAsync();
@@ -446,6 +466,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // checks if both async tasks are completed if so sendSMS
     public void bothAsync(){
+        m.calledMethodLog(TAG,"bothAsync");
         m.updateLog(TAG,"BothAsync "+counter);
         if(counter==2)
             sendSMS(placeName,durationEta);
@@ -457,11 +478,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         Context mContext;
 
         public ParserTask(Context context){
+            m.calledMethodLog(TAG,"ParserTask");
             mContext = context;
         }
         // Invoked by execute() method of this object
         @Override
         protected List<HashMap<String, String>> doInBackground(String... jsonData) {
+            m.calledMethodLog(TAG,"parserTask doInBackground");
             List<HashMap<String, String>> places = null;
             Place_JSON placeJson = new Place_JSON();
             try {
@@ -476,6 +499,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Executed after the complete execution of doInBackground() method
         @Override
         protected void onPostExecute(List<HashMap<String, String>> list) {
+            m.calledMethodLog(TAG,"parserTask onPostExecute");
+
             if (!list.isEmpty()){
                 HashMap<String, String> hmPlace = list.get(0);
                 String name = hmPlace.get("place_name");
@@ -491,6 +516,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
          * Receives a JSONObject and returns a list
          */
         public List<HashMap<String, String>> parse(JSONObject jObject) {
+            m.calledMethodLog(TAG,"place_JSON parse");
 
             JSONArray jPlaces = null;
             try {
@@ -505,6 +531,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
 
         private List<HashMap<String, String>> getPlaces(JSONArray jPlaces) {
+            m.calledMethodLog(TAG,"place_JSON getPlaces");
             int placesCount = jPlaces.length();
             List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> place = null;
@@ -522,7 +549,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
             return placesList;
         }
         private HashMap<String, String> getPlace(JSONObject jPlace){
-
+            m.calledMethodLog(TAG,"place_JSON getPlace");
             HashMap<String, String> place = new HashMap<>();
             String placeName = "-NA-";
             String vicinity = "-NA-";
@@ -559,6 +586,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         String data = null;
         @Override
         protected String doInBackground(String... url) {
+            m.calledMethodLog(TAG,"PlaceTask doInBackground");
             try {
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
@@ -568,6 +596,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         }
         @Override
         protected void onPostExecute(String result) {
+            m.calledMethodLog(TAG,"PlaceTask onPostExecute");
             ParserTask parserTask = new ParserTask(context);
             parserTask.execute(result);
             m.updateLog(TAG+""+"PlacesTaskOnPostExecute", result + "");
@@ -576,6 +605,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     //this method calls the eta async task
     public void etaCode(){
+        m.calledMethodLog(TAG,"etaCode");
         // Getting URL to the Google Directions API
         String url = buildEtaURL();
         // Start downloading json data from Google Directions API
@@ -584,7 +614,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     }
     // called to build eta url from etaCode
     public String buildEtaURL(){
-
+        m.calledMethodLog(TAG,"buildEtaURL");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String dest = preferences.getString(CONSTANT.HOME_ADDRESS,"");
 
@@ -607,6 +637,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
     // A method to download json data from url
     private String downloadUrlETA(String strUrl) throws IOException {
+        m.calledMethodLog(TAG,"downloadUrlETA");
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
@@ -642,6 +673,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Downloading data in non-ui thread
         @Override
         protected String doInBackground(String... url) {
+            m.calledMethodLog(TAG,"DownloadTask doInBackground");
             // For storing data from web service
             String data = "";
             try{
@@ -656,6 +688,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Executes in UI thread, after the execution of doInBackground()
         @Override
         protected void onPostExecute(String result) {
+            m.calledMethodLog(TAG,"DownloadTask onPostExecute");
             super.onPostExecute(result);
             // Invokes the thread for parsing the JSON data
             ParserTaskETA parserTaskETA = new ParserTaskETA(context);
@@ -668,12 +701,13 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
 
         Context mContext;
         public ParserTaskETA(Context context){
+            m.calledMethodLog(TAG,"ParserTaskETA");
             mContext = context;
         }
         // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
+            m.calledMethodLog(TAG,"ParserTaskETA doInBackground");
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
 
@@ -692,6 +726,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            m.calledMethodLog(TAG,"ParserTaskETA onPostExecute");
+
 //            String distance = "";
             String duration;
 
@@ -725,6 +761,8 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
     // called when the eta and places code have been called
     // purpose is to send address and place name to
     private void sendBroadcast (){
+        m.calledMethodLog(TAG,"sendBroadcast");
+
         Intent intent = new Intent ("message"); //put the same message as in the filter you used in the activity when registering the receiver
         intent.putExtra(CONSTANT.ADDRESS,getAddress());
         intent.putExtra(CONSTANT.PLACE_NAME,placeName);
