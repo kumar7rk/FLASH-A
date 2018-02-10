@@ -25,14 +25,24 @@ public class Keyword extends DialogFragment {
     SharedPreferences preferences;
     EditText keyword;
     AlertDialog.Builder alertDialog;
+    Main m;
 
+    public final String TAG = CONSTANT.KEYWORD;
     public Keyword() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        m = new Main(getActivity());
+        m.calledMethodLog(TAG,"onCreate");
+        super.onCreate(savedInstanceState);
     }
 
     //sets up the dialog; pretty much does everything this class is expected too
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        m.calledMethodLog(TAG,"onCreateDialog");
         //setting up Shared Preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = preferences.edit();
@@ -41,7 +51,6 @@ public class Keyword extends DialogFragment {
         View view = inflater.inflate(R.layout.activity_keyword, null);
 
         keyword= (EditText) view.findViewById(R.id.keyword_et);
-
 
         //putting the caret on the last of the keyword for convenience
         keyword.setSelection(keyword.getText().length());
@@ -86,6 +95,8 @@ public class Keyword extends DialogFragment {
     // yeah it's not like that by default
     @Override
     public void onResume() {
+        m.calledMethodLog(TAG,"onResume");
+
         super.onResume();
         keyword = (EditText) getDialog().findViewById(R.id.keyword_et);
         // get the stored keyword
