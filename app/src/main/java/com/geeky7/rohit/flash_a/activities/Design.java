@@ -655,10 +655,15 @@ public class Design extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.setIndeterminate(true);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
- //           dialog.show();
+            dialog.show();
         }
         protected Void doInBackground(Void... args) {
-            displayLocationSettingsRequest(getApplicationContext());
+            /*try {
+                Thread.sleep(6000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+            displayLocationSettingsRequest(Design.this);
             return null;
         }
         protected void onPostExecute(Void result) {
