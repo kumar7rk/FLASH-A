@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
         android:id="@+id/settings_send_eta"
-        android:title="Send ETA"
+        android:title="Send travel times"
         android:key="@string/settings_send_eta"
         android:summary="When your location is shared also send expected time of arrival (ETA) to home"/>
 
