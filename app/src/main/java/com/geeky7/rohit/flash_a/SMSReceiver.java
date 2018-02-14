@@ -19,10 +19,10 @@ public class SMSReceiver extends BroadcastReceiver {
     public static final String TAG = CONSTANT.SMS_RECEIVER;
     Main m;
     public void onReceive(Context context, Intent intent) {
+        m = new Main(MyApplication.getAppContext());
         m.calledMethodLog(TAG,"onReceive");
         String message = "";
         String senderNum = "";
-        m = new Main(MyApplication.getAppContext());
         // receives the message content in an intent
         final Bundle bundle = intent.getExtras();
         try {
