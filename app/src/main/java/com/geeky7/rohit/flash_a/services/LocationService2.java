@@ -332,7 +332,8 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
         int mRadius = 500;
-
+        String t= "cafe|amusement_park|university|stadium|shopping_mall|restaurant";
+        String types = URLEncoder.encode(t, "UTF-8");
         String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
         URL = location;
 
@@ -352,6 +353,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         sb.append("location=" + mLatitude + "," + mLongitude);
         sb.append("&radius="+mRadius);
         sb.append("&types=" +  URLEncoder.encode("point_of_interest", "UTF-8"));
+//        sb.append("&types="+types);
         sb.append("&sensor=true");
         sb.append("&key=" + key);
         m.updateLog(TAG+""+" PlacesURL", sb.toString());
