@@ -446,12 +446,20 @@ public class Design extends AppCompatActivity {
             })
             .setNegativeButton(getResources().getString(R.string.share), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
-                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                startActivityForResult(intent, CONTACT_REQUEST_CODE);
-                Main.showToast("Select contact to share your current location");
+                    Intent intent = new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
+                    intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                    startActivityForResult(intent, CONTACT_REQUEST_CODE);
+                    Main.showToast("Select contact to share your current location");
         }
-            });
+            })
+        .setNeutralButton("Map", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String map = "http://maps.google.com/maps?q=" + address;
+                Intent ViewOnMap = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
+                startActivity(ViewOnMap);
+            }
+        });
         // if address is fetched show dialog
         if (!("NA").equals(address)){
             builder.show();
