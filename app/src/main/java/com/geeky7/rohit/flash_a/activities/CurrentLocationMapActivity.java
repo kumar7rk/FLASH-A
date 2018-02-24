@@ -89,7 +89,6 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        marker.setTag(address);
         marker.setTitle(address);
         return false;
     }
