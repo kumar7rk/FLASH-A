@@ -44,6 +44,10 @@
         <activity
             android:name=".activities.TutorialActivityFirstTime"
             android:theme="@style/Theme.Intro" />
+        <activity
+            android:name=".activities.CurrentLocationMapActivity"
+            android:label="@string/action_current_location"
+            android:parentActivityName=".activities.Design"/>
 
         <service android:name=".services.LocationService" />
         <service
@@ -63,9 +67,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".activities.ContactsActivity" />
-        <activity android:name=".activities.CurrentLocationMapActivity"></activity>
     </application>
 
 </manifest>
