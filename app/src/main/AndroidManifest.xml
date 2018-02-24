@@ -65,7 +65,7 @@
         </receiver>
 
         <activity android:name=".activities.ContactsActivity" />
-        <activity android:name=".activities.currentLocationMapActivity"></activity>
+        <activity android:name=".activities.CurrentLocationMapActivity"></activity>
     </application>
 
 </manifest>
