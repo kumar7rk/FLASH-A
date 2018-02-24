@@ -37,12 +37,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
-public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback {
+public class HomeAddress extends AppCompatActivity implements
+        OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = CONSTANT.HOME_ADDRESS;
 
@@ -269,6 +272,7 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
             }
+            mMap.setOnMarkerClickListener(this);
         }
     }
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
@@ -283,5 +287,12 @@ public class HomeAddress extends AppCompatActivity implements OnMapReadyCallback
     public void onBackPressed() {
         m.calledMethodLog(TAG,"onBackpressed");
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        marker.setTitle("That's your home man :)");
+        return false;
     }
 }
