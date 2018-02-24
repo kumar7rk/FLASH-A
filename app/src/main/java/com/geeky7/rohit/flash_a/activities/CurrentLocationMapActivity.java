@@ -5,6 +5,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
@@ -28,11 +30,19 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements OnM
     private String address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        m = new Main(getApplicationContext());
+
         Intent intent = getIntent();
         address = intent.getStringExtra(CONSTANT.ADDRESS);
         super.onCreate(savedInstanceState);
-        m = new Main(getApplicationContext());
+
         setContentView(R.layout.activity_current_location_map);
+
+//        setHomeButtonEnabled(true);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(address);
+
         loadMap();
     }
 
@@ -79,5 +89,15 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements OnM
     public void onBackPressed() {
         m.calledMethodLog(TAG,"onBackpressed");
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }
