@@ -14,6 +14,8 @@ public class CONSTANT {
     public static final String SETTINGS_FRAGMENT = "SETTINGS_FRAGMENT";
     public static final String TUTORIAL_ACTIVITY = "TUTORIAL_ACTIVITY";
     public static final String TUTORIAL_ACTIVITY_FIRST_TIME = "TUTORIAL_ACTIVITY_FIRST_TIME";
+    public static final String CURRENT_LOCATION_MAP_ACTIVITY = "CURRENT_LOCATION_MAP_ACTIVITY";
+
     public static final String DESIGN= "DESIGN";
     public static final String SERVICE = "SERVICE";
     public static final String HOME_ADDRESS = "HOME_ADDRESS";
