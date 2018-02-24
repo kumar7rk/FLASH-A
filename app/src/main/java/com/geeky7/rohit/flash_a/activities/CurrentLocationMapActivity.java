@@ -30,19 +30,12 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements OnM
     private String address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        m = new Main(getApplicationContext());
-
         Intent intent = getIntent();
         address = intent.getStringExtra(CONSTANT.ADDRESS);
         super.onCreate(savedInstanceState);
-
+        m = new Main(getApplicationContext());
         setContentView(R.layout.activity_current_location_map);
-
-//        setHomeButtonEnabled(true);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         setTitle(address);
-
         loadMap();
     }
 
@@ -61,7 +54,7 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements OnM
 
         mMap.addMarker(new MarkerOptions().position(g));
         //mMap.getCameraPosition();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 13.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 15.0f));
     }
 
     // getting lat long from the home address
