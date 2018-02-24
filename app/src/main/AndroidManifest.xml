@@ -64,7 +64,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.ContactsActivity"></activity>
+        <activity android:name=".activities.ContactsActivity" />
+        <activity android:name=".activities.currentLocationMapActivity"></activity>
     </application>
 
 </manifest>
