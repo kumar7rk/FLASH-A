@@ -291,7 +291,6 @@ public class HomeAddress extends AppCompatActivity implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         marker.setTitle("That's your home man :)");
         return false;
     }
