@@ -456,8 +456,11 @@ public class Design extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String map = "http://maps.google.com/maps?q=" + address;
-                Intent ViewOnMap = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
-                startActivity(ViewOnMap);
+                //Intent ViewOnMap = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
+
+                Intent viewOnMap = new Intent(Design.this,CurrentLocationMapActivity.class);
+                viewOnMap.putExtra(CONSTANT.ADDRESS,address);
+                startActivity(viewOnMap);
             }
         });
         // if address is fetched show dialog
