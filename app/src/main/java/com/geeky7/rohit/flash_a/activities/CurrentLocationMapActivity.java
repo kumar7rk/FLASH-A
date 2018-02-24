@@ -5,8 +5,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.geeky7.rohit.flash_a.CONSTANT;
 import com.geeky7.rohit.flash_a.Main;
@@ -16,12 +14,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
-public class CurrentLocationMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class CurrentLocationMapActivity extends AppCompatActivity implements
+        OnMapReadyCallback
+        , GoogleMap.OnMarkerClickListener{
 
     Main m;
     private GoogleMap mMap;
@@ -55,8 +56,10 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements OnM
         mMap.addMarker(new MarkerOptions().position(g));
         //mMap.getCameraPosition();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(g, 15.0f));
-    }
 
+        mMap.setOnMarkerClickListener(this);
+
+    }
     // getting lat long from the home address
     // returns lat long which are used to put the marker on the map
     public LatLng getLocationFromAddress(String strAddress){
@@ -83,14 +86,11 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements OnM
         m.calledMethodLog(TAG,"onBackpressed");
         super.onBackPressed();
     }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
+    public boolean onMarkerClick(Marker marker) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        marker.setTag(address);
+        marker.setTitle(address);
+        return false;
     }
 }
