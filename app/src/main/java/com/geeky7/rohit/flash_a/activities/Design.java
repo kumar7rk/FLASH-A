@@ -76,7 +76,6 @@ public class Design extends AppCompatActivity {
     String placeS;
     String URL;
 
-
     static int counter_retry_fetching_location;
     private Keyword keyword = new Keyword();
 
@@ -639,13 +638,11 @@ public class Design extends AppCompatActivity {
                 e.printStackTrace();
             }
             startLocationService2();
-            // sleep here removed was causing - skipping frames
-
+            //Note- sleep here removed was causing - skipping frames
             return null;
         }
         protected void onPostExecute(Void result) {
             if (dialog.isShowing()) dialog.dismiss();
-
             buildDialogCurrentLocation();
         }
     }
@@ -666,11 +663,6 @@ public class Design extends AppCompatActivity {
             dialog.show();
         }
         protected Void doInBackground(Void... args) {
-            /*try {
-                Thread.sleep(6000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
             displayLocationSettingsRequest(Design.this);
             return null;
         }
