@@ -42,7 +42,7 @@ public class ContactsFragment extends DialogFragment {
     private ListView listView;
     private ArrayList<Contact> contacts = null;
     private ContactAdapter contactAdapter = null;
-    private SparseBooleanArray selectedContacts =   new SparseBooleanArray()  ;
+    private SparseBooleanArray selectedContacts = new SparseBooleanArray();
 
     private ProgressDialog progressDialog = null;
 
