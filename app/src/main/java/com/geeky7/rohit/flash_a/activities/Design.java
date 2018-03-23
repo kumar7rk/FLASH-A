@@ -462,6 +462,19 @@ public class Design extends AppCompatActivity {
         if (!("NA").equals(address)){
             dialog.show();
 //            builder.show();
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String lat = preferences.getString(CONSTANT.LATITUDE,"");
+                String lng = preferences.getString(CONSTANT.LONGITUDE,"");
+
+                Intent viewOnMap = new Intent(Design.this,CurrentLocationMapActivity.class);
+                viewOnMap.putExtra(CONSTANT.ADDRESS,address);
+                viewOnMap.putExtra(CONSTANT.LATITUDE,lat);
+                viewOnMap.putExtra(CONSTANT.LONGITUDE,lng);
+                startActivity(viewOnMap);
+            }
+        });
             counter_retry_fetching_location = 0;
             m.updateLog(TAG,"address is "+address);
         }
@@ -481,19 +494,6 @@ public class Design extends AppCompatActivity {
             else
                 new YourAsyncTask(Design.this).execute(); // if no address and counter < 5
         }
-        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String lat = preferences.getString(CONSTANT.LATITUDE,"");
-                String lng = preferences.getString(CONSTANT.LONGITUDE,"");
-
-                Intent viewOnMap = new Intent(Design.this,CurrentLocationMapActivity.class);
-                viewOnMap.putExtra(CONSTANT.ADDRESS,address);
-                viewOnMap.putExtra(CONSTANT.LATITUDE,lat);
-                viewOnMap.putExtra(CONSTANT.LONGITUDE,lng);
-                startActivity(viewOnMap);
-            }
-        });
         stopService(new Intent(this, LocationService2.class));
     }
 
