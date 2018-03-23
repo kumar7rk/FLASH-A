@@ -454,14 +454,14 @@ public class Design extends AppCompatActivity {
         .setNeutralButton("Map", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent viewOnMap = new Intent(Design.this,CurrentLocationMapActivity.class);
-                viewOnMap.putExtra(CONSTANT.ADDRESS,address);
-                startActivity(viewOnMap);
+
             }
         });
+        final AlertDialog dialog = builder.create();
         // if address is fetched show dialog
         if (!("NA").equals(address)){
-            builder.show();
+            dialog.show();
+//            builder.show();
             counter_retry_fetching_location = 0;
             m.updateLog(TAG,"address is "+address);
         }
@@ -481,6 +481,21 @@ public class Design extends AppCompatActivity {
             else
                 new YourAsyncTask(Design.this).execute(); // if no address and counter < 5
         }
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String lat = preferences.getString(CONSTANT.LATITUDE,"");
+                String lng = preferences.getString(CONSTANT.LONGITUDE,"");
+
+                Intent viewOnMap = new Intent(Design.this,CurrentLocationMapActivity.class);
+                viewOnMap.putExtra(CONSTANT.ADDRESS,address);
+                viewOnMap.putExtra(CONSTANT.LATITUDE,lat);
+                viewOnMap.putExtra(CONSTANT.LONGITUDE,lng);
+                startActivity(viewOnMap);
+            }
+        });
+
+
         stopService(new Intent(this, LocationService2.class));
     }
 
