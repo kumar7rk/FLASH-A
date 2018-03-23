@@ -331,10 +331,17 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
 
         double mLatitude = mCurrentLocation.getLatitude();
         double mLongitude = mCurrentLocation.getLongitude();
+
+
         int mRadius = 500;
         String t= "cafe|amusement_park|university|stadium|shopping_mall|restaurant";
         String types = URLEncoder.encode(t, "UTF-8");
         String location = "https://www.google.com/maps/search/?api=1&query=" + mLatitude + "," + mLongitude;
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(CONSTANT.LATITUDE,mLatitude+"");
+        editor.putString(CONSTANT.LONGITUDE,mLongitude+"");
+        editor.apply();
         URL = location;
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
