@@ -1,8 +1,6 @@
 package com.geeky7.rohit.flash_a.activities;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -16,10 +14,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.util.List;
-
 public class CurrentLocationMapActivity extends AppCompatActivity implements
         OnMapReadyCallback
         , GoogleMap.OnMarkerClickListener{
@@ -28,11 +22,14 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements
     private GoogleMap mMap;
     private static final String TAG = CONSTANT.CURRENT_LOCATION_MAP_ACTIVITY;
 
-    private String address;
+    private String address, latitude, longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         address = intent.getStringExtra(CONSTANT.ADDRESS);
+        latitude = intent.getStringExtra(CONSTANT.LATITUDE);
+        longitude = intent.getStringExtra(CONSTANT.LONGITUDE);
+
         super.onCreate(savedInstanceState);
         m = new Main(getApplicationContext());
         setContentView(R.layout.activity_current_location_map);
@@ -51,7 +48,9 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
         m.calledMethodLog(TAG,"onMapReady");
         mMap = googleMap;
-        LatLng g = getLocationFromAddress(address);
+        double lat = Double.parseDouble(latitude);
+        double lng = Double.parseDouble(longitude);
+        LatLng g = new LatLng(lat, lng);
 
         mMap.addMarker(new MarkerOptions().position(g));
         //mMap.getCameraPosition();
@@ -59,26 +58,6 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements
 
         mMap.setOnMarkerClickListener(this);
 
-    }
-    // getting lat long from the home address
-    // returns lat long which are used to put the marker on the map
-    public LatLng getLocationFromAddress(String strAddress){
-        m.calledMethodLog(TAG,"getLocationFromAddress");
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
-        LatLng p1 = null;
-        try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) return null;
-            Address location=address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return p1;
     }
 
     @Override
@@ -88,7 +67,6 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements
     }
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         marker.setTitle(address);
         return false;
     }
