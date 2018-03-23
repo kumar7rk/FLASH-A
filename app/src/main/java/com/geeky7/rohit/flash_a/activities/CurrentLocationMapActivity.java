@@ -62,7 +62,9 @@ public class CurrentLocationMapActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        m.calledMethodLog(TAG,"onBackpressed");
+        m.calledMethodLog(TAG,"onBackPressed");
+
+
         super.onBackPressed();
     }
     @Override
