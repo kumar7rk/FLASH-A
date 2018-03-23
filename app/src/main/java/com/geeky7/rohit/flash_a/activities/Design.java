@@ -635,8 +635,9 @@ public class Design extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            String message = "Fetching your location, Please wait!";
-            if (counter_retry_fetching_location>=1) message = "Retrying, Please wait!";
+            String message = getResources().getString(R.string.dialog_message);
+            if (counter_retry_fetching_location==1) message = getResources().getString(R.string.dialog_message_retry_1);
+            if (counter_retry_fetching_location>1) message = getResources().getString(R.string.dialog_message_retry_2_plus);
 
             dialog.setMessage(message);
             dialog.setCancelable(false);
