@@ -646,7 +646,7 @@ public class Design extends AppCompatActivity {
         }
         protected Void doInBackground(Void... args) {
             try {
-                Thread.sleep(6000);
+                Thread.sleep(8000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
