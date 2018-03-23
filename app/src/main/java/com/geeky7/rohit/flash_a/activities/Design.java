@@ -494,8 +494,6 @@ public class Design extends AppCompatActivity {
                 startActivity(viewOnMap);
             }
         });
-
-
         stopService(new Intent(this, LocationService2.class));
     }
 
