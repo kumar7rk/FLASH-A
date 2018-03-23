@@ -10,6 +10,10 @@
     <string name="title_activity_settings">Settings</string>
     <string name="error_fetching_location">Error fetching your location</string>
     <string name="map_no_internet_home_address">Connect to internet to load map</string>
+    <string name="dialog_message">Fetching your location, Please wait!</string>
+    <string name="dialog_message_retry_1">Retrying, Please wait!</string>
+    <string name="dialog_message_retry_2_plus">Taking longer than usual, Please wait!</string>
+
     <!--Permissions-->
     <string name="permission_rationale">Location, SMS and Contact permissions required for core functionality.</string>
     <string name="permission_denied_explanation">Permission(s) denied, but required for core functionality.</string>
