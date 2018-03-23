@@ -469,7 +469,7 @@ public class Design extends AppCompatActivity {
         else{
             m.updateLog(TAG,"address iss " + address);
             m.calledMethodLog(TAG,"Retry number: "+counter_retry_fetching_location);
-            if (counter_retry_fetching_location++==3){
+            if (counter_retry_fetching_location++==2){
                 counter_retry_fetching_location=0;
                 showSnackbar2(R.string.error_fetching_location, R.string.retry, new View.OnClickListener() {
                     @Override
