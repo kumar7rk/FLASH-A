@@ -350,7 +350,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         //calling a direct method which runs urlShortner code
         URL = m.urlShortner(location);
 
-        String key = getApplicationContext().getString(R.string.API_KEY_GEO);
+        String key =  getApplicationContext().getString(R.string.API_KEY_GEO);
 
         if (mCurrentLocation==null) mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -474,44 +474,23 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             int placesCount = jPlaces.length();
             List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> place = null;
-            //Taking each place, parses and adds to list object
-            for (int i = 0; i < 1; i++) {
-                try {
-                    //Call getPlace with place JSON object to parse the place
-                    place = getPlace((JSONObject) jPlaces.get(i));
-                    placesList.add(place);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    m.updateLog(TAG + " Parser task getPlaces"," Some exception" +e.getMessage());
-                }
+            try {
+                //Call getPlace with place JSON object to parse the place
+                place = getPlace((JSONObject) jPlaces.get(i));
+                placesList.add(place);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                m.updateLog(TAG + " Parser task getPlaces"," Some exception" +e.getMessage());
             }
             return placesList;
         }
         private HashMap<String, String> getPlace(JSONObject jPlace){
             HashMap<String, String> place = new HashMap<String, String>();
-            String placeName = "-NA-";
-            String vicinity = "-NA-";
-            String latitude;
-            String longitude;
-            String reference;
-            String placeType;
+            String placeName = "None";
             try {
                 // Extracting Place name, if available
                 if (!jPlace.isNull("name")) placeName = jPlace.getString("name");
-                // Extracting Place Vicinity, if available
-                //if (!jPlace.isNull("vicinity")) vicinity = jPlace.getString("vicinity");
-
-                //latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
-                //longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
-                //reference = jPlace.getString("reference");
-                //placeType = jPlace.getString("types");
-
                 place.put("place_name", placeName);
-                //place.put("vicinity", vicinity);
-                //place.put("lat", latitude);
-                //place.put("lng", longitude);
-                //place.put("reference", reference);
-                //place.put("types", placeType);
             } catch (JSONException e) {
                 e.printStackTrace();
                 m.updateLog(TAG + " Parser task getPlaces"," Some exception" +e.getMessage());
