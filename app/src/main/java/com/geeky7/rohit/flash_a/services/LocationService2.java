@@ -251,9 +251,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                     m.updateLog(TAG+" gps BroadcastReceiver ","Got some gps and internet");
                     if (mCurrentLocation==null){
                         m.updateLog(TAG+" gps BroadcastReceiver ","But goddamn location is null. Need to sleep.");
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
-                        Thread.sleep(2000);
+                        Thread.sleep(6000);
                         m.updateLog(TAG+" gps BroadcastReceiver ","6 seconds sleep ain't bad. Experiment with me. Ever thought of using asynctask");
                         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     }
@@ -299,11 +297,12 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
                 .replace(state,"").replaceFirst(country,"").replaceFirst(postalCode,"").replaceAll(",","").trim();
 
         m.updateLog(TAG+" Address",address);
-//        String street = addresses.get(0).getFeatureName();
-//        String city = addresses.get(0).getLocality();
-//        String number = addresses.get(0).getFeatureName();
-//        String council = addresses.get(0).getSubAdminArea();
-//         null- getSubLocality(),getPremises(),getThoroughfare()
+        // legacy code :D
+/*        String street = addresses.get(0).getFeatureName();
+        String city = addresses.get(0).getLocality();
+        String number = addresses.get(0).getFeatureName();
+        String council = addresses.get(0).getSubAdminArea();
+         null- getSubLocality(),getPremises(),getThoroughfare()*/
         return address;
     }
 
@@ -471,12 +470,11 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
             return getPlaces(jPlaces);
         }
         private List<HashMap<String, String>> getPlaces(JSONArray jPlaces) {
-            int placesCount = jPlaces.length();
             List<HashMap<String, String>> placesList = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> place = null;
+            HashMap<String, String> place;
             try {
                 //Call getPlace with place JSON object to parse the place
-                place = getPlace((JSONObject) jPlaces.get(i));
+                place = getPlace((JSONObject) jPlaces.get(0));
                 placesList.add(place);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -512,6 +510,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
         intent.putExtra(CONSTANT.URL_SHORTNER_SHARE_LOCATION,URL);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
-        m.updateLog(TAG,"I'm done. Yours sincerely SendBroadcast. P.S Don't miss me!");
+        m.updateLog(TAG,"I'm done. Sincerely Yours SendBroadcast. P.S Don't miss me!");
+        m.updateLog(TAG,"Surprise Surprise I'm done too - Yours LocationService2");
     }
 }
