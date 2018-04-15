@@ -205,8 +205,7 @@ public class LocationService2 extends Service implements GoogleApiClient.OnConne
     // requests a location
     protected void startLocationupdates() throws SecurityException {
         m.calledMethodLog(TAG,"startLocationupdates");
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mlocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mlocationRequest, this);
     }
     // stop location update; no longer needed
     protected void stopLocationupdates(){
