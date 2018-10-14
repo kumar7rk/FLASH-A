@@ -46,6 +46,9 @@ import com.geeky7.rohit.flash_a.Main;
 import com.geeky7.rohit.flash_a.R;
 import com.geeky7.rohit.flash_a.fragments.Keyword;
 import com.geeky7.rohit.flash_a.services.LocationService2;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -86,6 +89,15 @@ public class Design extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.design);
+
+        MobileAds.initialize(this, getResources().getString(R.string.ADMOB_APP_ID));
+
+        AdView adView  = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("051300950451AB528C6889589C437FE5")
+                .build();
+        adView.loadAd(adRequest);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = preferences.edit();
