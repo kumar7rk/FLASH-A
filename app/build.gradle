@@ -41,6 +41,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.google.android.gms:play-services-places:11.0.4'
+    compile 'com.google.android.gms:play-services-ads:11.0.4'
 
     compile 'com.android.support:support-v4:25.3.1'
     compile 'agency.tango.android:material-intro-screen:0.0.5'
