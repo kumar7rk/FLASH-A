@@ -97,6 +97,7 @@ public class Design extends AppCompatActivity {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("051300950451AB528C6889589C437FE5")
                 .build();
+
         adView.loadAd(adRequest);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
