@@ -418,7 +418,7 @@ public class Design extends AppCompatActivity {
                     // and enables the location when the user clicks ok
                     new buildLocationDialog(this).execute();
                 } else {
-                    new YourAsyncTask(this).execute();// gps in on
+                    new YourAsyncTask(this).execute();// gps is on
                 }
                 break;
         }
