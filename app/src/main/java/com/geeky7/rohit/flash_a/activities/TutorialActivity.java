@@ -58,9 +58,9 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .image(R.drawable.tutorial_slide_2)
                 .title("Receive an SMS request. Share location.")
 //                .title("Receive location request in SMS. Automatically share your location.")
-                .description("\n Whenever you receive an SMS with your chosen keyword. Your current location will be shared via SMS. " +
+                .description("\n When you receive an SMS with your chosen keyword. Your current location will be shared via SMS. " +
                         "\n\n"+
-                        "You can also chose to be notified by a push notification.")
+                        "You can also choose to be notified by a push notification.")
                 .build()
         );
         // third fragment
@@ -80,7 +80,7 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .buttonsColor(R.color.fourth_slide_buttons)
                 .image(R.drawable.tutorial_slide_4)
                 .title("Running into an emergency?")
-                .description("No worries :) You can share your current location including address and nearby landmark via SMS in under 30 seconds.")
+                .description("Don't worry:) You can share your current location including address and nearby landmark via SMS in under 30 seconds.")
                 .build()
                 /*,
                 new MessageButtonBehaviour(new View.OnClickListener() {
