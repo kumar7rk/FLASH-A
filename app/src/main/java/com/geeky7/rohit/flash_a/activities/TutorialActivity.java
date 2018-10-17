@@ -58,9 +58,9 @@ public class TutorialActivity extends MaterialIntroActivity {
                 .image(R.drawable.tutorial_slide_2)
                 .title("Receive an SMS request. Share location.")
 //                .title("Receive location request in SMS. Automatically share your location.")
-                .description("\n Whenever you receive an SMS with your chosen keyword. Your current location will be shared with them. " +
+                .description("\n Whenever you receive an SMS with your chosen keyword. Your current location will be shared via SMS. " +
                         "\n\n"+
-                        "You'll be notified when your location is shared.")
+                        "You can also chose to be notified by a push notification.")
                 .build()
         );
         // third fragment
