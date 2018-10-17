@@ -69,7 +69,7 @@ public class TutorialActivity extends MaterialIntroActivity {
                         .buttonsColor(R.color.third_slide_buttons)
                         .image(R.drawable.tutorial_slide_3)
                         .title("Stay safe & in control")
-                        .description("You can set your home address to send ETA home , edit keyword for your convenience." +
+                        .description("You can set your home (or any) address to share travel times with chosen contacts." +
                                 "\n\n"+
                                 "You're in complete control when the app runs. You can enable or disable the app with one click when you want privacy.")
                         .build()
